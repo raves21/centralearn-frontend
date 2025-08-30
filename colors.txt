@@ -1,0 +1,18 @@
+
+
+more flexible
+
+cta: #35a6e0
+bg: #efeeee
+mainbg: #f6f7f6
+
+
+less flexible:
+
+cta: #6f367a
+flavor: #fc7f4c
+        #b5db70
+        #96ccd5
+        #a8bcfb
+bg: #f2f3f2
+mainbg: #ffffff
