@@ -10,8 +10,8 @@ function RouteComponent() {
 
   if (getCurrentUserStatus === "pending") {
     return (
-      <div className="h-dvh grid place-items-center text-violet-700 font-semibold">
-        Loading...
+      <div className="h-dvh grid place-items-center text-cta font-semibold">
+        <p className="text-4xl">Loading...</p>
       </div>
     );
   }

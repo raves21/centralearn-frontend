@@ -5,13 +5,13 @@ import type { CurrentUser } from "../types";
 import { queryClient } from "../../../utils/queryClient";
 import { setCurrentUser } from "../functions";
 
-type UseLogin = {
+type UseLoginArgs = {
   email: string;
   password: string;
 };
-export function useLogin({ email, password }: UseLogin) {
+export function useLogin() {
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({ email, password }: UseLoginArgs) => {
       await axios.get(`${import.meta.env.VITE_BASE_URL}/sanctum/csrf-cookie`);
       const { data } = await api.post("/auth/login", { email, password });
       return data.data as CurrentUser;
