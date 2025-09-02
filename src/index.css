@@ -11,6 +11,12 @@
     margin: 0;
     box-sizing: border-box;
   }
+  button:hover {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: auto;
+  }
 }
 
 @theme inline {
@@ -51,8 +57,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-inter: Inter, sans-serif;
   --font-poppins: Poppins, sans-serif;
-  --color-cta: #4f39f6;
-  --color-cta-disabled: #372aac;
+  --color-mainaccent: #4f39f6;
+  --color-mainaccent-disabled: #372aac;
+  --color-gray-bg: #f2f3f2;
+  --color-main-bg: #ffffff;
 }
 
 :root {

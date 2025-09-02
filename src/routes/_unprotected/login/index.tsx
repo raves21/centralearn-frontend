@@ -18,9 +18,13 @@ function RouteComponent() {
   const [password, setPassword] = useState("");
 
   return (
-    <div className="min-h-dvh w-dvw max-w-full flex items-center justify-center">
-      <div className="flex flex-col gap-12 items-center p-24 shadow-md rounded-md">
+    <div className="min-h-dvh w-dvw max-w-full relative flex items-center bg-gray-bg justify-center">
+      <div className="flex items-center justify-center gap-2 absolute top-6 left-6">
+        <Loader className="size-11 stroke-mainaccent" />
         <p className="text-3xl font-semibold">CentraLearn</p>
+      </div>
+      <div className="flex flex-col gap-12 items-center p-24 shadow-md bg-main-bg rounded-md">
+        <p className="text-3xl font-semibold">Login</p>
         <form
           className="flex flex-col gap-5"
           onSubmit={async (e) => {
@@ -44,7 +48,7 @@ function RouteComponent() {
           />
           <button
             disabled={loginStatus === "pending"}
-            className="flex hover:cursor-pointer disabled:hover:cursor-auto items-center disabled:bg-cta-disabled justify-center gap-4 w-[340px] py-3 text-white rounded-md bg-cta"
+            className="flex hover:cursor-pointer disabled:hover:cursor-auto items-center disabled:bg-mainaccent-disabled justify-center gap-4 w-[340px] py-3 text-white rounded-md bg-mainaccent"
           >
             {loginStatus === "pending" ? (
               <Loader className="animate-spin" />

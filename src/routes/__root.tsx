@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import Providers from "../components/Providers";
+import Providers from "../components/layout/Providers";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -8,7 +8,9 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <Providers>
-      <Outlet />
+      <div className="text-sm font-poppins">
+        <Outlet />
+      </div>
     </Providers>
   );
 }
