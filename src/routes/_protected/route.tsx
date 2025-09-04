@@ -28,8 +28,12 @@ function RouteComponent() {
     return (
       <div className="h-dvh relative w-dvw bg-gray-bg">
         <TopPanel />
-        <SidePanel />
-        <Outlet />
+        <div className="size-full flex">
+          <SidePanel />
+          <div className="flex-grow pt-[calc(9dvh+28px)] px-7">
+            <Outlet />
+          </div>
+        </div>
       </div>
     );
   }

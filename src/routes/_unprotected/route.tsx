@@ -8,7 +8,6 @@ export const Route = createFileRoute("/_unprotected")({
 
 function RouteComponent() {
   const { status: getCurrentUserStatus } = useCurrentUser();
-
   if (getCurrentUserStatus === "pending") {
     return (
       <div className="h-dvh flex items-center justify-center gap-6 bg-gray-bg text-mainaccent font-semibold">
@@ -19,7 +18,7 @@ function RouteComponent() {
   }
 
   if (getCurrentUserStatus === "success") {
-    return <Navigate to="/home" />;
+    return <Navigate to="/dashboard" />;
   }
 
   if (getCurrentUserStatus === "error") {

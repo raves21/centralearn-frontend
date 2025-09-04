@@ -1,7 +1,8 @@
-import { ChevronDown, Loader } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useCurrentUser } from "../../services/auth/api/queries";
 import { Navigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+import Logo from "../shared/Logo";
 
 export default function TopPanel() {
   const { data: currentUser } = useCurrentUser();
@@ -13,11 +14,8 @@ export default function TopPanel() {
   }, []);
 
   return (
-    <div className="px-3 h-[10%] bg-main-bg absolute top-0 left-0 w-full flex items-center justify-between">
-      <div className="flex items-center justify-center gap-2">
-        <Loader className="size-8 stroke-mainaccent" />
-        <p className="text-2xl font-semibold">CentraLearn</p>
-      </div>
+    <div className="px-3 h-[9dvh] bg-main-bg fixed top-0 left-0 w-full flex items-center justify-between">
+      <Logo />
       <div className="flex items-center gap-3 h-full mr-3 group">
         <div className="rounded-full overflow-hidden aspect-square h-[60%]">
           <img

@@ -13,7 +13,14 @@ import { Route as UnprotectedRouteRouteImport } from './routes/_unprotected/rout
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnprotectedLoginIndexRouteImport } from './routes/_unprotected/login/index'
-import { Route as ProtectedHomeIndexRouteImport } from './routes/_protected/home/index'
+import { Route as ProtectedStudentsIndexRouteImport } from './routes/_protected/students/index'
+import { Route as ProtectedSemestersIndexRouteImport } from './routes/_protected/semesters/index'
+import { Route as ProtectedInstructorsIndexRouteImport } from './routes/_protected/instructors/index'
+import { Route as ProtectedDepartmentsIndexRouteImport } from './routes/_protected/departments/index'
+import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
+import { Route as ProtectedCoursesIndexRouteImport } from './routes/_protected/courses/index'
+import { Route as ProtectedClassesIndexRouteImport } from './routes/_protected/classes/index'
+import { Route as ProtectedAdminsIndexRouteImport } from './routes/_protected/admins/index'
 
 const UnprotectedRouteRoute = UnprotectedRouteRouteImport.update({
   id: '/_unprotected',
@@ -33,20 +40,71 @@ const UnprotectedLoginIndexRoute = UnprotectedLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => UnprotectedRouteRoute,
 } as any)
-const ProtectedHomeIndexRoute = ProtectedHomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
+const ProtectedStudentsIndexRoute = ProtectedStudentsIndexRouteImport.update({
+  id: '/students/',
+  path: '/students/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedSemestersIndexRoute = ProtectedSemestersIndexRouteImport.update({
+  id: '/semesters/',
+  path: '/semesters/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedInstructorsIndexRoute =
+  ProtectedInstructorsIndexRouteImport.update({
+    id: '/instructors/',
+    path: '/instructors/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedDepartmentsIndexRoute =
+  ProtectedDepartmentsIndexRouteImport.update({
+    id: '/departments/',
+    path: '/departments/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedCoursesIndexRoute = ProtectedCoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedClassesIndexRoute = ProtectedClassesIndexRouteImport.update({
+  id: '/classes/',
+  path: '/classes/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedAdminsIndexRoute = ProtectedAdminsIndexRouteImport.update({
+  id: '/admins/',
+  path: '/admins/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/home': typeof ProtectedHomeIndexRoute
+  '/admins': typeof ProtectedAdminsIndexRoute
+  '/classes': typeof ProtectedClassesIndexRoute
+  '/courses': typeof ProtectedCoursesIndexRoute
+  '/dashboard': typeof ProtectedDashboardIndexRoute
+  '/departments': typeof ProtectedDepartmentsIndexRoute
+  '/instructors': typeof ProtectedInstructorsIndexRoute
+  '/semesters': typeof ProtectedSemestersIndexRoute
+  '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/home': typeof ProtectedHomeIndexRoute
+  '/admins': typeof ProtectedAdminsIndexRoute
+  '/classes': typeof ProtectedClassesIndexRoute
+  '/courses': typeof ProtectedCoursesIndexRoute
+  '/dashboard': typeof ProtectedDashboardIndexRoute
+  '/departments': typeof ProtectedDepartmentsIndexRoute
+  '/instructors': typeof ProtectedInstructorsIndexRoute
+  '/semesters': typeof ProtectedSemestersIndexRoute
+  '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
 }
 export interface FileRoutesById {
@@ -54,20 +112,54 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_unprotected': typeof UnprotectedRouteRouteWithChildren
-  '/_protected/home/': typeof ProtectedHomeIndexRoute
+  '/_protected/admins/': typeof ProtectedAdminsIndexRoute
+  '/_protected/classes/': typeof ProtectedClassesIndexRoute
+  '/_protected/courses/': typeof ProtectedCoursesIndexRoute
+  '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
+  '/_protected/departments/': typeof ProtectedDepartmentsIndexRoute
+  '/_protected/instructors/': typeof ProtectedInstructorsIndexRoute
+  '/_protected/semesters/': typeof ProtectedSemestersIndexRoute
+  '/_protected/students/': typeof ProtectedStudentsIndexRoute
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/login'
+  fullPaths:
+    | '/'
+    | '/admins'
+    | '/classes'
+    | '/courses'
+    | '/dashboard'
+    | '/departments'
+    | '/instructors'
+    | '/semesters'
+    | '/students'
+    | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/login'
+  to:
+    | '/'
+    | '/admins'
+    | '/classes'
+    | '/courses'
+    | '/dashboard'
+    | '/departments'
+    | '/instructors'
+    | '/semesters'
+    | '/students'
+    | '/login'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/_unprotected'
-    | '/_protected/home/'
+    | '/_protected/admins/'
+    | '/_protected/classes/'
+    | '/_protected/courses/'
+    | '/_protected/dashboard/'
+    | '/_protected/departments/'
+    | '/_protected/instructors/'
+    | '/_protected/semesters/'
+    | '/_protected/students/'
     | '/_unprotected/login/'
   fileRoutesById: FileRoutesById
 }
@@ -107,22 +199,85 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnprotectedLoginIndexRouteImport
       parentRoute: typeof UnprotectedRouteRoute
     }
-    '/_protected/home/': {
-      id: '/_protected/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof ProtectedHomeIndexRouteImport
+    '/_protected/students/': {
+      id: '/_protected/students/'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof ProtectedStudentsIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/semesters/': {
+      id: '/_protected/semesters/'
+      path: '/semesters'
+      fullPath: '/semesters'
+      preLoaderRoute: typeof ProtectedSemestersIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/instructors/': {
+      id: '/_protected/instructors/'
+      path: '/instructors'
+      fullPath: '/instructors'
+      preLoaderRoute: typeof ProtectedInstructorsIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/departments/': {
+      id: '/_protected/departments/'
+      path: '/departments'
+      fullPath: '/departments'
+      preLoaderRoute: typeof ProtectedDepartmentsIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/dashboard/': {
+      id: '/_protected/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/courses/': {
+      id: '/_protected/courses/'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof ProtectedCoursesIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/classes/': {
+      id: '/_protected/classes/'
+      path: '/classes'
+      fullPath: '/classes'
+      preLoaderRoute: typeof ProtectedClassesIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/admins/': {
+      id: '/_protected/admins/'
+      path: '/admins'
+      fullPath: '/admins'
+      preLoaderRoute: typeof ProtectedAdminsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
 }
 
 interface ProtectedRouteRouteChildren {
-  ProtectedHomeIndexRoute: typeof ProtectedHomeIndexRoute
+  ProtectedAdminsIndexRoute: typeof ProtectedAdminsIndexRoute
+  ProtectedClassesIndexRoute: typeof ProtectedClassesIndexRoute
+  ProtectedCoursesIndexRoute: typeof ProtectedCoursesIndexRoute
+  ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
+  ProtectedDepartmentsIndexRoute: typeof ProtectedDepartmentsIndexRoute
+  ProtectedInstructorsIndexRoute: typeof ProtectedInstructorsIndexRoute
+  ProtectedSemestersIndexRoute: typeof ProtectedSemestersIndexRoute
+  ProtectedStudentsIndexRoute: typeof ProtectedStudentsIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
-  ProtectedHomeIndexRoute: ProtectedHomeIndexRoute,
+  ProtectedAdminsIndexRoute: ProtectedAdminsIndexRoute,
+  ProtectedClassesIndexRoute: ProtectedClassesIndexRoute,
+  ProtectedCoursesIndexRoute: ProtectedCoursesIndexRoute,
+  ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
+  ProtectedDepartmentsIndexRoute: ProtectedDepartmentsIndexRoute,
+  ProtectedInstructorsIndexRoute: ProtectedInstructorsIndexRoute,
+  ProtectedSemestersIndexRoute: ProtectedSemestersIndexRoute,
+  ProtectedStudentsIndexRoute: ProtectedStudentsIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
