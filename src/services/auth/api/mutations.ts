@@ -19,7 +19,7 @@ export function useLogin() {
     onSuccess: (data) => {
       queryClient.clear();
       setCurrentUser(data);
-      history.replaceState(null, "", "/home");
+      history.replaceState(null, "", "/dashboard");
     },
   });
 }

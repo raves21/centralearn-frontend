@@ -1,12 +1,12 @@
 import {
   Calendar,
   Landmark,
-  LayoutDashboard,
   Clipboard,
-  School,
-  LockKeyhole,
   GraduationCap,
   BriefcaseBusiness,
+  UserRoundCog,
+  LayoutGrid,
+  Layers,
 } from "lucide-react";
 import { type ReactNode } from "react";
 import { cn } from "../../lib/utils";
@@ -25,7 +25,7 @@ export default function SidePanel() {
       linkProps: {
         to: "/dashboard",
       },
-      icon: <LayoutDashboard className="size-6" />,
+      icon: <LayoutGrid className="size-6" />,
     },
     {
       name: "Departments",
@@ -46,21 +46,21 @@ export default function SidePanel() {
       linkProps: {
         to: "/courses",
       },
-      icon: <Clipboard className="size-6" />,
+      icon: <Layers className="size-6" />,
     },
     {
       name: "Classes",
       linkProps: {
         to: "/classes",
       },
-      icon: <School className="size-6" />,
+      icon: <Clipboard className="size-6" />,
     },
     {
       name: "Admins",
       linkProps: {
         to: "/admins",
       },
-      icon: <LockKeyhole className="size-6" />,
+      icon: <UserRoundCog className="size-6" />,
     },
     {
       name: "Students",
