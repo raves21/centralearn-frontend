@@ -87,7 +87,7 @@ export default function SidePanel() {
           {...route.linkProps}
           key={i}
           className={cn(
-            "p-3 flex items-center w-full text-gray-500 gap-[10px] rounded-md font-medium",
+            "p-3 flex items-center w-full text-main-text gap-[10px] rounded-md font-medium",
             {
               "bg-mainaccent text-white": !!matchRoute({
                 to: route.linkProps.to,

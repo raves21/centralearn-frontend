@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useLogin } from "../../../services/auth/api/mutations";
 import { Loader } from "lucide-react";
 import { useState } from "react";
+import { useLogin } from "../../../domains/auth/api/mutations";
 
 export const Route = createFileRoute("/_unprotected/login/")({
   component: RouteComponent,

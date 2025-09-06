@@ -1,6 +1,6 @@
 import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
-import { useCurrentUser } from "../../services/auth/api/queries";
 import { Loader } from "lucide-react";
+import { useCurrentUser } from "../../domains/auth/api/queries";
 
 export const Route = createFileRoute("/_unprotected")({
   component: RouteComponent,
