@@ -4,14 +4,16 @@ import type { GetAllDepartmentsResponse } from "../types";
 
 type UseDepartmentsArgs = {
   page: number | undefined;
-  name: string | undefined;
+  searchQuery: string | undefined;
 };
 
-export function useDepartments({ page = 1, name }: UseDepartmentsArgs) {
+export function useDepartments({ page = 1, searchQuery }: UseDepartmentsArgs) {
   return useQuery({
-    queryKey: ["allDepartments", page, name || undefined],
+    queryKey: ["allDepartments", page, searchQuery || undefined],
     queryFn: async () => {
-      const { data } = await api.get("/departments", { params: { name } });
+      const { data } = await api.get("/departments", {
+        params: { page, query: searchQuery },
+      });
       return data as GetAllDepartmentsResponse;
     },
   });

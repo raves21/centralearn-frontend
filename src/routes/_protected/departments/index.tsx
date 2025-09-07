@@ -8,10 +8,9 @@ import type { Department } from "@/domains/departments/types";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
 import { Loader } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
-import { useEffect } from "react";
 
 const searchParamsSchema = z.object({
-  name: z.string().optional(),
+  searchQuery: z.string().optional(),
   page: z.number().optional(),
 });
 
@@ -32,20 +31,14 @@ export const Route = createFileRoute("/_protected/departments/")({
 });
 
 function RouteComponent() {
-  const { name, page, success } = Route.useSearch();
+  const { searchQuery, page, success } = Route.useSearch();
   const navigate = useNavigate();
   useHandleSearchParamsValidationFailure({
     isValidationFail: !success,
-    onValidationFail: () => {
-      console.log("FAIL AND VALIDATION");
-      navigate({ to: "/departments" });
-    },
+    onValidationFail: () => navigate({ to: "/departments" }),
   });
 
-  useEffect(() => {
-    console.log("NAMe", name);
-  }, [name]);
-  const { data, status } = useDepartments({ page, name });
+  const { data, status } = useDepartments({ page, searchQuery });
 
   const columns: ColumnDef<Department>[] = [
     {
@@ -100,12 +93,13 @@ function RouteComponent() {
           }}
           filterProps={{
             searchInputPlaceholder: "Search departments by name/code",
+            searchInputInitValue: searchQuery,
             onInputSearch: (searchInput) =>
               navigate({
                 to: "/departments",
                 search: (prev) => ({
                   ...prev,
-                  name: searchInput || undefined,
+                  searchQuery: searchInput || undefined,
                 }),
               }),
           }}

@@ -25,56 +25,56 @@ export default function SidePanel() {
       linkProps: {
         to: "/dashboard",
       },
-      icon: <LayoutGrid className="size-6" />,
+      icon: <LayoutGrid key={1} className="size-6" />,
     },
     {
       name: "Departments",
       linkProps: {
         to: "/departments",
       },
-      icon: <Landmark className="size-6" />,
+      icon: <Landmark key={2} className="size-6" />,
     },
     {
       name: "Semesters",
       linkProps: {
         to: "/semesters",
       },
-      icon: <Calendar className="size-6" />,
+      icon: <Calendar key={3} className="size-6" />,
     },
     {
       name: "Courses",
       linkProps: {
         to: "/courses",
       },
-      icon: <Layers className="size-6" />,
+      icon: <Layers key={4} className="size-6" />,
     },
     {
       name: "Classes",
       linkProps: {
         to: "/classes",
       },
-      icon: <Clipboard className="size-6" />,
+      icon: <Clipboard key={5} className="size-6" />,
     },
     {
       name: "Admins",
       linkProps: {
         to: "/admins",
       },
-      icon: <UserRoundCog className="size-6" />,
+      icon: <UserRoundCog key={6} className="size-6" />,
     },
     {
       name: "Students",
       linkProps: {
         to: "/students",
       },
-      icon: <GraduationCap className="size-6" />,
+      icon: <GraduationCap key={7} className="size-6" />,
     },
     {
       name: "Instructors",
       linkProps: {
         to: "/instructors",
       },
-      icon: <BriefcaseBusiness className="size-6" />,
+      icon: <BriefcaseBusiness key={8} className="size-6" />,
     },
   ];
 
@@ -82,10 +82,10 @@ export default function SidePanel() {
 
   return (
     <div className="flex flex-col p-2 w-[16%] h-full pt-[calc(9dvh+20px)] bg-main-bg">
-      {routesTemp.map((route, i) => (
+      {routesTemp.map((route) => (
         <Link
           {...route.linkProps}
-          key={i}
+          key={route.name}
           className={cn(
             "p-3 flex items-center w-full text-main-text gap-[10px] rounded-md font-medium",
             {

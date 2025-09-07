@@ -7,7 +7,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { useDebounceInput } from "@/utils/hooks/useDebounceInput";
 import { useFocusInput } from "@/utils/hooks/useFocusInput";
-import { useSearch } from "@tanstack/react-router";
 import type { Table } from "@tanstack/react-table";
 import { ChevronDown, Filter } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,6 +14,7 @@ import { useEffect, useState } from "react";
 type Props = {
   onInputSearch: (input: string) => void;
   searchInputPlaceholder: string;
+  searchInputInitValue: string | undefined;
   table: Table<any>;
 };
 
@@ -22,10 +22,9 @@ export default function TableFilters({
   onInputSearch,
   searchInputPlaceholder,
   table,
+  searchInputInitValue,
 }: Props) {
-  const { name } = useSearch({ from: "/_protected/departments/" });
-
-  const [searchInput, setSearchInput] = useState(name ?? "");
+  const [searchInput, setSearchInput] = useState(searchInputInitValue ?? "");
 
   const debouncedInput = useDebounceInput({ value: searchInput, delay: 400 });
 

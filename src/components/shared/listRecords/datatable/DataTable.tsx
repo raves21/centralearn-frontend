@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   filterProps: {
     onInputSearch: (input: string) => void;
     searchInputPlaceholder: string;
+    searchInputInitValue: string | undefined;
   };
   className?: string;
 }
@@ -53,6 +54,7 @@ export function DataTable<TData, TValue>({
         table={table}
         onInputSearch={filterProps.onInputSearch}
         searchInputPlaceholder={filterProps.searchInputPlaceholder}
+        searchInputInitValue={filterProps.searchInputInitValue}
       />
       <Table className="bg-white rounded-lg">
         <TableHeader>
