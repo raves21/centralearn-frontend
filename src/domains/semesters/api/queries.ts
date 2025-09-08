@@ -9,7 +9,7 @@ type UseSemesterArgs = {
 
 export function useSemesters({ page = 1, searchQuery }: UseSemesterArgs) {
   return useQuery({
-    queryKey: ["useSemesters", page, searchQuery || undefined],
+    queryKey: ["semesters", page, searchQuery || undefined],
     queryFn: async () => {
       const { data } = await api.get("/semesters", {
         params: { page, query: searchQuery },

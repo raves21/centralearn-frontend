@@ -9,7 +9,7 @@ type UseDepartmentsArgs = {
 
 export function useDepartments({ page = 1, searchQuery }: UseDepartmentsArgs) {
   return useQuery({
-    queryKey: ["allDepartments", page, searchQuery || undefined],
+    queryKey: ["departments", page, searchQuery || undefined],
     queryFn: async () => {
       const { data } = await api.get("/departments", {
         params: { page, query: searchQuery },

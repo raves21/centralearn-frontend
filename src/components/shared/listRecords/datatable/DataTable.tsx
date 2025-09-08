@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import Pagination from "../../pagination/Pagination";
+import Pagination from "../pagination/Pagination";
 import TableFilters from "./TableFilters";
 
 interface DataTableProps<TData, TValue> {
@@ -84,7 +84,11 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className="py-5 px-3" key={cell.id}>
+                  <TableCell
+                    title={cell.getValue<any>()}
+                    className="py-5 px-3 max-w-[150px] truncate"
+                    key={cell.id}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
