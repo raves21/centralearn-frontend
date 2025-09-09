@@ -25,56 +25,63 @@ export default function SidePanel() {
       linkProps: {
         to: "/dashboard",
       },
-      icon: <LayoutGrid key={1} className="size-6" />,
-    },
-    {
-      name: "Departments",
-      linkProps: {
-        to: "/departments",
-      },
-      icon: <Landmark key={2} className="size-6" />,
+      icon: <LayoutGrid key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Semesters",
       linkProps: {
         to: "/semesters",
       },
-      icon: <Calendar key={3} className="size-6" />,
+      icon: <Calendar key={crypto.randomUUID()} className="size-6" />,
+    },
+    {
+      name: "Departments",
+      linkProps: {
+        to: "/departments",
+      },
+      icon: <Landmark key={crypto.randomUUID()} className="size-6" />,
+    },
+    {
+      name: "Programs",
+      linkProps: {
+        to: "/programs",
+      },
+      icon: <Layers key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Courses",
       linkProps: {
         to: "/courses",
       },
-      icon: <Layers key={4} className="size-6" />,
+      icon: <Layers key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Classes",
       linkProps: {
         to: "/classes",
       },
-      icon: <Clipboard key={5} className="size-6" />,
+      icon: <Clipboard key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Admins",
       linkProps: {
         to: "/admins",
       },
-      icon: <UserRoundCog key={6} className="size-6" />,
+      icon: <UserRoundCog key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Students",
       linkProps: {
         to: "/students",
       },
-      icon: <GraduationCap key={7} className="size-6" />,
+      icon: <GraduationCap key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Instructors",
       linkProps: {
         to: "/instructors",
       },
-      icon: <BriefcaseBusiness key={8} className="size-6" />,
+      icon: <BriefcaseBusiness key={crypto.randomUUID()} className="size-6" />,
     },
   ];
 

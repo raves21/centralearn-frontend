@@ -66,7 +66,8 @@ export default function TableFilters({
                   checked={column.getIsVisible()}
                   onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 >
-                  {column.id}
+                  {/* todo: https://chatgpt.com/share/68c07cdb-21b0-8003-90af-9bc10c6f15bb */}
+                  {`${column.columnDef.header}`}
                 </DropdownMenuCheckboxItem>
               );
             })}

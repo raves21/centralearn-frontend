@@ -4,6 +4,7 @@ export type User = {
   lastName: string;
   email: string;
   address: string;
+  roles: string[];
 };
 
 export type PaginationProps = {

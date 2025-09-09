@@ -6,8 +6,8 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
 import { Loader } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
-import { useStudents } from "@/domains/students/api/queries";
-import type { Student } from "@/domains/students/types";
+import { usePrograms } from "@/domains/programs/api/queries";
+import type { Program } from "@/domains/programs/types";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -17,7 +17,7 @@ const searchParamsSchema = z.object({
 type SearchParamsSchema = z.infer<typeof searchParamsSchema> &
   SearchSchemaValidationStatus;
 
-export const Route = createFileRoute("/_protected/students/")({
+export const Route = createFileRoute("/_protected/programs/")({
   component: RouteComponent,
   validateSearch: (search): SearchParamsSchema => {
     const validated = searchParamsSchema.safeParse(search);
@@ -35,31 +35,27 @@ function RouteComponent() {
   const navigate = useNavigate();
   useHandleSearchParamsValidationFailure({
     isValidationFail: !success,
-    onValidationFail: () => navigate({ to: "/students" }),
+    onValidationFail: () => navigate({ to: "/programs" }),
   });
 
-  const { data, status } = useStudents({ page, searchQuery });
+  const { data, status } = usePrograms({ page, searchQuery });
 
-  const columns: ColumnDef<Student>[] = [
+  const columns: ColumnDef<Program>[] = [
     {
-      accessorFn: (row) => row.user.firstName,
-      accessorKey: "firstName",
-      header: "Firstname",
+      accessorKey: "name",
+      header: "Name",
     },
     {
-      accessorFn: (row) => row.user.lastName,
-      accessorKey: "lastName",
-      header: "Lastname",
+      accessorKey: "code",
+      header: "Code",
     },
     {
-      accessorFn: (row) => row.program.code,
-      accessorKey: "programCode",
-      header: "Program",
-    },
-    {
-      accessorFn: (row) => row.program.department?.code,
-      accessorKey: "programDept",
+      accessorFn: (row) => row.department?.code,
       header: "Department",
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
     },
   ];
 
@@ -82,7 +78,7 @@ function RouteComponent() {
   if (data) {
     return (
       <div className="size-full flex flex-col gap-16">
-        <TitleAndCreateAction headerTitle="Students" createAction={() => {}} />
+        <TitleAndCreateAction headerTitle="Programs" createAction={() => {}} />
         <DataTable
           columns={columns}
           data={data.data}
@@ -90,18 +86,18 @@ function RouteComponent() {
             currentPage: data.meta.current_page,
             handlePageChange: (_, page) => {
               navigate({
-                to: "/students",
+                to: "/programs",
                 search: (prev) => ({ ...prev, page: page }),
               });
             },
             totalPages: data.meta.last_page,
           }}
           filterProps={{
-            searchInputPlaceholder: "Search students by name",
+            searchInputPlaceholder: "Search programs by name/code",
             searchInputInitValue: searchQuery,
             onInputSearch: (searchInput) =>
               navigate({
-                to: "/students",
+                to: "/programs",
                 search: (prev) => ({
                   ...prev,
                   searchQuery: searchInput || undefined,

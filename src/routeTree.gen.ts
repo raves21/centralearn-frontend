@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnprotectedLoginIndexRouteImport } from './routes/_unprotected/login/index'
 import { Route as ProtectedStudentsIndexRouteImport } from './routes/_protected/students/index'
 import { Route as ProtectedSemestersIndexRouteImport } from './routes/_protected/semesters/index'
+import { Route as ProtectedProgramsIndexRouteImport } from './routes/_protected/programs/index'
 import { Route as ProtectedInstructorsIndexRouteImport } from './routes/_protected/instructors/index'
 import { Route as ProtectedDepartmentsIndexRouteImport } from './routes/_protected/departments/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
@@ -48,6 +49,11 @@ const ProtectedStudentsIndexRoute = ProtectedStudentsIndexRouteImport.update({
 const ProtectedSemestersIndexRoute = ProtectedSemestersIndexRouteImport.update({
   id: '/semesters/',
   path: '/semesters/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedProgramsIndexRoute = ProtectedProgramsIndexRouteImport.update({
+  id: '/programs/',
+  path: '/programs/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ProtectedInstructorsIndexRoute =
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/departments': typeof ProtectedDepartmentsIndexRoute
   '/instructors': typeof ProtectedInstructorsIndexRoute
+  '/programs': typeof ProtectedProgramsIndexRoute
   '/semesters': typeof ProtectedSemestersIndexRoute
   '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/departments': typeof ProtectedDepartmentsIndexRoute
   '/instructors': typeof ProtectedInstructorsIndexRoute
+  '/programs': typeof ProtectedProgramsIndexRoute
   '/semesters': typeof ProtectedSemestersIndexRoute
   '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
   '/_protected/departments/': typeof ProtectedDepartmentsIndexRoute
   '/_protected/instructors/': typeof ProtectedInstructorsIndexRoute
+  '/_protected/programs/': typeof ProtectedProgramsIndexRoute
   '/_protected/semesters/': typeof ProtectedSemestersIndexRoute
   '/_protected/students/': typeof ProtectedStudentsIndexRoute
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/departments'
     | '/instructors'
+    | '/programs'
     | '/semesters'
     | '/students'
     | '/login'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/departments'
     | '/instructors'
+    | '/programs'
     | '/semesters'
     | '/students'
     | '/login'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/_protected/dashboard/'
     | '/_protected/departments/'
     | '/_protected/instructors/'
+    | '/_protected/programs/'
     | '/_protected/semesters/'
     | '/_protected/students/'
     | '/_unprotected/login/'
@@ -213,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedSemestersIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/programs/': {
+      id: '/_protected/programs/'
+      path: '/programs'
+      fullPath: '/programs'
+      preLoaderRoute: typeof ProtectedProgramsIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/instructors/': {
       id: '/_protected/instructors/'
       path: '/instructors'
@@ -265,6 +284,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
   ProtectedDepartmentsIndexRoute: typeof ProtectedDepartmentsIndexRoute
   ProtectedInstructorsIndexRoute: typeof ProtectedInstructorsIndexRoute
+  ProtectedProgramsIndexRoute: typeof ProtectedProgramsIndexRoute
   ProtectedSemestersIndexRoute: typeof ProtectedSemestersIndexRoute
   ProtectedStudentsIndexRoute: typeof ProtectedStudentsIndexRoute
 }
@@ -276,6 +296,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
   ProtectedDepartmentsIndexRoute: ProtectedDepartmentsIndexRoute,
   ProtectedInstructorsIndexRoute: ProtectedInstructorsIndexRoute,
+  ProtectedProgramsIndexRoute: ProtectedProgramsIndexRoute,
   ProtectedSemestersIndexRoute: ProtectedSemestersIndexRoute,
   ProtectedStudentsIndexRoute: ProtectedStudentsIndexRoute,
 }
