@@ -10,7 +10,7 @@ import type { Course } from "@/domains/courses/types";
 import { useCourseClasses } from "@/domains/classes/api/queries";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Semester } from "@/domains/semesters/types";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -58,7 +58,7 @@ function RouteComponent() {
       cell: ({ getValue }) => {
         const semester = getValue<Semester>();
         return (
-          <p>{`${semester.name} - (${moment(semester.startDate).format("MMM DD, YYYY")} - ${moment(semester.endDate).format("MMM DD, YYYY")})`}</p>
+          <p>{`${semester.name} - (${dayjs(semester.startDate).format("MMM D, YYYY")} - ${dayjs(semester.endDate).format("MMM D, YYYY")})`}</p>
         );
       },
     },

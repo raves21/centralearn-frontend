@@ -11,8 +11,9 @@ export function useCourseClasses({ page, searchQuery }: UseCourseClassesArgs) {
   return useQuery({
     queryKey: ["courseClasses", page, searchQuery],
     queryFn: async () => {
-      const { data } = await api.get("/course-classes");
-      console.log("DATA", data);
+      const { data } = await api.get("/course-classes", {
+        params: { page, query: searchQuery },
+      });
       return data as GetAllCourseClasses;
     },
   });

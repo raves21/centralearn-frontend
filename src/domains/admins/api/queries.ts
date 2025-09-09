@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/axiosBackend";
-import type { GetAllCourses } from "../types";
+import type { GetAllAdmins } from "../types";
 
-type UseCoursesArgs = {
+type UseAdminsArgs = {
   searchQuery: string | undefined;
   page: number | undefined;
 };
 
-export function useCourses({ page, searchQuery }: UseCoursesArgs) {
+export function useAdmins({ page, searchQuery }: UseAdminsArgs) {
   return useQuery({
-    queryKey: ["courses", page, searchQuery],
+    queryKey: ["admins", page, searchQuery],
     queryFn: async () => {
-      const { data } = await api.get("/courses", {
+      const { data } = await api.get("/admins", {
         params: { page, query: searchQuery },
       });
-      return data as GetAllCourses;
+      return data as GetAllAdmins;
     },
   });
 }
