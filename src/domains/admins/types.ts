@@ -1,6 +1,6 @@
 import type { PaginationProps, User } from "../../utils/sharedTypes";
 
-export type GetAllAdmins = PaginationProps & {
+export type GetAdmins = PaginationProps & {
   data: Admin[];
 };
 

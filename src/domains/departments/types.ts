@@ -1,6 +1,6 @@
 import type { PaginationProps } from "../../utils/sharedTypes";
 
-export type GetAllDepartmentsResponse = PaginationProps & {
+export type GetDepartmentsResponse = PaginationProps & {
   data: Department[];
 };
 

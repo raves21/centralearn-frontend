@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/axiosBackend";
-import type { GetAllCourses } from "../types";
+import type { GetCourses } from "../types";
 
 type UseCoursesArgs = {
   searchQuery: string | undefined;
@@ -14,7 +14,7 @@ export function useCourses({ page, searchQuery }: UseCoursesArgs) {
       const { data } = await api.get("/courses", {
         params: { page, query: searchQuery },
       });
-      return data as GetAllCourses;
+      return data as GetCourses;
     },
   });
 }

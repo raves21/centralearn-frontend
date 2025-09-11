@@ -1,6 +1,6 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetAllStudentsResponse } from "../types";
+import type { GetStudentsResponse } from "../types";
 
 type UseStudentsArgs = {
   page: number | undefined;
@@ -14,7 +14,7 @@ export function useStudents({ page = 1, searchQuery }: UseStudentsArgs) {
       const { data } = await api.get("/students", {
         params: { page, query: searchQuery },
       });
-      return data as GetAllStudentsResponse;
+      return data as GetStudentsResponse;
     },
   });
 }

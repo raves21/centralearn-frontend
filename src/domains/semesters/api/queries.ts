@@ -1,6 +1,6 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetAllSemestersResponse } from "../types";
+import type { GetSemestersResponse } from "../types";
 
 type UseSemesterArgs = {
   page: number | undefined;
@@ -14,7 +14,7 @@ export function useSemesters({ page = 1, searchQuery }: UseSemesterArgs) {
       const { data } = await api.get("/semesters", {
         params: { page, query: searchQuery },
       });
-      return data as GetAllSemestersResponse;
+      return data as GetSemestersResponse;
     },
   });
 }

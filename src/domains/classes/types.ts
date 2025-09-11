@@ -2,7 +2,7 @@ import type { PaginationProps } from "../../utils/sharedTypes";
 import type { Course } from "../courses/types";
 import type { Semester } from "../semesters/types";
 
-export type GetAllCourseClasses = PaginationProps & {
+export type GetCourseClasses = PaginationProps & {
   data: CourseClass[];
 };
 

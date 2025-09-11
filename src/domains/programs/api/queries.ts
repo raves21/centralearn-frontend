@@ -1,6 +1,6 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetAllProgramsResponse } from "../types";
+import type { GetProgramsResponse } from "../types";
 
 type UseProgramsArgs = {
   page: number | undefined;
@@ -14,7 +14,7 @@ export function usePrograms({ page = 1, searchQuery }: UseProgramsArgs) {
       const { data } = await api.get("/programs", {
         params: { page, query: searchQuery },
       });
-      return data as GetAllProgramsResponse;
+      return data as GetProgramsResponse;
     },
   });
 }

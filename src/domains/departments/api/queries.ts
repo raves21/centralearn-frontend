@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../utils/axiosBackend";
-import type { GetAllDepartmentsResponse } from "../types";
+import type { GetDepartmentsResponse } from "../types";
 
 type UseDepartmentsArgs = {
   page: number | undefined;
@@ -14,7 +14,7 @@ export function useDepartments({ page = 1, searchQuery }: UseDepartmentsArgs) {
       const { data } = await api.get("/departments", {
         params: { page, query: searchQuery },
       });
-      return data as GetAllDepartmentsResponse;
+      return data as GetDepartmentsResponse;
     },
   });
 }
