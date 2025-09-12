@@ -9,7 +9,7 @@ export default function TopPanel() {
   if (!currentUser) return <Navigate to="/login" replace />;
 
   return (
-    <div className="px-3 h-[9dvh] bg-main-bg fixed top-0 left-0 w-full flex items-center justify-between">
+    <div className="px-3 h-[9dvh] max-h-[90px] shrink-0 bg-main-bg w-full flex items-center justify-between">
       <Logo />
       <div className="flex items-center gap-3 h-full mr-3 group">
         <div className="rounded-full overflow-hidden aspect-square h-[60%]">

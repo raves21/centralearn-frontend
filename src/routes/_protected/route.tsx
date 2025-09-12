@@ -26,11 +26,11 @@ function RouteComponent() {
 
   if (getCurrentUserStatus === "success") {
     return (
-      <div className="h-dvh relative w-dvw bg-gray-bg">
+      <div className="h-dvh flex flex-col relative w-dvw bg-gray-bg overflow-hidden">
         <TopPanel />
-        <div className="size-full flex">
+        <div className="size-full flex-grow flex overflow-hidden">
           <SidePanel />
-          <div className="flex-grow pt-[calc(9dvh+28px)] px-7">
+          <div className="flex-grow px-7 pt-7 overflow-auto">
             <Outlet />
           </div>
         </div>

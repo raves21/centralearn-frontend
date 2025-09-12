@@ -88,7 +88,7 @@ export default function SidePanel() {
   const matchRoute = useMatchRoute();
 
   return (
-    <div className="flex flex-col p-2 w-[16%] h-full pt-[calc(9dvh+20px)] bg-main-bg">
+    <div className="flex flex-col px-2 pt-4 shrink-0 w-[30%] max-w-[300px] h-full bg-main-bg">
       {routesTemp.map((route) => (
         <Link
           {...route.linkProps}
@@ -98,6 +98,7 @@ export default function SidePanel() {
             {
               "bg-mainaccent text-white": !!matchRoute({
                 to: route.linkProps.to,
+                fuzzy: true,
               }),
             }
           )}

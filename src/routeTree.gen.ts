@@ -22,6 +22,7 @@ import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected
 import { Route as ProtectedCoursesIndexRouteImport } from './routes/_protected/courses/index'
 import { Route as ProtectedClassesIndexRouteImport } from './routes/_protected/classes/index'
 import { Route as ProtectedAdminsIndexRouteImport } from './routes/_protected/admins/index'
+import { Route as ProtectedDepartmentsCreateIndexRouteImport } from './routes/_protected/departments/create/index'
 
 const UnprotectedRouteRoute = UnprotectedRouteRouteImport.update({
   id: '/_unprotected',
@@ -88,6 +89,12 @@ const ProtectedAdminsIndexRoute = ProtectedAdminsIndexRouteImport.update({
   path: '/admins/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedDepartmentsCreateIndexRoute =
+  ProtectedDepartmentsCreateIndexRouteImport.update({
+    id: '/departments/create/',
+    path: '/departments/create/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/semesters': typeof ProtectedSemestersIndexRoute
   '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
+  '/departments/create': typeof ProtectedDepartmentsCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -114,6 +122,7 @@ export interface FileRoutesByTo {
   '/semesters': typeof ProtectedSemestersIndexRoute
   '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
+  '/departments/create': typeof ProtectedDepartmentsCreateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -130,6 +139,7 @@ export interface FileRoutesById {
   '/_protected/semesters/': typeof ProtectedSemestersIndexRoute
   '/_protected/students/': typeof ProtectedStudentsIndexRoute
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
+  '/_protected/departments/create/': typeof ProtectedDepartmentsCreateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/semesters'
     | '/students'
     | '/login'
+    | '/departments/create'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/semesters'
     | '/students'
     | '/login'
+    | '/departments/create'
   id:
     | '__root__'
     | '/'
@@ -173,6 +185,7 @@ export interface FileRouteTypes {
     | '/_protected/semesters/'
     | '/_protected/students/'
     | '/_unprotected/login/'
+    | '/_protected/departments/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedAdminsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/departments/create/': {
+      id: '/_protected/departments/create/'
+      path: '/departments/create'
+      fullPath: '/departments/create'
+      preLoaderRoute: typeof ProtectedDepartmentsCreateIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -287,6 +307,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedProgramsIndexRoute: typeof ProtectedProgramsIndexRoute
   ProtectedSemestersIndexRoute: typeof ProtectedSemestersIndexRoute
   ProtectedStudentsIndexRoute: typeof ProtectedStudentsIndexRoute
+  ProtectedDepartmentsCreateIndexRoute: typeof ProtectedDepartmentsCreateIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -299,6 +320,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedProgramsIndexRoute: ProtectedProgramsIndexRoute,
   ProtectedSemestersIndexRoute: ProtectedSemestersIndexRoute,
   ProtectedStudentsIndexRoute: ProtectedStudentsIndexRoute,
+  ProtectedDepartmentsCreateIndexRoute: ProtectedDepartmentsCreateIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useLogin } from "../../../domains/auth/api/mutations";
+import { InputWithLabel } from "@/components/ui/input-with-label";
 
 export const Route = createFileRoute("/_unprotected/login/")({
   component: RouteComponent,
@@ -23,7 +24,7 @@ function RouteComponent() {
         <Loader className="size-11 stroke-mainaccent" />
         <p className="text-3xl font-semibold">CentraLearn</p>
       </div>
-      <div className="flex flex-col gap-12 items-center p-24 shadow-md bg-main-bg rounded-md">
+      <div className="flex flex-col gap-10 items-center p-24 shadow-md bg-main-bg rounded-md">
         <p className="text-3xl font-semibold">Login</p>
         <form
           className="flex flex-col gap-5"
@@ -32,18 +33,18 @@ function RouteComponent() {
             await login({ email, password });
           }}
         >
-          <input
+          <InputWithLabel
+            label="Email"
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
-            placeholder="Email"
-            className="px-2 w-[340px] py-3 border-1 rounded-sm border-gray-600 focus:outline-black"
+            containerClassName="w-[340px]"
             type="text"
           />
-          <input
+          <InputWithLabel
+            label="Password"
             value={password}
             onChange={(e) => setPassword(e.currentTarget.value)}
-            placeholder="Password"
-            className="px-2 w-[340px] py-3 border-1 rounded-sm border-gray-600 focus:outline-black"
+            containerClassName="w-[340px]"
             type="text"
           />
           <button

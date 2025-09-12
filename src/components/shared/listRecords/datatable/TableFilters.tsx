@@ -41,7 +41,7 @@ export default function TableFilters({
         placeholder={searchInputPlaceholder}
         value={searchInput}
         onChange={(e) => setSearchInput(e.currentTarget.value)}
-        className="w-[400px] shadow-none border-gray-400 focus-visible:ring-mainaccent/50"
+        className="w-[400px]"
       />
       <button className="bg-none border-1 min-w-[110px] justify-center rounded-md px-3 gap-2 text-black py-2 hover:ring-mainaccent/50 hover:ring-[2px] transition-all flex items-center border-gray-400">
         <Filter className="size-4" />
