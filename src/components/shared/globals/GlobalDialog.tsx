@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useShallow } from "zustand/react/shallow";
-import { useGlobalStore } from "./stores/useGlobalStore";
+import { useGlobalStore } from "./utils/useGlobalStore";
 
 export default function GlobalDialog() {
   const [isDialogOpen, dialogContent, toggleOpenDialog] = useGlobalStore(

@@ -22,6 +22,9 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateDepartment } from "@/domains/departments/api/mutations";
+import { toast } from "sonner";
+import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
 
 export const Route = createFileRoute("/_protected/departments/create/")({
   component: RouteComponent,
@@ -38,6 +41,13 @@ function RouteComponent() {
   const [preview, setPreview] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  const { mutateAsync: createDepartment, status: createDepartmentStatus } =
+    useCreateDepartment();
+
+  usePendingOverlay({
+    isPending: createDepartmentStatus === "pending",
+    pendingLabel: "Creating Department",
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,7 +58,23 @@ function RouteComponent() {
     },
   });
 
-  async function onSubmit({}: z.infer<typeof formSchema>) {}
+  async function onSubmit({
+    name,
+    code,
+    description,
+  }: z.infer<typeof formSchema>) {
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("code", code);
+      if (description) formData.append("description", description);
+      if (image) formData.append("image", image);
+      await createDepartment(formData);
+      navigate({ to: "/departments" });
+    } catch (error) {
+      toast.error("An error occured");
+    }
+  }
 
   return (
     <div className="flex flex-col gap-16 size-full">
@@ -142,14 +168,15 @@ function RouteComponent() {
           <div className="flex items-center gap-5">
             <button
               type="submit"
-              className="flex font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] text-white rounded-md bg-mainaccent"
+              className="flex hover:bg-indigo-700 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-2 py-[10px] text-white rounded-md bg-mainaccent"
             >
               Create
             </button>
             <button
+              disabled={createDepartmentStatus === "pending"}
               onClick={() => navigate({ to: "/departments" })}
               type="button"
-              className="flex font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-white border-2 border-gray-600/50 text-black"
+              className="flex disabled:bg-gray-200 hover:bg-gray-200 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-white border-2 border-gray-600/50 text-black"
             >
               Cancel
             </button>

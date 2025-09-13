@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Pen, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type Props = {
   className?: string;
@@ -24,8 +25,12 @@ export default function ImageUpload({
   function onChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      if (selectedFile.type === "") imageProps.setImage(selectedFile);
-      previewProps.setPreview(URL.createObjectURL(selectedFile));
+      if (!["image/jpeg", "image/png"].includes(selectedFile.type)) {
+        toast.error("Only .jpg/jpeg and .png files are allowed.");
+      } else {
+        imageProps.setImage(selectedFile);
+        previewProps.setPreview(URL.createObjectURL(selectedFile));
+      }
     }
   }
 

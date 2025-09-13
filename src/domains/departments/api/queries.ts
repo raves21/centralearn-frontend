@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../utils/axiosBackend";
 import type { GetDepartmentsResponse } from "../types";
 
-type UseDepartmentsArgs = {
+export function useDepartments({
+  page = 1,
+  searchQuery,
+}: {
   page: number | undefined;
   searchQuery: string | undefined;
-};
-
-export function useDepartments({ page = 1, searchQuery }: UseDepartmentsArgs) {
+}) {
   return useQuery({
     queryKey: ["departments", page, searchQuery || undefined],
     queryFn: async () => {
