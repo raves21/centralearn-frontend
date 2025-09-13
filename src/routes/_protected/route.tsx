@@ -13,7 +13,7 @@ function RouteComponent() {
 
   if (getCurrentUserStatus === "pending") {
     return (
-      <div className="h-dvh flex items-center justify-center gap-6 bg-gray-bg text-mainaccent font-semibold">
+      <div className="flex items-center justify-center gap-6 font-semibold h-dvh bg-gray-bg text-mainaccent">
         <p className="text-4xl font-semibold">CentraLearn</p>
         <Loader className="size-16 animate-spin stroke-mainaccent" />
       </div>
@@ -26,11 +26,11 @@ function RouteComponent() {
 
   if (getCurrentUserStatus === "success") {
     return (
-      <div className="h-dvh flex flex-col relative w-dvw bg-gray-bg overflow-hidden">
+      <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
         <TopPanel />
-        <div className="size-full flex-grow flex overflow-hidden">
+        <div className="flex flex-grow overflow-hidden size-full">
           <SidePanel />
-          <div className="flex-grow px-7 pt-7 overflow-auto">
+          <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
             <Outlet />
           </div>
         </div>

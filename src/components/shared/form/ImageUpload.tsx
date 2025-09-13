@@ -24,7 +24,7 @@ export default function ImageUpload({
   function onChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      imageProps.setImage(selectedFile);
+      if (selectedFile.type === "") imageProps.setImage(selectedFile);
       previewProps.setPreview(URL.createObjectURL(selectedFile));
     }
   }
@@ -39,10 +39,10 @@ export default function ImageUpload({
       )}
     >
       {previewProps.preview && (
-        <div className="size-full relative">
+        <div className="relative size-full">
           <img
             src={previewProps.preview}
-            className="size-full absolute object-contain z-30"
+            className="absolute z-30 object-contain size-full"
           />
           <div
             className={cn(
@@ -57,7 +57,7 @@ export default function ImageUpload({
                 onChange={onChangeFile}
                 type="file"
                 accept="image/*"
-                className="absolute inset-0 group-hover:cursor-pointer size-full opacity-0 z-10"
+                className="absolute inset-0 z-10 opacity-0 group-hover:cursor-pointer size-full"
               />
               <Pen className="size-[50%] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute transition-colors group-hover:stroke-white stroke-white pointer-events-none" />
             </div>
@@ -78,10 +78,10 @@ export default function ImageUpload({
         onChange={onChangeFile}
         type="file"
         accept="image/*"
-        className="size-full opacity-0 z-20"
+        className="z-20 opacity-0 size-full"
       />
       {!imageProps.image && (
-        <p className="absolute text-gray-600 left-1/2 top-1/2 -z-10 text-center -translate-x-1/2 -translate-y-1/2">
+        <p className="absolute text-center text-gray-600 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 -z-10">
           Click here to upload image
         </p>
       )}

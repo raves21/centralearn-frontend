@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_unprotected/login/")({
   component: RouteComponent,
@@ -35,7 +36,14 @@ function RouteComponent() {
   });
 
   async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
-    await login({ email, password });
+    try {
+      await login({ email, password });
+      toast.success("You are logged in!");
+    } catch (err: any) {
+      toast.error("Error", {
+        description: err.response.data.message,
+      });
+    }
   }
 
   return (

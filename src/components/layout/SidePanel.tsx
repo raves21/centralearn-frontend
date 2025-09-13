@@ -88,7 +88,7 @@ export default function SidePanel() {
   const matchRoute = useMatchRoute();
 
   return (
-    <div className="flex flex-col px-2 pt-4 shrink-0 w-[30%] max-w-[300px] h-full bg-main-bg">
+    <div className="flex flex-col fixed left-0 top-[9dvh] pt-[28px] px-2 w-[30%] max-w-[300px] h-[calc(100dvh-9dvh)] overflow-auto bg-main-bg">
       {routesTemp.map((route) => (
         <Link
           {...route.linkProps}

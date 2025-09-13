@@ -9,9 +9,9 @@ export default function TopPanel() {
   if (!currentUser) return <Navigate to="/login" replace />;
 
   return (
-    <div className="px-3 h-[9dvh] max-h-[90px] shrink-0 bg-main-bg w-full flex items-center justify-between">
+    <div className="px-3 h-[9dvh] fixed top-0 z-50 left-0 max-h-[90px] bg-main-bg w-full flex items-center justify-between">
       <Logo />
-      <div className="flex items-center gap-3 h-full mr-3 group">
+      <div className="flex items-center h-full gap-3 mr-3 group">
         <div className="rounded-full overflow-hidden aspect-square h-[60%]">
           <img
             src="https://as2.ftcdn.net/jpg/01/78/45/89/1000_F_178458935_IKeoXYjUSDLSeX5YrSOqZLd1cTepNjbV.jpg"
@@ -24,7 +24,7 @@ export default function TopPanel() {
           </p>
           <p className="text-main-text">{currentUser.roles[0]}</p>
         </div>
-        <ChevronDown className="stroke-main-text ml-4 group-hover:stroke-gray-800 size-5" />
+        <ChevronDown className="ml-4 stroke-main-text group-hover:stroke-gray-800 size-5" />
       </div>
     </div>
   );
