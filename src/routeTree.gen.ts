@@ -22,6 +22,7 @@ import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected
 import { Route as ProtectedCoursesIndexRouteImport } from './routes/_protected/courses/index'
 import { Route as ProtectedClassesIndexRouteImport } from './routes/_protected/classes/index'
 import { Route as ProtectedAdminsIndexRouteImport } from './routes/_protected/admins/index'
+import { Route as ProtectedSemestersCreateIndexRouteImport } from './routes/_protected/semesters/create/index'
 import { Route as ProtectedDepartmentsCreateIndexRouteImport } from './routes/_protected/departments/create/index'
 
 const UnprotectedRouteRoute = UnprotectedRouteRouteImport.update({
@@ -89,6 +90,12 @@ const ProtectedAdminsIndexRoute = ProtectedAdminsIndexRouteImport.update({
   path: '/admins/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedSemestersCreateIndexRoute =
+  ProtectedSemestersCreateIndexRouteImport.update({
+    id: '/semesters/create/',
+    path: '/semesters/create/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedDepartmentsCreateIndexRoute =
   ProtectedDepartmentsCreateIndexRouteImport.update({
     id: '/departments/create/',
@@ -109,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
   '/departments/create': typeof ProtectedDepartmentsCreateIndexRoute
+  '/semesters/create': typeof ProtectedSemestersCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -123,6 +131,7 @@ export interface FileRoutesByTo {
   '/students': typeof ProtectedStudentsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
   '/departments/create': typeof ProtectedDepartmentsCreateIndexRoute
+  '/semesters/create': typeof ProtectedSemestersCreateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,6 +149,7 @@ export interface FileRoutesById {
   '/_protected/students/': typeof ProtectedStudentsIndexRoute
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
   '/_protected/departments/create/': typeof ProtectedDepartmentsCreateIndexRoute
+  '/_protected/semesters/create/': typeof ProtectedSemestersCreateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/students'
     | '/login'
     | '/departments/create'
+    | '/semesters/create'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/students'
     | '/login'
     | '/departments/create'
+    | '/semesters/create'
   id:
     | '__root__'
     | '/'
@@ -186,6 +198,7 @@ export interface FileRouteTypes {
     | '/_protected/students/'
     | '/_unprotected/login/'
     | '/_protected/departments/create/'
+    | '/_protected/semesters/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedAdminsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/semesters/create/': {
+      id: '/_protected/semesters/create/'
+      path: '/semesters/create'
+      fullPath: '/semesters/create'
+      preLoaderRoute: typeof ProtectedSemestersCreateIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/departments/create/': {
       id: '/_protected/departments/create/'
       path: '/departments/create'
@@ -308,6 +328,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedSemestersIndexRoute: typeof ProtectedSemestersIndexRoute
   ProtectedStudentsIndexRoute: typeof ProtectedStudentsIndexRoute
   ProtectedDepartmentsCreateIndexRoute: typeof ProtectedDepartmentsCreateIndexRoute
+  ProtectedSemestersCreateIndexRoute: typeof ProtectedSemestersCreateIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -321,6 +342,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedSemestersIndexRoute: ProtectedSemestersIndexRoute,
   ProtectedStudentsIndexRoute: ProtectedStudentsIndexRoute,
   ProtectedDepartmentsCreateIndexRoute: ProtectedDepartmentsCreateIndexRoute,
+  ProtectedSemestersCreateIndexRoute: ProtectedSemestersCreateIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

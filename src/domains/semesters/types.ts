@@ -10,3 +10,8 @@ export type Semester = {
   startDate: string;
   endDate: string;
 };
+
+export type SemesterMinMaxTimestamps = {
+  startDateMin: string | null;
+  endDateMax: string | null;
+};

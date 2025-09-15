@@ -8,6 +8,7 @@ import { Loader } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import { useSemesters } from "@/domains/semesters/api/queries";
 import type { Semester } from "@/domains/semesters/types";
+import dayjs from "dayjs";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -48,10 +49,12 @@ function RouteComponent() {
     {
       accessorKey: "startDate",
       header: "Start Date",
+      cell: (data) => dayjs(data.getValue() as string).format("MMM D, YYYY"),
     },
     {
       accessorKey: "endDate",
       header: "End Date",
+      cell: (data) => dayjs(data.getValue() as string).format("MMM D, YYYY"),
     },
   ];
 
@@ -74,7 +77,10 @@ function RouteComponent() {
   if (data) {
     return (
       <div className="size-full flex flex-col gap-16">
-        <TitleAndCreateAction headerTitle="Semesters" createAction={() => {}} />
+        <TitleAndCreateAction
+          headerTitle="Semesters"
+          createAction={() => navigate({ to: "/semesters/create" })}
+        />
         <DataTable
           columns={columns}
           data={data.data}
