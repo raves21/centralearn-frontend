@@ -168,7 +168,7 @@ function RouteComponent() {
           <div className="flex items-center gap-5">
             <button
               type="submit"
-              className="flex hover:bg-indigo-700 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-2 py-[10px] text-white rounded-md bg-mainaccent"
+              className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-2 py-[10px] text-white rounded-md bg-mainaccent"
             >
               Create
             </button>
