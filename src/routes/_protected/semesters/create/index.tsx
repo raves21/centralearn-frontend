@@ -91,31 +91,37 @@ function RouteComponent() {
 
   const startDate = form.watch("startDate");
 
-  return (
-    <div className="flex flex-col gap-16 size-full">
-      <div className="flex flex-col gap-8">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <Link to="/semesters">Semesters</Link>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Create</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <p className="text-2xl font-bold">Create Semester</p>
+  if (minMaxTimestampsStatus === "error") {
+    return (
+      <div className="size-full grid place-items-center">An error occured.</div>
+    );
+  }
+
+  if (minMaxTimestampsStatus === "pending") {
+    return (
+      <div className="size-full grid place-items-center">
+        <Loader className="size-15 stroke-mainaccent animate-spin" />
       </div>
-      {minMaxTimestampsStatus === "error" && (
-        <div className="flex-1 grid place-items-center">An error occured.</div>
-      )}
-      {minMaxTimestampsStatus === "pending" && (
-        <div className="flex-1 grid place-items-center">
-          <Loader className="size-15 stroke-mainaccent animate-spin" />
+    );
+  }
+
+  if (minMaxTimestamps) {
+    return (
+      <div className="flex flex-col gap-16 size-full">
+        <div className="flex flex-col gap-8">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <Link to="/semesters">Semesters</Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Create</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <p className="text-2xl font-bold">Create Semester</p>
         </div>
-      )}
-      {minMaxTimestamps && (
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -270,7 +276,7 @@ function RouteComponent() {
             </div>
           </form>
         </Form>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
 }
