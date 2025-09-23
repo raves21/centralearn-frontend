@@ -11,17 +11,17 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
-import ProgramInfoForm from "@/domains/programs/components/createProgramFormSteps/ProgramInfoForm";
 import { Loader } from "lucide-react";
 import { useGetAllDepartments } from "@/domains/departments/api/queries";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
-import AssignToDepartmentForm from "@/domains/programs/components/createProgramFormSteps/AssignToDepartmentForm";
 import { toast } from "sonner";
-import { useCreateProgram } from "@/domains/programs/api/mutations";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
+import { useCreateCourse } from "@/domains/courses/api/mutations";
+import CourseInfoForm from "@/domains/courses/components/createCourseFormSteps/CourseInfoForm";
+import AssignToDepartmentsForm from "@/domains/courses/components/createCourseFormSteps/AssignToDepartmentsForm";
 
-export const Route = createFileRoute("/_protected/programs/create/")({
+export const Route = createFileRoute("/_protected/courses/create/")({
   component: RouteComponent,
 });
 
@@ -32,8 +32,8 @@ const step1Schema = z.object({
 });
 
 const step2Schema = z.object({
-  departmentId: z
-    .string()
+  departments: z
+    .array(z.string())
     .nullable()
     .refine((val) => val !== null, { error: "This field is required." }),
 });
@@ -52,11 +52,11 @@ type StepField = {
 
 const formSteps: Record<number, StepField> = {
   1: {
-    label: "Program Info",
+    label: "Course Info",
     step: "step1",
   },
   2: {
-    label: "Assign to Department",
+    label: "Assign to Department/s",
     step: "step2",
   },
 };
@@ -66,15 +66,15 @@ function RouteComponent() {
 
   const navigate = useNavigate();
 
-  const { mutateAsync: createProgram, status: createProgramStatus } =
-    useCreateProgram();
+  const { mutateAsync: createCourse, status: createCourseStatus } =
+    useCreateCourse();
 
   const { data: departments, status: getAllDepartmentsStatus } =
     useGetAllDepartments({});
 
   usePendingOverlay({
-    isPending: createProgramStatus === "pending",
-    pendingLabel: "Creating Program",
+    isPending: createCourseStatus === "pending",
+    pendingLabel: "Creating Course",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -86,7 +86,7 @@ function RouteComponent() {
         name: "",
       },
       step2: {
-        departmentId: null,
+        departments: null,
       },
     },
   });
@@ -98,7 +98,7 @@ function RouteComponent() {
 
   async function onSubmit({
     step1: { code, name, description },
-    step2: { departmentId },
+    step2: { departments },
   }: TFormSchema) {
     let formData = new FormData();
     formData.append("code", code);
@@ -109,10 +109,13 @@ function RouteComponent() {
     if (image) {
       formData.append("image", image);
     }
-    formData.append("department_id", departmentId!);
+
+    departments!.forEach((deptId) => {
+      formData.append("departments[]", deptId);
+    });
 
     try {
-      await createProgram(formData);
+      await createCourse(formData);
       navigate({ to: "/programs" });
     } catch (error) {
       toast.error("An error occured.");
@@ -150,7 +153,7 @@ function RouteComponent() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <p className="text-2xl font-bold">Create Program</p>
+          <p className="text-2xl font-bold">Create Course</p>
         </div>
         <FormProvider {...form}>
           <Form {...form}>
@@ -160,7 +163,7 @@ function RouteComponent() {
                 formStepEntries={formStepEntries}
               >
                 {currentStep === 1 && (
-                  <ProgramInfoForm
+                  <CourseInfoForm
                     imageProps={{
                       image,
                       preview,
@@ -171,7 +174,7 @@ function RouteComponent() {
                   />
                 )}
                 {currentStep === 2 && (
-                  <AssignToDepartmentForm
+                  <AssignToDepartmentsForm
                     departments={departments}
                     onPrev={prevStep}
                   />

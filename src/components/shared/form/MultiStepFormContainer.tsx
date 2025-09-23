@@ -3,24 +3,24 @@ import { Circle } from "lucide-react";
 import type { PropsWithChildren } from "react";
 
 type Props = {
-  stepFieldEntries: any[];
+  formStepEntries: any[];
   currentStep: number;
 } & PropsWithChildren;
 
 export default function MultiStepFormContainer({
   children,
-  stepFieldEntries,
+  formStepEntries,
   currentStep,
 }: Props) {
   return (
     <div className="flex flex-col bg-white border-2 border-gray-200 rounded-lg">
       <div className="flex border-b-2 border-gray-200">
-        {stepFieldEntries.map(([key, value], i) => {
+        {formStepEntries.map(([key, value], i) => {
           return (
             <div
               key={i}
               className={cn("flex-1 py-3 px-4 flex items-center gap-4", {
-                "border-r-2 border-gray-200": i !== stepFieldEntries.length - 1,
+                "border-r-2 border-gray-200": i !== formStepEntries.length - 1,
               })}
             >
               <div className="relative">
