@@ -7,23 +7,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  MultiSelect,
+  MultiSelectContent,
+  MultiSelectGroup,
+  MultiSelectItem,
+  MultiSelectTrigger,
+  MultiSelectValue,
+} from "@/components/ui/multi-select";
 import { useFormContext } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
 
 type Props = {
   departments: Department[] | undefined;
@@ -35,7 +26,6 @@ export default function AssignToDepartmentsForm({
   onPrev,
 }: Props) {
   const { control } = useFormContext();
-  const [open, setOpen] = useState(false);
 
   if (!departments) return null;
 
@@ -43,62 +33,28 @@ export default function AssignToDepartmentsForm({
     <div className="flex flex-col gap-12 w-full">
       <FormField
         control={control}
-        name="step2.departmentId"
+        name="step2.departments"
         render={({ field }) => (
           <FormItem className="flex-1 font-poppins">
             <FormLabel>
-              Department <span className="text-red-500">*</span>
+              Department/s <span className="text-red-500">*</span>
             </FormLabel>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <FormControl>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className={cn(
-                      "w-full justify-between font-normal",
-                      !field.value && "text-muted-foreground"
-                    )}
-                  >
-                    {field.value
-                      ? departments.find((dept) => dept.id === field.value)
-                          ?.name
-                      : "Select Department..."}
-                    <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                  </Button>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 font-poppins">
-                <Command>
-                  <CommandInput placeholder="Search Department..." />
-                  <CommandList>
-                    <CommandEmpty>No department found.</CommandEmpty>
-                    <CommandGroup>
-                      {departments.map((dept) => (
-                        <CommandItem
-                          key={dept.id}
-                          value={dept.id}
-                          onSelect={() => {
-                            field.onChange(dept.id);
-                            setOpen(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              dept.id === field.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {dept.name}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <MultiSelect onValuesChange={field.onChange} values={field.value}>
+              <FormControl>
+                <MultiSelectTrigger className="w-full">
+                  <MultiSelectValue placeholder="Select Departments..." />
+                </MultiSelectTrigger>
+              </FormControl>
+              <MultiSelectContent>
+                <MultiSelectGroup>
+                  {departments.map((department) => (
+                    <MultiSelectItem value={department.id}>
+                      {department.name}
+                    </MultiSelectItem>
+                  ))}
+                </MultiSelectGroup>
+              </MultiSelectContent>
+            </MultiSelect>
             <FormMessage />
           </FormItem>
         )}

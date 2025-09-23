@@ -32,10 +32,7 @@ const step1Schema = z.object({
 });
 
 const step2Schema = z.object({
-  departments: z
-    .array(z.string())
-    .nullable()
-    .refine((val) => val !== null, { error: "This field is required." }),
+  departments: z.array(z.string()).min(1, { error: "This field is required." }),
 });
 
 const formSchema = z.object({
@@ -86,7 +83,7 @@ function RouteComponent() {
         name: "",
       },
       step2: {
-        departments: null,
+        departments: [],
       },
     },
   });
@@ -116,7 +113,7 @@ function RouteComponent() {
 
     try {
       await createCourse(formData);
-      navigate({ to: "/programs" });
+      navigate({ to: "/courses" });
     } catch (error) {
       toast.error("An error occured.");
     }
