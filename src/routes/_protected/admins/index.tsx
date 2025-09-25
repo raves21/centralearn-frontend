@@ -48,12 +48,12 @@ function RouteComponent() {
     {
       accessorFn: (row) => row.user.firstName,
       id: "firstName",
-      header: "Firstname",
+      header: "First Name",
     },
     {
       accessorFn: (row) => row.user.lastName,
       id: "lastName",
-      header: "Lastname",
+      header: "Last Name",
     },
   ];
 
@@ -76,7 +76,10 @@ function RouteComponent() {
   if (data) {
     return (
       <div className="size-full flex flex-col gap-16">
-        <TitleAndCreateAction headerTitle="Admins" createAction={() => {}} />
+        <TitleAndCreateAction
+          headerTitle="Admins"
+          createAction={() => navigate({ to: "/admins/create" })}
+        />
         <DataTable
           columns={columns}
           data={data.data}
