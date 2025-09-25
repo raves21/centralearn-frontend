@@ -10,7 +10,7 @@ import type { Course } from "@/domains/courses/types";
 import { useCourseClasses } from "@/domains/classes/api/queries";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Semester } from "@/domains/semesters/types";
-import dayjs from "dayjs";
+import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -57,9 +57,7 @@ function RouteComponent() {
       header: "Semester",
       cell: ({ getValue }) => {
         const semester = getValue<Semester>();
-        return (
-          <p>{`${semester.name} - (${dayjs(semester.startDate).format("MMM D, YYYY")} - ${dayjs(semester.endDate).format("MMM D, YYYY")})`}</p>
-        );
+        return <p>{formatToSemesterNameAndTimestamps(semester)}</p>;
       },
     },
     {
@@ -91,7 +89,10 @@ function RouteComponent() {
   if (data) {
     return (
       <div className="size-full flex flex-col gap-16">
-        <TitleAndCreateAction headerTitle="Classes" createAction={() => {}} />
+        <TitleAndCreateAction
+          headerTitle="Classes"
+          createAction={() => navigate({ to: "/classes/create" })}
+        />
         <DataTable
           columns={columns}
           data={data.data}

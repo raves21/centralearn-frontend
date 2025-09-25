@@ -74,7 +74,7 @@ export default function AssignToDepartmentForm({ departments, onPrev }: Props) {
                       {departments.map((dept) => (
                         <CommandItem
                           key={dept.id}
-                          value={dept.id}
+                          value={dept.name}
                           onSelect={() => {
                             field.onChange(dept.id);
                             setOpen(false);

@@ -84,12 +84,13 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    title={cell.getValue<any>()}
-                    className="py-5 px-3 max-w-[150px] truncate"
-                    key={cell.id}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  <TableCell className="py-5 px-3 max-w-[200px]" key={cell.id}>
+                    <div className="whitespace-normal break-words line-clamp-3">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </div>
                   </TableCell>
                 ))}
               </TableRow>

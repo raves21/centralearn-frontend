@@ -26,7 +26,7 @@ export function useGetAllDepartments({
   searchQuery?: string;
 }) {
   return useQuery({
-    queryKey: ["allDepartments", searchQuery],
+    queryKey: ["departments", "allDepartments", searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/departments", {
         params: { query: searchQuery, paginate: 0 },
