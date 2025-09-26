@@ -12,7 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
 import { Loader } from "lucide-react";
-import { useGetAllDepartments } from "@/domains/departments/api/queries";
+import { useAllDepartments } from "@/domains/departments/api/queries";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import { toast } from "sonner";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
@@ -67,7 +67,7 @@ function RouteComponent() {
     useCreateCourse();
 
   const { data: departments, status: getAllDepartmentsStatus } =
-    useGetAllDepartments({});
+    useAllDepartments({});
 
   usePendingOverlay({
     isPending: createCourseStatus === "pending",

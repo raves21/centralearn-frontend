@@ -82,7 +82,10 @@ function RouteComponent() {
   if (data) {
     return (
       <div className="size-full flex flex-col gap-16">
-        <TitleAndCreateAction headerTitle="Students" createAction={() => {}} />
+        <TitleAndCreateAction
+          headerTitle="Students"
+          createAction={() => navigate({ to: "/students/create" })}
+        />
         <DataTable
           columns={columns}
           data={data.data}

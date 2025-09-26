@@ -33,7 +33,7 @@ const formSchema = z.object({
   address: z.string().min(1, { error: "This field is required." }),
   jobTitle: z.string().min(1, { error: "This field is required." }),
   email: z.email().min(1, { error: "This field is required." }),
-  password: z.string().min(8, { error: "This field is required." }),
+  password: z.string().min(8, { error: "Minimum of 8 characters." }),
 });
 
 function RouteComponent() {

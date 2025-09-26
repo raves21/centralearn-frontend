@@ -20,7 +20,7 @@ export function useDepartments({
   });
 }
 
-export function useGetAllDepartments({
+export function useAllDepartments({
   searchQuery = undefined,
 }: {
   searchQuery?: string;
