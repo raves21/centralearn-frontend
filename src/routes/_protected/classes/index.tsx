@@ -11,6 +11,7 @@ import { useCourseClasses } from "@/domains/classes/api/queries";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Semester } from "@/domains/semesters/types";
 import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
+import { cn } from "@/lib/utils";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -67,6 +68,19 @@ function RouteComponent() {
     {
       accessorKey: "status",
       header: "Status",
+      cell: ({ getValue }) => {
+        const status = getValue<"open" | "close">();
+        return (
+          <p
+            className={cn(
+              "rounded-md px-2 py-1 text-white w-min text-xs",
+              status === "open" ? "bg-green-500" : "bg-red-600"
+            )}
+          >
+            {status.split("")[0].toUpperCase() + status.substring(1)}
+          </p>
+        );
+      },
     },
   ];
 
