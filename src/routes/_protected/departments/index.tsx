@@ -6,8 +6,14 @@ import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Department } from "@/domains/departments/types";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { Loader } from "lucide-react";
+import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -52,6 +58,40 @@ function RouteComponent() {
     {
       accessorKey: "description",
       header: "Description",
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
+        const department = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="stroke-mainaccent" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate({
+                    to: "/departments/$departmentId/edit",
+                    params: {
+                      departmentId: department.id,
+                    },
+                  })
+                }
+              >
+                Edit
+                <Pencil className="stroke-mainaccent" />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Delete
+                <Trash className="stroke-red-500" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
   ];
 

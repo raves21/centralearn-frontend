@@ -14,3 +14,21 @@ export function useCreateDepartment() {
     },
   });
 }
+
+export function useEditDepartment() {
+  return useMutation({
+    mutationFn: async ({
+      departmentId,
+      payload,
+    }: {
+      departmentId: string;
+      payload: FormData;
+    }) => {
+      await api.post(`/departments/${departmentId}`, payload);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
+      queryClient.invalidateQueries({ queryKey: ["department"] });
+    },
+  });
+}

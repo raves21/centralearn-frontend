@@ -35,3 +35,13 @@ export function useAllDepartments({
     },
   });
 }
+
+export function useDepartmentInfo({ departmentId }: { departmentId: string }) {
+  return useQuery({
+    queryKey: ["department", departmentId],
+    queryFn: async () => {
+      const { data } = await api.get(`/departments/${departmentId}`);
+      return data.data as Department;
+    },
+  });
+}
