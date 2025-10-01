@@ -57,7 +57,7 @@ function RouteComponent() {
       header: "Program",
     },
     {
-      accessorFn: (row) => row.program.department?.code,
+      accessorFn: (row) => row.program.department.code,
       accessorKey: "programDept",
       header: "Department",
     },

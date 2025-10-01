@@ -30,3 +30,13 @@ export function useAllPrograms({ searchQuery }: { searchQuery?: string }) {
     },
   });
 }
+
+export function useProgramInfo({ programId }: { programId: string }) {
+  return useQuery({
+    queryKey: ["program", programId],
+    queryFn: async () => {
+      const { data } = await api.get(`/programs/${programId}`);
+      return data.data as Program;
+    },
+  });
+}

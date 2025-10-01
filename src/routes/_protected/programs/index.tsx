@@ -4,10 +4,16 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { Loader } from "lucide-react";
+import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import { usePrograms } from "@/domains/programs/api/queries";
 import type { Program } from "@/domains/programs/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -50,12 +56,46 @@ function RouteComponent() {
       header: "Code",
     },
     {
-      accessorFn: (row) => row.department?.code,
+      accessorFn: (row) => row.department.code,
       header: "Department",
     },
     {
       accessorKey: "description",
       header: "Description",
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
+        const program = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="stroke-mainaccent" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate({
+                    to: "/programs/$programId/edit",
+                    params: {
+                      programId: program.id,
+                    },
+                  })
+                }
+              >
+                Edit
+                <Pencil className="stroke-mainaccent" />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Delete
+                <Trash className="stroke-red-500" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
   ];
 

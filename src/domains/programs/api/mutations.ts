@@ -16,3 +16,25 @@ export function useCreateProgram() {
     },
   });
 }
+
+export function useEditProgram() {
+  return useMutation({
+    mutationFn: async ({
+      programId,
+      payload,
+    }: {
+      programId: string;
+      payload: FormData;
+    }) => {
+      await api.post(`/programs/${programId}`, payload, {
+        headers: {
+          "Content-Type": "multipart/formdata",
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["programs"] });
+      queryClient.invalidateQueries({ queryKey: ["program"] });
+    },
+  });
+}

@@ -11,27 +11,26 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import ProgramInfoForm from "@/domains/programs/components/createEditProgramFormSteps/ProgramInfoForm";
 import { Loader } from "lucide-react";
-import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
-import { toast } from "sonner";
-import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
-import { useCreateInstructor } from "@/domains/instructors/api/mutations";
 import { useAllDepartments } from "@/domains/departments/api/queries";
+import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import AssignToDepartmentForm from "@/domains/programs/components/createEditProgramFormSteps/AssignToDepartmentForm";
-import InstructorInfoForm from "@/domains/instructors/components/createInstructorFormSteps/InstructorInfoForm";
+import { toast } from "sonner";
+import { useEditProgram } from "@/domains/programs/api/mutations";
+import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
+import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
+import { useEffect } from "react";
+import { useProgramInfo } from "@/domains/programs/api/queries";
 
-export const Route = createFileRoute("/_protected/instructors/create/")({
+export const Route = createFileRoute("/_protected/programs/$programId/edit/")({
   component: RouteComponent,
 });
 
 const step1Schema = z.object({
-  firstName: z.string().min(1, { error: "This field is required." }),
-  lastName: z.string().min(1, { error: "This field is required." }),
-  address: z.string().min(1, { error: "This field is required." }),
-  jobTitle: z.string().min(1, { error: "This field is required." }),
-  email: z.email().min(1, { error: "This field is required." }),
-  isAdmin: z.boolean(),
-  password: z.string().min(8, { error: "Minimum of 8 characters." }),
+  name: z.string().min(1, "This field is required."),
+  code: z.string().min(1, "This field is required."),
+  description: z.string().optional(),
 });
 
 const step2Schema = z.object({
@@ -55,7 +54,7 @@ type StepField = {
 
 const formSteps: Record<number, StepField> = {
   1: {
-    label: "Instructor Info",
+    label: "Program Info",
     step: "step1",
   },
   2: {
@@ -65,30 +64,33 @@ const formSteps: Record<number, StepField> = {
 };
 
 function RouteComponent() {
+  const { image, preview, setImage, setPreview } = useImageUploadState();
+  const { programId } = Route.useParams();
+
   const navigate = useNavigate();
 
-  const { mutateAsync: createInstructor, status: createInstructorStatus } =
-    useCreateInstructor();
+  const { data: programInfo, status: programInfoStatus } = useProgramInfo({
+    programId,
+  });
+
+  const { mutateAsync: editProgram, status: editProgramStatus } =
+    useEditProgram();
 
   const { data: departments, status: getAllDepartmentsStatus } =
     useAllDepartments({});
 
   usePendingOverlay({
-    isPending: createInstructorStatus === "pending",
-    pendingLabel: "Creating Instructor",
+    isPending: editProgramStatus === "pending",
+    pendingLabel: "Updating Program",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       step1: {
-        address: "",
-        email: "",
-        jobTitle: "",
-        firstName: "",
-        lastName: "",
-        password: "",
-        isAdmin: false,
+        code: "",
+        description: "",
+        name: "",
       },
       step2: {
         departmentId: null,
@@ -96,28 +98,45 @@ function RouteComponent() {
     },
   });
 
+  useEffect(() => {
+    if (programInfo) {
+      form.reset({
+        step1: {
+          code: programInfo.code,
+          description: programInfo.description || undefined,
+          name: programInfo.name,
+        },
+        step2: {
+          departmentId: programInfo.department.id,
+        },
+      });
+      setPreview(programInfo.imageUrl);
+    }
+  }, [programInfo, preview]);
+
   const { currentStep, nextStep, prevStep } = useMultiStepFormState({
     formSteps,
     form,
   });
 
   async function onSubmit({
-    step1: { address, email, firstName, lastName, password, jobTitle, isAdmin },
+    step1: { code, name, description },
     step2: { departmentId },
   }: TFormSchema) {
     let formData = new FormData();
-    formData.append("first_name", firstName);
-    formData.append("last_name", lastName);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("address", address);
-    formData.append("job_title", jobTitle);
-    formData.append("is_admin", Number(isAdmin).toString());
+    formData.append("code", code);
+    formData.append("name", name);
+    if (description) {
+      formData.append("description", description);
+    }
+    if (image) {
+      formData.append("image", image);
+    }
     formData.append("department_id", departmentId!);
 
     try {
-      await createInstructor(formData);
-      navigate({ to: "/instructors" });
+      await editProgram({ programId, payload: formData });
+      navigate({ to: "/programs" });
     } catch (error) {
       toast.error("An error occured.");
     }
@@ -125,13 +144,13 @@ function RouteComponent() {
 
   const formStepEntries = Object.entries(formSteps);
 
-  if (getAllDepartmentsStatus === "error") {
+  if ([getAllDepartmentsStatus, programInfoStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if (getAllDepartmentsStatus === "pending") {
+  if ([getAllDepartmentsStatus, programInfoStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -146,15 +165,15 @@ function RouteComponent() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link to="/instructors">Instructors</Link>
+                <Link to="/programs">Programs</Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Create</BreadcrumbPage>
+                <BreadcrumbPage>Edit</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <p className="text-2xl font-bold">Create Instructor </p>
+          <p className="text-2xl font-bold">Edit Program</p>
         </div>
         <FormProvider {...form}>
           <Form {...form}>
@@ -163,9 +182,20 @@ function RouteComponent() {
                 currentStep={currentStep}
                 formStepEntries={formStepEntries}
               >
-                {currentStep === 1 && <InstructorInfoForm onNext={nextStep} />}
+                {currentStep === 1 && (
+                  <ProgramInfoForm
+                    imageProps={{
+                      image,
+                      preview,
+                      setImage,
+                      setPreview,
+                    }}
+                    onNext={nextStep}
+                  />
+                )}
                 {currentStep === 2 && (
                   <AssignToDepartmentForm
+                    type="edit"
                     departments={departments}
                     onPrev={prevStep}
                   />

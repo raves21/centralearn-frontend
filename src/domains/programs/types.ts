@@ -11,5 +11,5 @@ export type Program = {
   code: string;
   description: string | null;
   imageUrl: string | null;
-  department: Pick<Department, "id" | "name" | "code"> | null;
+  department: Pick<Department, "id" | "name" | "code">;
 };

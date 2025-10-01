@@ -26,11 +26,16 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 
 type Props = {
+  type: "edit" | "create";
   departments: Department[] | undefined;
   onPrev: () => void;
 };
 
-export default function AssignToDepartmentForm({ departments, onPrev }: Props) {
+export default function AssignToDepartmentForm({
+  departments,
+  onPrev,
+  type,
+}: Props) {
   const { control } = useFormContext();
   const [open, setOpen] = useState(false);
 
@@ -112,7 +117,7 @@ export default function AssignToDepartmentForm({ departments, onPrev }: Props) {
           type="submit"
           className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-mainaccent border-2 text-white"
         >
-          Create
+          {type === "create" ? "Create" : "Save"}
         </button>
       </div>
     </div>

@@ -11,11 +11,11 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
-import ProgramInfoForm from "@/domains/programs/components/createProgramFormSteps/ProgramInfoForm";
+import ProgramInfoForm from "@/domains/programs/components/createEditProgramFormSteps/ProgramInfoForm";
 import { Loader } from "lucide-react";
 import { useAllDepartments } from "@/domains/departments/api/queries";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
-import AssignToDepartmentForm from "@/domains/programs/components/createProgramFormSteps/AssignToDepartmentForm";
+import AssignToDepartmentForm from "@/domains/programs/components/createEditProgramFormSteps/AssignToDepartmentForm";
 import { toast } from "sonner";
 import { useCreateProgram } from "@/domains/programs/api/mutations";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
@@ -172,6 +172,7 @@ function RouteComponent() {
                 )}
                 {currentStep === 2 && (
                   <AssignToDepartmentForm
+                    type="create"
                     departments={departments}
                     onPrev={prevStep}
                   />

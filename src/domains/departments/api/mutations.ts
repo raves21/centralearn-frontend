@@ -24,7 +24,9 @@ export function useEditDepartment() {
       departmentId: string;
       payload: FormData;
     }) => {
-      await api.post(`/departments/${departmentId}`, payload);
+      await api.post(`/departments/${departmentId}`, payload, {
+        headers: { "Content-Type": "multipart/formdata" },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["departments"] });
