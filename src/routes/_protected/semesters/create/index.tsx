@@ -269,7 +269,7 @@ function RouteComponent() {
                 disabled={createSemesterStatus === "pending"}
                 onClick={() => navigate({ to: "/semesters" })}
                 type="button"
-                className="flex disabled:bg-gray-200 hover:bg-gray-200 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-white border-2 border-gray-600/50 text-black"
+                className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
               >
                 Cancel
               </button>

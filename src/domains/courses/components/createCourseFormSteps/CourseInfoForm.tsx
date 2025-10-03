@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "@tanstack/react-router";
 import type { Dispatch, SetStateAction } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -24,6 +25,7 @@ type Props = {
 export default function CourseInfoForm({ onNext, imageProps }: Props) {
   const { control } = useFormContext();
   const { image, preview, setImage, setPreview } = imageProps;
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col gap-12">
@@ -93,7 +95,14 @@ export default function CourseInfoForm({ onNext, imageProps }: Props) {
           </div>
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <button
+          onClick={() => navigate({ to: "/courses" })}
+          type="button"
+          className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
+        >
+          Cancel
+        </button>
         <button
           onClick={onNext}
           type="button"

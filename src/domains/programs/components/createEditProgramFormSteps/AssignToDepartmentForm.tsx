@@ -109,7 +109,7 @@ export default function AssignToDepartmentForm({
         <button
           onClick={onPrev}
           type="button"
-          className="flex hover:gray-500 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
+          className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
         >
           Back
         </button>

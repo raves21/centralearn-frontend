@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
   onNext: () => void;
@@ -29,6 +30,7 @@ type Props = {
 
 export default function InstructorInfoForm({ onNext }: Props) {
   const { control } = useFormContext();
+  const navigate = useNavigate();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
@@ -204,7 +206,14 @@ export default function InstructorInfoForm({ onNext }: Props) {
           />
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <button
+          onClick={() => navigate({ to: "/instructors" })}
+          type="button"
+          className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
+        >
+          Cancel
+        </button>
         <button
           onClick={onNext}
           type="button"

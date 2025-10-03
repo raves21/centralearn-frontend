@@ -6,6 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 
 export default function StudentInfoForm({ onNext }: Props) {
   const { control } = useFormContext();
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col gap-12">
@@ -100,10 +102,17 @@ export default function StudentInfoForm({ onNext }: Props) {
           />
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-between">
         <button
-          onClick={onNext}
+          onClick={() => navigate({ to: "/students" })}
           type="button"
+          className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={onNext}
           className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-mainaccent border-2 text-white"
         >
           Next
