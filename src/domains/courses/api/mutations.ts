@@ -16,3 +16,25 @@ export function useCreateCourse() {
     },
   });
 }
+
+export function useEditCourse() {
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      payload,
+    }: {
+      courseId: string;
+      payload: FormData;
+    }) => {
+      await api.post(`/courses/${courseId}`, payload, {
+        headers: {
+          "Content-Type": "multipart/formdata",
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["course"] });
+    },
+  });
+}

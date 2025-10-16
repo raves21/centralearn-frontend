@@ -158,7 +158,7 @@ function RouteComponent() {
     );
   }
 
-  if (departments) {
+  if (departments && programInfoStatus) {
     return (
       <div className="flex flex-col gap-8 size-full">
         <div className="flex flex-col gap-8">

@@ -17,11 +17,13 @@ import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContai
 import { toast } from "sonner";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
-import { useCreateCourse } from "@/domains/courses/api/mutations";
+import { useEditCourse } from "@/domains/courses/api/mutations";
 import CourseInfoForm from "@/domains/courses/components/createEditCourseFormSteps/CourseInfoForm";
 import AssignToDepartmentsForm from "@/domains/courses/components/createEditCourseFormSteps/AssignToDepartmentsForm";
+import { useCourseInfo } from "@/domains/courses/api/queries";
+import { useEffect } from "react";
 
-export const Route = createFileRoute("/_protected/courses/create/")({
+export const Route = createFileRoute("/_protected/courses/$courseId/edit/")({
   component: RouteComponent,
 });
 
@@ -59,19 +61,22 @@ const formSteps: Record<number, StepField> = {
 };
 
 function RouteComponent() {
+  const { courseId } = Route.useParams();
   const { image, preview, setImage, setPreview } = useImageUploadState();
 
   const navigate = useNavigate();
 
-  const { mutateAsync: createCourse, status: createCourseStatus } =
-    useCreateCourse();
+  const { mutateAsync: editCourse, status: editCourseStatus } = useEditCourse();
+
+  const { data: courseInfo, status: courseInfoStatus } =
+    useCourseInfo(courseId);
 
   const { data: departments, status: getAllDepartmentsStatus } =
     useAllDepartments({});
 
   usePendingOverlay({
-    isPending: createCourseStatus === "pending",
-    pendingLabel: "Creating Course",
+    isPending: editCourseStatus === "pending",
+    pendingLabel: "Updating Course",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -88,6 +93,22 @@ function RouteComponent() {
     },
   });
 
+  useEffect(() => {
+    if (courseInfo) {
+      form.reset({
+        step1: {
+          code: courseInfo.code,
+          description: courseInfo.description ?? undefined,
+          name: courseInfo.name,
+        },
+        step2: {
+          departments: courseInfo.departments.map((dept) => dept.id),
+        },
+      });
+      setPreview(courseInfo.imageUrl);
+    }
+  }, [courseInfo]);
+
   const { currentStep, nextStep, prevStep } = useMultiStepFormState({
     formSteps,
     form,
@@ -103,8 +124,13 @@ function RouteComponent() {
     if (description) {
       formData.append("description", description);
     }
-    if (image) {
-      formData.append("image", image);
+
+    if (courseInfo && courseInfo.imageUrl && !preview) {
+      formData.append("image", "__DELETED__");
+    } else {
+      if (image) {
+        formData.append("image", image);
+      }
     }
 
     departments!.forEach((deptId) => {
@@ -112,7 +138,8 @@ function RouteComponent() {
     });
 
     try {
-      await createCourse(formData);
+      await editCourse({ courseId, payload: formData });
+      toast.success("Saved.");
       navigate({ to: "/courses" });
     } catch (error) {
       toast.error("An error occured.");
@@ -121,13 +148,13 @@ function RouteComponent() {
 
   const formStepEntries = Object.entries(formSteps);
 
-  if (getAllDepartmentsStatus === "error") {
+  if ([getAllDepartmentsStatus, courseInfoStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if (getAllDepartmentsStatus === "pending") {
+  if ([getAllDepartmentsStatus, courseInfoStatus].includes("pending")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -135,22 +162,22 @@ function RouteComponent() {
     );
   }
 
-  if (departments) {
+  if (departments && courseInfoStatus) {
     return (
       <div className="flex flex-col gap-8 size-full">
         <div className="flex flex-col gap-8">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link to="/programs">Programs</Link>
+                <Link to="/courses">Courses</Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Create</BreadcrumbPage>
+                <BreadcrumbPage>Edit</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <p className="text-2xl font-bold">Create Course</p>
+          <p className="text-2xl font-bold">Edit Course</p>
         </div>
         <FormProvider {...form}>
           <Form {...form}>
@@ -172,7 +199,7 @@ function RouteComponent() {
                 )}
                 {currentStep === 2 && (
                   <AssignToDepartmentsForm
-                    type="create"
+                    type="edit"
                     departments={departments}
                     onPrev={prevStep}
                   />

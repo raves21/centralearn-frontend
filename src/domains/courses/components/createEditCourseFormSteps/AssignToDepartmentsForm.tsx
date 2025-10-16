@@ -17,6 +17,7 @@ import {
 import { useFormContext } from "react-hook-form";
 
 type Props = {
+  type: "create" | "edit";
   departments: Department[] | undefined;
   onPrev: () => void;
 };
@@ -24,6 +25,7 @@ type Props = {
 export default function AssignToDepartmentsForm({
   departments,
   onPrev,
+  type,
 }: Props) {
   const { control } = useFormContext();
 
@@ -71,7 +73,7 @@ export default function AssignToDepartmentsForm({
           type="submit"
           className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-mainaccent border-2 text-white"
         >
-          Create
+          {type === "create" ? "Create" : "Save"}
         </button>
       </div>
     </div>

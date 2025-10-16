@@ -35,3 +35,13 @@ export function useAllCourses({
     },
   });
 }
+
+export function useCourseInfo(courseId: string) {
+  return useQuery({
+    queryKey: ["course", courseId],
+    queryFn: async () => {
+      const { data } = await api.get(`/courses/${courseId}`);
+      return data.data as Course;
+    },
+  });
+}

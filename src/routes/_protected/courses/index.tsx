@@ -4,10 +4,17 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { Loader } from "lucide-react";
+import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import { useCourses } from "@/domains/courses/api/queries";
 import type { Course } from "@/domains/courses/types";
+import type { Department } from "@/domains/departments/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -53,11 +60,15 @@ function RouteComponent() {
       accessorKey: "departments",
       header: "Departments",
       cell: ({ getValue }) => {
-        const departments = getValue<string[]>();
+        const departments = getValue<Department[]>();
         return (
           <p>
             {departments.map((dept, i) =>
-              i !== departments.length - 1 ? `${dept}, ` : dept
+              i !== departments.length - 1 ? (
+                <span>{dept.code}, </span>
+              ) : (
+                <span>{dept.code}</span>
+              )
             )}
           </p>
         );
@@ -66,6 +77,40 @@ function RouteComponent() {
     {
       accessorKey: "description",
       header: "Description",
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
+        const course = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="stroke-mainaccent" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate({
+                    to: "/courses/$courseId/edit",
+                    params: {
+                      courseId: course.id,
+                    },
+                  })
+                }
+              >
+                Edit
+                <Pencil className="stroke-mainaccent" />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Delete
+                <Trash className="stroke-red-500" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
   ];
 

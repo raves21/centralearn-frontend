@@ -32,6 +32,7 @@ import { Route as ProtectedClassesCreateIndexRouteImport } from './routes/_prote
 import { Route as ProtectedAdminsCreateIndexRouteImport } from './routes/_protected/admins/create/index'
 import { Route as ProtectedProgramsProgramIdEditIndexRouteImport } from './routes/_protected/programs/$programId/edit/index'
 import { Route as ProtectedDepartmentsDepartmentIdEditIndexRouteImport } from './routes/_protected/departments/$departmentId/edit/index'
+import { Route as ProtectedCoursesCourseIdEditIndexRouteImport } from './routes/_protected/courses/$courseId/edit/index'
 
 const UnprotectedRouteRoute = UnprotectedRouteRouteImport.update({
   id: '/_unprotected',
@@ -158,6 +159,12 @@ const ProtectedDepartmentsDepartmentIdEditIndexRoute =
     path: '/departments/$departmentId/edit/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedCoursesCourseIdEditIndexRoute =
+  ProtectedCoursesCourseIdEditIndexRouteImport.update({
+    id: '/courses/$courseId/edit/',
+    path: '/courses/$courseId/edit/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/programs/create': typeof ProtectedProgramsCreateIndexRoute
   '/semesters/create': typeof ProtectedSemestersCreateIndexRoute
   '/students/create': typeof ProtectedStudentsCreateIndexRoute
+  '/courses/$courseId/edit': typeof ProtectedCoursesCourseIdEditIndexRoute
   '/departments/$departmentId/edit': typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
   '/programs/$programId/edit': typeof ProtectedProgramsProgramIdEditIndexRoute
 }
@@ -202,6 +210,7 @@ export interface FileRoutesByTo {
   '/programs/create': typeof ProtectedProgramsCreateIndexRoute
   '/semesters/create': typeof ProtectedSemestersCreateIndexRoute
   '/students/create': typeof ProtectedStudentsCreateIndexRoute
+  '/courses/$courseId/edit': typeof ProtectedCoursesCourseIdEditIndexRoute
   '/departments/$departmentId/edit': typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
   '/programs/$programId/edit': typeof ProtectedProgramsProgramIdEditIndexRoute
 }
@@ -228,6 +237,7 @@ export interface FileRoutesById {
   '/_protected/programs/create/': typeof ProtectedProgramsCreateIndexRoute
   '/_protected/semesters/create/': typeof ProtectedSemestersCreateIndexRoute
   '/_protected/students/create/': typeof ProtectedStudentsCreateIndexRoute
+  '/_protected/courses/$courseId/edit/': typeof ProtectedCoursesCourseIdEditIndexRoute
   '/_protected/departments/$departmentId/edit/': typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
   '/_protected/programs/$programId/edit/': typeof ProtectedProgramsProgramIdEditIndexRoute
 }
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/programs/create'
     | '/semesters/create'
     | '/students/create'
+    | '/courses/$courseId/edit'
     | '/departments/$departmentId/edit'
     | '/programs/$programId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/programs/create'
     | '/semesters/create'
     | '/students/create'
+    | '/courses/$courseId/edit'
     | '/departments/$departmentId/edit'
     | '/programs/$programId/edit'
   id:
@@ -301,6 +313,7 @@ export interface FileRouteTypes {
     | '/_protected/programs/create/'
     | '/_protected/semesters/create/'
     | '/_protected/students/create/'
+    | '/_protected/courses/$courseId/edit/'
     | '/_protected/departments/$departmentId/edit/'
     | '/_protected/programs/$programId/edit/'
   fileRoutesById: FileRoutesById
@@ -474,6 +487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDepartmentsDepartmentIdEditIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/courses/$courseId/edit/': {
+      id: '/_protected/courses/$courseId/edit/'
+      path: '/courses/$courseId/edit'
+      fullPath: '/courses/$courseId/edit'
+      preLoaderRoute: typeof ProtectedCoursesCourseIdEditIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -495,6 +515,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedProgramsCreateIndexRoute: typeof ProtectedProgramsCreateIndexRoute
   ProtectedSemestersCreateIndexRoute: typeof ProtectedSemestersCreateIndexRoute
   ProtectedStudentsCreateIndexRoute: typeof ProtectedStudentsCreateIndexRoute
+  ProtectedCoursesCourseIdEditIndexRoute: typeof ProtectedCoursesCourseIdEditIndexRoute
   ProtectedDepartmentsDepartmentIdEditIndexRoute: typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
   ProtectedProgramsProgramIdEditIndexRoute: typeof ProtectedProgramsProgramIdEditIndexRoute
 }
@@ -517,6 +538,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedProgramsCreateIndexRoute: ProtectedProgramsCreateIndexRoute,
   ProtectedSemestersCreateIndexRoute: ProtectedSemestersCreateIndexRoute,
   ProtectedStudentsCreateIndexRoute: ProtectedStudentsCreateIndexRoute,
+  ProtectedCoursesCourseIdEditIndexRoute:
+    ProtectedCoursesCourseIdEditIndexRoute,
   ProtectedDepartmentsDepartmentIdEditIndexRoute:
     ProtectedDepartmentsDepartmentIdEditIndexRoute,
   ProtectedProgramsProgramIdEditIndexRoute:
