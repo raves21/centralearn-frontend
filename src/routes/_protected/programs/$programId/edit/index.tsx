@@ -112,7 +112,7 @@ function RouteComponent() {
       });
       setPreview(programInfo.imageUrl);
     }
-  }, [programInfo, preview]);
+  }, [programInfo]);
 
   const { currentStep, nextStep, prevStep } = useMultiStepFormState({
     formSteps,

@@ -65,9 +65,9 @@ function RouteComponent() {
           <p>
             {departments.map((dept, i) =>
               i !== departments.length - 1 ? (
-                <span>{dept.code}, </span>
+                <span key={i}>{dept.code}, </span>
               ) : (
-                <span>{dept.code}</span>
+                <span key={i}>{dept.code}</span>
               )
             )}
           </p>
