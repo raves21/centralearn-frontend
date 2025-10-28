@@ -12,3 +12,21 @@ export function useCreateStudent() {
     },
   });
 }
+
+export function useEditStudent() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      formData,
+    }: {
+      id: string;
+      formData: FormData;
+    }) => {
+      await api.post(`/students/${id}`, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      queryClient.invalidateQueries({ queryKey: ["student"] });
+    },
+  });
+}

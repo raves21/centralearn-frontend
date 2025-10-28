@@ -26,11 +26,12 @@ import { useState } from "react";
 import type { Program } from "@/domains/programs/types";
 
 type Props = {
+  type: "edit" | "create";
   programs: Program[] | undefined;
   onPrev: () => void;
 };
 
-export default function AssignToProgramForm({ programs, onPrev }: Props) {
+export default function AssignToProgramForm({ programs, onPrev, type }: Props) {
   const { control } = useFormContext();
   const [open, setOpen] = useState(false);
 
@@ -112,7 +113,7 @@ export default function AssignToProgramForm({ programs, onPrev }: Props) {
           type="submit"
           className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-mainaccent border-2 text-white"
         >
-          Create
+          {type === "create" ? "Create" : "Save"}
         </button>
       </div>
     </div>

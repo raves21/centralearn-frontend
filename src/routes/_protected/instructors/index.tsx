@@ -4,11 +4,17 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { Loader } from "lucide-react";
+import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import { useInstructors } from "@/domains/instructors/api/queries";
 import type { Instructor } from "@/domains/instructors/types";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -75,6 +81,40 @@ function RouteComponent() {
           >
             {isAdmin ? "Yes" : "No"}
           </p>
+        );
+      },
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
+        const instructor = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="stroke-mainaccent" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate({
+                    to: "/instructors/$instructorId/edit",
+                    params: {
+                      instructorId: instructor.id,
+                    },
+                  })
+                }
+              >
+                Edit
+                <Pencil className="stroke-mainaccent" />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Delete
+                <Trash className="stroke-red-500" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       },
     },

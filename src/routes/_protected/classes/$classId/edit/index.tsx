@@ -144,7 +144,7 @@ function RouteComponent() {
     );
   }
 
-  if (allCourses && allSemesters) {
+  if (allCourses && allSemesters && courseClassInfoStatus) {
     return (
       <div className="flex flex-col gap-16 size-full pb-12">
         <div className="flex flex-col gap-8">

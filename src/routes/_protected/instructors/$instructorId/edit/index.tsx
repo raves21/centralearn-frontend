@@ -15,12 +15,16 @@ import { Loader } from "lucide-react";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import { toast } from "sonner";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
-import { useAllPrograms } from "@/domains/programs/api/queries";
-import { useCreateStudent } from "@/domains/students/api/mutations";
-import StudentInfoForm from "@/domains/students/components/createEditStudentFormSteps/StudentInfoForm";
-import AssignToProgramForm from "@/domains/students/components/createEditStudentFormSteps/AssignToProgramForm";
+import { useEditInstructor } from "@/domains/instructors/api/mutations";
+import { useAllDepartments } from "@/domains/departments/api/queries";
+import AssignToDepartmentForm from "@/domains/programs/components/createEditProgramFormSteps/AssignToDepartmentForm";
+import InstructorInfoForm from "@/domains/instructors/components/createEditInstructorFormSteps/InstructorInfoForm";
+import { useInstructorInfo } from "@/domains/instructors/api/queries";
+import { useEffect } from "react";
 
-export const Route = createFileRoute("/_protected/students/create/")({
+export const Route = createFileRoute(
+  "/_protected/instructors/$instructorId/edit/"
+)({
   component: RouteComponent,
 });
 
@@ -28,12 +32,16 @@ const step1Schema = z.object({
   firstName: z.string().min(1, { error: "This field is required." }),
   lastName: z.string().min(1, { error: "This field is required." }),
   address: z.string().min(1, { error: "This field is required." }),
+  jobTitle: z.string().min(1, { error: "This field is required." }),
   email: z.email().min(1, { error: "This field is required." }),
-  password: z.string().min(8, { error: "Minimum of 8 characters" }),
+  isAdmin: z.boolean(),
+  password: z.string().refine((val) => val === "" || val.length >= 8, {
+    message: "Must be at least 8 characters or empty",
+  }),
 });
 
 const step2Schema = z.object({
-  programId: z
+  departmentId: z
     .string()
     .nullable()
     .refine((val) => val !== null, { error: "This field is required." }),
@@ -53,26 +61,31 @@ type StepField = {
 
 const formSteps: Record<number, StepField> = {
   1: {
-    label: "Student Info",
+    label: "Instructor Info",
     step: "step1",
   },
   2: {
-    label: "Assign to Program",
+    label: "Assign to Department",
     step: "step2",
   },
 };
 
 function RouteComponent() {
+  const { instructorId } = Route.useParams();
   const navigate = useNavigate();
 
-  const { mutateAsync: createStudent, status: createStudentStatus } =
-    useCreateStudent();
+  const { mutateAsync: editInstructor, status: editInstructorStatus } =
+    useEditInstructor();
 
-  const { data: programs, status: getAllProgramsStatus } = useAllPrograms({});
+  const { data: instructorInfo, status: instructorInfoStatus } =
+    useInstructorInfo(instructorId);
+
+  const { data: departments, status: getAllDepartmentsStatus } =
+    useAllDepartments({});
 
   usePendingOverlay({
-    isPending: createStudentStatus === "pending",
-    pendingLabel: "Creating Student",
+    isPending: editInstructorStatus === "pending",
+    pendingLabel: "Updating Instructor",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -81,15 +94,36 @@ function RouteComponent() {
       step1: {
         address: "",
         email: "",
+        jobTitle: "",
         firstName: "",
         lastName: "",
         password: "",
+        isAdmin: false,
       },
       step2: {
-        programId: null,
+        departmentId: null,
       },
     },
   });
+
+  useEffect(() => {
+    if (instructorInfo) {
+      form.reset({
+        step1: {
+          address: instructorInfo.user.address,
+          email: instructorInfo.user.email,
+          firstName: instructorInfo.user.firstName,
+          isAdmin: instructorInfo.isAdmin,
+          jobTitle: instructorInfo.jobTitle,
+          lastName: instructorInfo.user.lastName,
+          password: "",
+        },
+        step2: {
+          departmentId: instructorInfo.department.id,
+        },
+      });
+    }
+  }, [instructorInfo]);
 
   const { currentStep, nextStep, prevStep } = useMultiStepFormState({
     formSteps,
@@ -97,8 +131,8 @@ function RouteComponent() {
   });
 
   async function onSubmit({
-    step1: { address, email, firstName, lastName, password },
-    step2: { programId },
+    step1: { address, email, firstName, lastName, password, jobTitle, isAdmin },
+    step2: { departmentId },
   }: TFormSchema) {
     let formData = new FormData();
     formData.append("first_name", firstName);
@@ -106,11 +140,13 @@ function RouteComponent() {
     formData.append("email", email);
     formData.append("password", password);
     formData.append("address", address);
-    formData.append("program_id", programId!);
+    formData.append("job_title", jobTitle);
+    formData.append("is_admin", Number(isAdmin).toString());
+    formData.append("department_id", departmentId!);
 
     try {
-      await createStudent(formData);
-      navigate({ to: "/students" });
+      await editInstructor({ id: instructorId, formData });
+      navigate({ to: "/instructors" });
     } catch (error) {
       toast.error("An error occured.");
     }
@@ -118,13 +154,13 @@ function RouteComponent() {
 
   const formStepEntries = Object.entries(formSteps);
 
-  if (getAllProgramsStatus === "error") {
+  if ([getAllDepartmentsStatus, instructorInfoStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if (getAllProgramsStatus === "pending") {
+  if ([getAllDepartmentsStatus, instructorInfoStatus].includes("pending")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -132,22 +168,22 @@ function RouteComponent() {
     );
   }
 
-  if (programs) {
+  if (departments && instructorInfo) {
     return (
       <div className="flex flex-col gap-8 size-full">
         <div className="flex flex-col gap-8">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link to="/students">Students</Link>
+                <Link to="/instructors">Instructors</Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Create</BreadcrumbPage>
+                <BreadcrumbPage>Edit</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <p className="text-2xl font-bold">Create Student </p>
+          <p className="text-2xl font-bold">Edit Instructor </p>
         </div>
         <FormProvider {...form}>
           <Form {...form}>
@@ -156,11 +192,11 @@ function RouteComponent() {
                 currentStep={currentStep}
                 formStepEntries={formStepEntries}
               >
-                {currentStep === 1 && <StudentInfoForm onNext={nextStep} />}
+                {currentStep === 1 && <InstructorInfoForm onNext={nextStep} />}
                 {currentStep === 2 && (
-                  <AssignToProgramForm
-                    type="create"
-                    programs={programs}
+                  <AssignToDepartmentForm
+                    type="edit"
+                    departments={departments}
                     onPrev={prevStep}
                   />
                 )}

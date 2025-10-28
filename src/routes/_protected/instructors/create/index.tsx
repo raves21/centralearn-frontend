@@ -18,7 +18,7 @@ import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
 import { useCreateInstructor } from "@/domains/instructors/api/mutations";
 import { useAllDepartments } from "@/domains/departments/api/queries";
 import AssignToDepartmentForm from "@/domains/programs/components/createEditProgramFormSteps/AssignToDepartmentForm";
-import InstructorInfoForm from "@/domains/instructors/components/createInstructorFormSteps/InstructorInfoForm";
+import InstructorInfoForm from "@/domains/instructors/components/createEditInstructorFormSteps/InstructorInfoForm";
 
 export const Route = createFileRoute("/_protected/instructors/create/")({
   component: RouteComponent,
@@ -166,6 +166,7 @@ function RouteComponent() {
                 {currentStep === 1 && <InstructorInfoForm onNext={nextStep} />}
                 {currentStep === 2 && (
                   <AssignToDepartmentForm
+                    type="create"
                     departments={departments}
                     onPrev={prevStep}
                   />

@@ -1,6 +1,6 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetStudentsResponse } from "../types";
+import type { GetStudentsResponse, Student } from "../types";
 
 type UseStudentsArgs = {
   page: number | undefined;
@@ -15,6 +15,16 @@ export function useStudents({ page = 1, searchQuery }: UseStudentsArgs) {
         params: { page, query: searchQuery },
       });
       return data as GetStudentsResponse;
+    },
+  });
+}
+
+export function useStudentInfo(id: string) {
+  return useQuery({
+    queryKey: ["student", id],
+    queryFn: async () => {
+      const { data } = await api.get(`/students/${id}`);
+      return data.data as Student;
     },
   });
 }

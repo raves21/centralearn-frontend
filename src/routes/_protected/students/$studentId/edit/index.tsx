@@ -16,11 +16,13 @@ import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContai
 import { toast } from "sonner";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
 import { useAllPrograms } from "@/domains/programs/api/queries";
-import { useCreateStudent } from "@/domains/students/api/mutations";
+import { useEditStudent } from "@/domains/students/api/mutations";
 import StudentInfoForm from "@/domains/students/components/createEditStudentFormSteps/StudentInfoForm";
 import AssignToProgramForm from "@/domains/students/components/createEditStudentFormSteps/AssignToProgramForm";
+import { useStudentInfo } from "@/domains/students/api/queries";
+import { useEffect } from "react";
 
-export const Route = createFileRoute("/_protected/students/create/")({
+export const Route = createFileRoute("/_protected/students/$studentId/edit/")({
   component: RouteComponent,
 });
 
@@ -29,7 +31,9 @@ const step1Schema = z.object({
   lastName: z.string().min(1, { error: "This field is required." }),
   address: z.string().min(1, { error: "This field is required." }),
   email: z.email().min(1, { error: "This field is required." }),
-  password: z.string().min(8, { error: "Minimum of 8 characters" }),
+  password: z.string().refine((val) => val === "" || val.length >= 8, {
+    message: "Must be at least 8 characters or empty",
+  }),
 });
 
 const step2Schema = z.object({
@@ -63,16 +67,20 @@ const formSteps: Record<number, StepField> = {
 };
 
 function RouteComponent() {
+  const { studentId } = Route.useParams();
   const navigate = useNavigate();
 
-  const { mutateAsync: createStudent, status: createStudentStatus } =
-    useCreateStudent();
+  const { mutateAsync: editStudent, status: editStudentStatus } =
+    useEditStudent();
+
+  const { data: studentInfo, status: studentInfoStatus } =
+    useStudentInfo(studentId);
 
   const { data: programs, status: getAllProgramsStatus } = useAllPrograms({});
 
   usePendingOverlay({
-    isPending: createStudentStatus === "pending",
-    pendingLabel: "Creating Student",
+    isPending: editStudentStatus === "pending",
+    pendingLabel: "Updating  Student",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -90,6 +98,23 @@ function RouteComponent() {
       },
     },
   });
+
+  useEffect(() => {
+    if (studentInfo) {
+      form.reset({
+        step1: {
+          address: studentInfo.user.address,
+          email: studentInfo.user.email,
+          firstName: studentInfo.user.firstName,
+          lastName: studentInfo.user.lastName,
+          password: "",
+        },
+        step2: {
+          programId: studentInfo.program.id,
+        },
+      });
+    }
+  }, [studentInfo]);
 
   const { currentStep, nextStep, prevStep } = useMultiStepFormState({
     formSteps,
@@ -109,7 +134,7 @@ function RouteComponent() {
     formData.append("program_id", programId!);
 
     try {
-      await createStudent(formData);
+      await editStudent({ id: studentId, formData });
       navigate({ to: "/students" });
     } catch (error) {
       toast.error("An error occured.");
@@ -118,13 +143,13 @@ function RouteComponent() {
 
   const formStepEntries = Object.entries(formSteps);
 
-  if (getAllProgramsStatus === "error") {
+  if ([getAllProgramsStatus, studentInfoStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if (getAllProgramsStatus === "pending") {
+  if ([getAllProgramsStatus, studentInfoStatus].includes("pending")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -132,7 +157,7 @@ function RouteComponent() {
     );
   }
 
-  if (programs) {
+  if (programs && studentInfoStatus) {
     return (
       <div className="flex flex-col gap-8 size-full">
         <div className="flex flex-col gap-8">
@@ -159,7 +184,7 @@ function RouteComponent() {
                 {currentStep === 1 && <StudentInfoForm onNext={nextStep} />}
                 {currentStep === 2 && (
                   <AssignToProgramForm
-                    type="create"
+                    type="edit"
                     programs={programs}
                     onPrev={prevStep}
                   />

@@ -10,4 +10,5 @@ export type Instructor = {
   user: User;
   jobTitle: string;
   department: Pick<Department, "id" | "name" | "code">;
+  isAdmin: boolean;
 };

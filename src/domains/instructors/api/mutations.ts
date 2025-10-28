@@ -12,3 +12,21 @@ export function useCreateInstructor() {
     },
   });
 }
+
+export function useEditInstructor() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      formData,
+    }: {
+      id: string;
+      formData: FormData;
+    }) => {
+      await api.post(`/instructors/${id}`, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["instructors"] });
+      queryClient.invalidateQueries({ queryKey: ["instructor"] });
+    },
+  });
+}

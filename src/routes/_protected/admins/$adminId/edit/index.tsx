@@ -73,6 +73,7 @@ function RouteComponent() {
         firstName: adminInfo.user.firstName,
         jobTitle: adminInfo.jobTitle,
         lastName: adminInfo.user.lastName,
+        password: "",
       });
     }
   }, [adminInfo]);
