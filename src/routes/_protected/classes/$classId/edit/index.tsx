@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ImageUpload from "@/components/shared/form/ImageUpload";
-import { useState } from "react";
+import { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
-import { useCreateCourseClass } from "@/domains/classes/api/mutations";
+import { useEditCourseClass } from "@/domains/classes/api/mutations";
 import {
   Command,
   CommandEmpty,
@@ -43,8 +43,10 @@ import { useAllSemesters } from "@/domains/semesters/api/queries";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
+import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
+import { useCourseClassInfo } from "@/domains/classes/api/queries";
 
-export const Route = createFileRoute("/_protected/classes/create/")({
+export const Route = createFileRoute("/_protected/classes/$classId/edit/")({
   component: RouteComponent,
 });
 
@@ -56,12 +58,15 @@ const formSchema = z.object({
 });
 
 function RouteComponent() {
-  const [image, setImage] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const { classId } = Route.useParams();
+  const { image, preview, setImage, setPreview } = useImageUploadState();
 
   const navigate = useNavigate();
-  const { mutateAsync: createCourseClass, status: createCourseClassStatus } =
-    useCreateCourseClass();
+  const { mutateAsync: editCourseClass, status: editCourseClassStatus } =
+    useEditCourseClass();
+
+  const { data: courseClassInfo, status: courseClassInfoStatus } =
+    useCourseClassInfo(classId);
 
   const { data: allCourses, status: allCoursesStatus } = useAllCourses({});
   const { data: allSemesters, status: allSemestersStatus } = useAllSemesters(
@@ -69,8 +74,8 @@ function RouteComponent() {
   );
 
   usePendingOverlay({
-    isPending: createCourseClassStatus === "pending",
-    pendingLabel: "Creating Class",
+    isPending: editCourseClassStatus === "pending",
+    pendingLabel: "Updating Class",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -82,6 +87,18 @@ function RouteComponent() {
       status: "open",
     },
   });
+
+  useEffect(() => {
+    if (courseClassInfo) {
+      form.reset({
+        courseId: courseClassInfo.course.id,
+        sectionName: courseClassInfo.sectionName,
+        semesterId: courseClassInfo.semester.id,
+        status: courseClassInfo.status,
+      });
+      setPreview(courseClassInfo.imageUrl || courseClassInfo.course.imageUrl);
+    }
+  }, [courseClassInfo]);
 
   async function onSubmit({
     courseId,
@@ -98,20 +115,28 @@ function RouteComponent() {
       formData.append("section_name", sectionName);
       formData.append("semester_id", semesterId);
       formData.append("status", status);
-      await createCourseClass(formData);
+      await editCourseClass({ id: classId, formData });
       navigate({ to: "/classes" });
     } catch (error) {
       toast.error("An error occured.");
     }
   }
 
-  if ([allCoursesStatus, allSemestersStatus].includes("error")) {
+  if (
+    [allCoursesStatus, allSemestersStatus, courseClassInfoStatus].includes(
+      "error"
+    )
+  ) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if ([allCoursesStatus, allSemestersStatus].includes("pending")) {
+  if (
+    [allCoursesStatus, allSemestersStatus, courseClassInfoStatus].includes(
+      "pending"
+    )
+  ) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -132,11 +157,11 @@ function RouteComponent() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Create</BreadcrumbPage>
+                <BreadcrumbPage>Edit</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <p className="text-2xl font-bold">Create Class</p>
+          <p className="text-2xl font-bold">Edit Class</p>
         </div>
         <Form {...form}>
           <form
@@ -388,10 +413,10 @@ function RouteComponent() {
                 type="submit"
                 className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-2 py-[10px] text-white rounded-md bg-mainaccent"
               >
-                Create
+                Save
               </button>
               <button
-                disabled={createCourseClassStatus === "pending"}
+                disabled={editCourseClassStatus === "pending"}
                 onClick={() => navigate({ to: "/classes" })}
                 type="button"
                 className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"

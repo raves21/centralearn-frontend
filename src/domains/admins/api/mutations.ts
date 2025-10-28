@@ -12,3 +12,21 @@ export function useCreateAdmin() {
     },
   });
 }
+
+export function useEditAdmin() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      formData,
+    }: {
+      id: string;
+      formData: FormData;
+    }) => {
+      await api.post(`/admins/${id}`, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
+      queryClient.invalidateQueries({ queryKey: ["admin"] });
+    },
+  });
+}

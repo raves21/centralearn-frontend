@@ -12,3 +12,21 @@ export function useCreateCourseClass() {
     },
   });
 }
+
+export function useEditCourseClass() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      formData,
+    }: {
+      id: string;
+      formData: FormData;
+    }) => {
+      await api.post(`/course-classes/${id}`, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courseClasses"] });
+      queryClient.invalidateQueries({ queryKey: ["courseClass"] });
+    },
+  });
+}

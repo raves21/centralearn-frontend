@@ -11,5 +11,7 @@ export type CourseClass = {
   name: string;
   course: Course;
   semester: Semester;
-  status: string;
+  sectionName: string;
+  status: "open" | "close";
+  imageUrl: string | null;
 };

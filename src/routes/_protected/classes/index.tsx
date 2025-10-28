@@ -4,7 +4,7 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { Loader } from "lucide-react";
+import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import type { Course } from "@/domains/courses/types";
 import { useCourseClasses } from "@/domains/classes/api/queries";
@@ -12,6 +12,12 @@ import type { CourseClass } from "@/domains/classes/types";
 import type { Semester } from "@/domains/semesters/types";
 import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -79,6 +85,40 @@ function RouteComponent() {
           >
             {status.split("")[0].toUpperCase() + status.substring(1)}
           </p>
+        );
+      },
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
+        const rowClass = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="stroke-mainaccent" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate({
+                    to: "/classes/$classId/edit",
+                    params: {
+                      classId: rowClass.id,
+                    },
+                  })
+                }
+              >
+                Edit
+                <Pencil className="stroke-mainaccent" />
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Delete
+                <Trash className="stroke-red-500" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       },
     },
