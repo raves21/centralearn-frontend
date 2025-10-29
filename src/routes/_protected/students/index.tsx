@@ -129,6 +129,14 @@ function RouteComponent() {
         <DataTable
           columns={columns}
           data={data.data}
+          onRowClick={(row) =>
+            navigate({
+              to: "/students/$studentId",
+              params: {
+                studentId: row.id,
+              },
+            })
+          }
           paginationProps={{
             currentPage: data.meta.current_page,
             handlePageChange: (_, page) => {

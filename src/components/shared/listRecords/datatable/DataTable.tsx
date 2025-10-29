@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
     currentPage: number;
     handlePageChange: (e: React.ChangeEvent<unknown>, page: number) => void;
   };
+  onRowClick?: (row: TData) => void;
   filterProps: {
     onInputSearch: (input: string) => void;
     searchInputPlaceholder: string;
@@ -41,6 +42,7 @@ export function DataTable<TData, TValue>({
   className,
   paginationProps,
   filterProps,
+  onRowClick = () => {},
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -79,6 +81,7 @@ export function DataTable<TData, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
+                onClick={() => onRowClick(row.original)}
                 className="hover:cursor-pointer"
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}

@@ -8,18 +8,12 @@ import {
   LayoutGrid,
   Layers,
 } from "lucide-react";
-import { type ReactNode } from "react";
 import { cn } from "../../lib/utils";
-import { Link, useMatchRoute, type LinkProps } from "@tanstack/react-router";
-
-type SidePanelRoute = {
-  name: string;
-  linkProps: LinkProps;
-  icon: ReactNode;
-};
+import { Link, useMatchRoute } from "@tanstack/react-router";
+import type { NavigationButton } from "@/utils/sharedTypes";
 
 export default function SidePanel() {
-  const routesTemp: SidePanelRoute[] = [
+  const routesTemp: NavigationButton[] = [
     {
       name: "Dashboard",
       linkProps: {

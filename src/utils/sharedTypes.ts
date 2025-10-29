@@ -1,3 +1,6 @@
+import type { LinkProps } from "@tanstack/react-router";
+import type { ReactNode } from "react";
+
 export type User = {
   id: string;
   firstName: string;
@@ -38,4 +41,10 @@ export type PaginationLink = {
 
 export type SearchSchemaValidationStatus = {
   success?: boolean;
+};
+
+export type NavigationButton = {
+  name: string;
+  linkProps: LinkProps;
+  icon: ReactNode;
 };

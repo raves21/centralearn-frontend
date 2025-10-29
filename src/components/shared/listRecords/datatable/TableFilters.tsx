@@ -57,6 +57,7 @@ export default function TableFilters({
         <DropdownMenuContent align="end">
           {table
             .getAllColumns()
+            .filter((column) => Boolean(column.columnDef.header))
             .filter((column) => column.getCanHide())
             .map((column) => {
               return (

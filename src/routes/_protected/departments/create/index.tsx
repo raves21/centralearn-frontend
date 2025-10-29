@@ -97,7 +97,7 @@ function RouteComponent() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col w-full gap-8"
+          className="flex flex-col w-full gap-8 pb-10"
         >
           <div className="flex flex-col gap-8">
             <div className="flex w-full gap-10">

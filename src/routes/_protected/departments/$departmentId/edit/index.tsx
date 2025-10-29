@@ -87,7 +87,15 @@ function RouteComponent() {
       formData.append("name", name);
       formData.append("code", code);
       if (description) formData.append("description", description);
-      if (image) formData.append("image", image);
+
+      if (departmentInfo && departmentInfo.imageUrl && !preview) {
+        formData.append("image", "__DELETED__");
+      } else {
+        if (image) {
+          formData.append("image", image);
+        }
+      }
+
       await editDepartment({ departmentId, payload: formData });
       navigate({ to: "/departments" });
     } catch (error) {
@@ -133,7 +141,7 @@ function RouteComponent() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col w-full gap-8"
+            className="flex flex-col w-full gap-8 pb-10"
           >
             <div className="flex flex-col gap-8">
               <div className="flex w-full gap-10">
