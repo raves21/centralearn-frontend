@@ -22,6 +22,7 @@ import CourseInfoForm from "@/domains/courses/components/createEditCourseFormSte
 import AssignToDepartmentsForm from "@/domains/courses/components/createEditCourseFormSteps/AssignToDepartmentsForm";
 import { useCourseInfo } from "@/domains/courses/api/queries";
 import { useEffect } from "react";
+import { isArrayEqualRegardlessOfOrder } from "@/utils/sharedFunctions";
 
 export const Route = createFileRoute("/_protected/courses/$courseId/edit/")({
   component: RouteComponent,
@@ -118,6 +119,7 @@ function RouteComponent() {
     step1: { code, name, description },
     step2: { departments },
   }: TFormSchema) {
+    if (!courseInfo) return;
     let formData = new FormData();
     formData.append("code", code);
     formData.append("name", name);
@@ -133,9 +135,16 @@ function RouteComponent() {
       }
     }
 
-    departments!.forEach((deptId) => {
-      formData.append("departments[]", deptId);
-    });
+    if (
+      !isArrayEqualRegardlessOfOrder(
+        departments,
+        courseInfo.departments.map((dept) => dept.id)
+      )
+    ) {
+      departments!.forEach((deptId) => {
+        formData.append("departments[]", deptId);
+      });
+    }
 
     try {
       await editCourse({ courseId, payload: formData });

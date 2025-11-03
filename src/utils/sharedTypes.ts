@@ -46,5 +46,15 @@ export type SearchSchemaValidationStatus = {
 export type NavigationButton = {
   name: string;
   linkProps: LinkProps;
-  icon: ReactNode;
+  icon?: ReactNode;
+};
+
+export type InfoSectionDetail = {
+  label: string;
+  value: string | ReactNode;
+};
+
+export type TInfoSection = {
+  header: string;
+  details: InfoSectionDetail[];
 };

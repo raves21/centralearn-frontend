@@ -108,8 +108,12 @@ function RouteComponent() {
   }: z.infer<typeof formSchema>) {
     try {
       const formData = new FormData();
-      if (image) {
-        formData.append("image", image);
+      if (courseClassInfo && courseClassInfo.imageUrl && !preview) {
+        formData.append("image", "__DELETED__");
+      } else {
+        if (image) {
+          formData.append("image", image);
+        }
       }
       formData.append("course_id", courseId);
       formData.append("section_name", sectionName);
