@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Course } from "@/domains/courses/types";
-import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
 import type { Semester } from "@/domains/semesters/types";
 import { useStudentEnrolledClasses } from "@/domains/students/api/queries";
 import { cn } from "@/lib/utils";
@@ -66,7 +65,15 @@ function RouteComponent() {
       header: "Course",
       cell: ({ getValue }) => {
         const course = getValue<Course>();
-        return <p>{course.code}</p>;
+        return <p>{course.name}</p>;
+      },
+    },
+    {
+      accessorKey: "courseCode",
+      header: "Course Code",
+      cell: ({ row }) => {
+        const courseClass = row.original;
+        return <p>{courseClass.course.code}</p>;
       },
     },
     {
@@ -74,12 +81,12 @@ function RouteComponent() {
       header: "Semester",
       cell: ({ getValue }) => {
         const semester = getValue<Semester>();
-        return <p>{formatToSemesterNameAndTimestamps(semester)}</p>;
+        return semester.name;
       },
     },
     {
       accessorKey: "sectionName",
-      header: "Section Name",
+      header: "Section",
     },
     {
       accessorKey: "status",

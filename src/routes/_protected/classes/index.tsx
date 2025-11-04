@@ -10,7 +10,6 @@ import type { Course } from "@/domains/courses/types";
 import { useCourseClasses } from "@/domains/classes/api/queries";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Semester } from "@/domains/semesters/types";
-import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -56,7 +55,15 @@ function RouteComponent() {
       header: "Course",
       cell: ({ getValue }) => {
         const course = getValue<Course>();
-        return <p>{course.code}</p>;
+        return <p>{course.name}</p>;
+      },
+    },
+    {
+      accessorKey: "courseCode",
+      header: "Course Code",
+      cell: ({ row }) => {
+        const courseClass = row.original;
+        return <p>{courseClass.course.code}</p>;
       },
     },
     {
@@ -64,12 +71,12 @@ function RouteComponent() {
       header: "Semester",
       cell: ({ getValue }) => {
         const semester = getValue<Semester>();
-        return <p>{formatToSemesterNameAndTimestamps(semester)}</p>;
+        return <p>{semester.name}</p>;
       },
     },
     {
       accessorKey: "sectionName",
-      header: "Section Name",
+      header: "Section",
     },
     {
       accessorKey: "status",
