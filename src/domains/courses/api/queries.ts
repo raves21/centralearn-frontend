@@ -1,21 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/axiosBackend";
-import type { Course, GetCourses } from "../types";
+import type { Course, CoursesPaginated } from "../types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
 export function useCourses({
-  page,
-  searchQuery,
-}: {
-  searchQuery?: string;
-  page: number | undefined;
-}) {
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams) {
   return useQuery({
     queryKey: ["courses", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/courses", {
         params: { page, query: searchQuery },
       });
-      return data as GetCourses;
+      return data as CoursesPaginated;
     },
   });
 }

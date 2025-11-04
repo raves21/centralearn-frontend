@@ -1,20 +1,20 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetStudentsResponse, Student } from "../types";
+import type { StudentsPaginated, Student } from "../types";
+import type { CourseClassesPaginated } from "@/domains/classes/types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
-type UseStudentsArgs = {
-  page: number | undefined;
-  searchQuery: string | undefined;
-};
-
-export function useStudents({ page = 1, searchQuery }: UseStudentsArgs) {
+export function useStudents({
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams) {
   return useQuery({
-    queryKey: ["students", page, searchQuery || undefined],
+    queryKey: ["students", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/students", {
         params: { page, query: searchQuery },
       });
-      return data as GetStudentsResponse;
+      return data as StudentsPaginated;
     },
   });
 }
@@ -25,6 +25,30 @@ export function useStudentInfo(id: string) {
     queryFn: async () => {
       const { data } = await api.get(`/students/${id}`);
       return data.data as Student;
+    },
+  });
+}
+
+export function useStudentEnrolledClasses({
+  studentId,
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams & { studentId: string }) {
+  return useQuery({
+    queryKey: [
+      "studentEnrolledClasses",
+      "courseClasses",
+      page,
+      searchQuery,
+      studentId,
+    ],
+    queryFn: async () => {
+      const { data } = await api.get(
+        `/students/${studentId}/classes-enrolled`,
+        { params: { paginate: 1, page, query: searchQuery } }
+      );
+
+      return data as CourseClassesPaginated;
     },
   });
 }

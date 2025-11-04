@@ -96,7 +96,7 @@ function RouteComponent() {
         semesterId: courseClassInfo.semester.id,
         status: courseClassInfo.status,
       });
-      setPreview(courseClassInfo.imageUrl || courseClassInfo.course.imageUrl);
+      setPreview(courseClassInfo.imageUrl);
     }
   }, [courseClassInfo]);
 

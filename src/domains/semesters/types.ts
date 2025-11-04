@@ -1,6 +1,6 @@
 import type { PaginationProps } from "../../utils/sharedTypes";
 
-export type GetSemestersResponse = PaginationProps & {
+export type SemestersPaginated = PaginationProps & {
   data: Semester[];
 };
 

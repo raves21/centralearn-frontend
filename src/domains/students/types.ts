@@ -1,7 +1,7 @@
 import type { PaginationProps, User } from "../../utils/sharedTypes";
 import type { Program } from "../programs/types";
 
-export type GetStudentsResponse = PaginationProps & {
+export type StudentsPaginated = PaginationProps & {
   data: Student[];
 };
 

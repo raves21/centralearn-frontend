@@ -1,4 +1,4 @@
-import InfoSection from "@/components/shared/infoSection/InfoSection";
+import InfoSection from "@/components/shared/infoPage/InfoSection";
 import { useStudentInfo } from "@/domains/students/api/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader } from "lucide-react";

@@ -39,6 +39,11 @@ export type PaginationLink = {
   active: boolean;
 };
 
+export type PaginatedQueryParams = {
+  page: number | undefined;
+  searchQuery: string | undefined;
+};
+
 export type SearchSchemaValidationStatus = {
   success?: boolean;
 };

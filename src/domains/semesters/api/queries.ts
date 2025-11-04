@@ -1,25 +1,23 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
 import type {
-  GetSemestersResponse,
+  SemestersPaginated,
   Semester,
   SemesterMinMaxTimestamps,
 } from "../types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
 export function useSemesters({
   page = 1,
-  searchQuery,
-}: {
-  page: number | undefined;
-  searchQuery: string | undefined;
-}) {
+  searchQuery = undefined,
+}: PaginatedQueryParams) {
   return useQuery({
-    queryKey: ["semesters", page, searchQuery || undefined],
+    queryKey: ["semesters", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/semesters", {
         params: { page, query: searchQuery },
       });
-      return data as GetSemestersResponse;
+      return data as SemestersPaginated;
     },
   });
 }

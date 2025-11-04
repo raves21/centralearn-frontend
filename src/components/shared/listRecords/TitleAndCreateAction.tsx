@@ -3,6 +3,7 @@ import { cn } from "../../../lib/utils";
 type Props = {
   headerTitle: string;
   createAction: () => void;
+  createActionLabel?: string;
   className?: string;
 };
 
@@ -10,6 +11,7 @@ export default function TitleAndCreateAction({
   createAction,
   headerTitle,
   className,
+  createActionLabel,
 }: Props) {
   return (
     <div
@@ -20,7 +22,7 @@ export default function TitleAndCreateAction({
         onClick={createAction}
         className="px-5 py-3 text-white bg-mainaccent hover:bg-indigo-800 transition-colors rounded-md"
       >
-        Create New
+        {createActionLabel ?? "Create New"}
       </button>
     </div>
   );

@@ -1,21 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../utils/axiosBackend";
-import type { Department, GetDepartmentsResponse } from "../types";
+import type { Department, DepartmentsPaginated } from "../types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
 export function useDepartments({
   page = 1,
   searchQuery = undefined,
-}: {
-  page?: number;
-  searchQuery?: string;
-}) {
+}: PaginatedQueryParams) {
   return useQuery({
     queryKey: ["departments", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/departments", {
         params: { page, query: searchQuery },
       });
-      return data as GetDepartmentsResponse;
+      return data as DepartmentsPaginated;
     },
   });
 }

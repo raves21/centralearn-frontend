@@ -1,20 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/axiosBackend";
-import type { CourseClass, GetCourseClasses } from "../types";
+import type { CourseClass, CourseClassesPaginated } from "../types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
-type UseCourseClassesArgs = {
-  searchQuery: string | undefined;
-  page: number | undefined;
-};
-
-export function useCourseClasses({ page, searchQuery }: UseCourseClassesArgs) {
+export function useCourseClasses({
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams) {
   return useQuery({
     queryKey: ["courseClasses", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/course-classes", {
         params: { page, query: searchQuery },
       });
-      return data as GetCourseClasses;
+      return data as CourseClassesPaginated;
     },
   });
 }

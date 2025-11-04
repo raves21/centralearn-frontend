@@ -1,20 +1,19 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetInstructorsResponse, Instructor } from "../types";
+import type { InstructorsPaginated, Instructor } from "../types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
-type UseInstructorsArgs = {
-  page: number | undefined;
-  searchQuery: string | undefined;
-};
-
-export function useInstructors({ page = 1, searchQuery }: UseInstructorsArgs) {
+export function useInstructors({
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams) {
   return useQuery({
-    queryKey: ["instructors", page, searchQuery || undefined],
+    queryKey: ["instructors", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/instructors", {
         params: { page, query: searchQuery },
       });
-      return data as GetInstructorsResponse;
+      return data as InstructorsPaginated;
     },
   });
 }

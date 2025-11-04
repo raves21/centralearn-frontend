@@ -1,20 +1,19 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
-import type { GetProgramsResponse, Program } from "../types";
+import type { ProgramsPaginated, Program } from "../types";
+import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 
-type UseProgramsArgs = {
-  page: number | undefined;
-  searchQuery: string | undefined;
-};
-
-export function usePrograms({ page = 1, searchQuery }: UseProgramsArgs) {
+export function usePrograms({
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams) {
   return useQuery({
-    queryKey: ["programs", page, searchQuery || undefined],
+    queryKey: ["programs", page, searchQuery],
     queryFn: async () => {
       const { data } = await api.get("/programs", {
         params: { page, query: searchQuery },
       });
-      return data as GetProgramsResponse;
+      return data as ProgramsPaginated;
     },
   });
 }

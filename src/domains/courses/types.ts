@@ -1,7 +1,7 @@
 import type { PaginationProps } from "../../utils/sharedTypes";
 import type { Department } from "../departments/types";
 
-export type GetCourses = PaginationProps & {
+export type CoursesPaginated = PaginationProps & {
   data: Course[];
 };
 
