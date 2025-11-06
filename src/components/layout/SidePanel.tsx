@@ -7,6 +7,7 @@ import {
   UserRoundCog,
   LayoutGrid,
   Layers,
+  Component,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { Link, useMatchRoute } from "@tanstack/react-router";
@@ -55,6 +56,13 @@ export default function SidePanel() {
         to: "/classes",
       },
       icon: <Clipboard key={crypto.randomUUID()} className="size-6" />,
+    },
+    {
+      name: "Sections",
+      linkProps: {
+        to: "/sections",
+      },
+      icon: <Component key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Admins",

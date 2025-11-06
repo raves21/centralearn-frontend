@@ -1,5 +1,5 @@
 import { Loader2 } from "lucide-react";
-import { usePendingOverlayStore } from "./usePendingOverlayStore";
+import { usePendingOverlayStore } from "./utils/usePendingOverlayStore";
 import { useShallow } from "zustand/react/shallow";
 
 export default function PendingOverlay() {

@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateDepartment } from "@/domains/departments/api/mutations";
 import { toast } from "sonner";
-import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 
 export const Route = createFileRoute("/_protected/departments/create/")({
   component: RouteComponent,

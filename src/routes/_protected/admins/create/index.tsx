@@ -20,7 +20,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useCreateAdmin } from "@/domains/admins/api/mutations";
 
 export const Route = createFileRoute("/_protected/admins/create/")({

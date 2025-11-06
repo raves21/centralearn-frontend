@@ -88,7 +88,13 @@ export function DataTable<TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell className="py-5 px-3 max-w-[200px]" key={cell.id}>
-                    <div className="whitespace-normal break-words line-clamp-3">
+                    <div
+                      className={cn(
+                        "whitespace-normal break-words line-clamp-3",
+                        //empty header is the 'actions'
+                        { "w-min ml-auto": cell.column.columnDef.header === "" }
+                      )}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

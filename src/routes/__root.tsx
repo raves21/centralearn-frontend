@@ -1,7 +1,7 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import Providers from "../components/layout/Providers";
 import { Toaster } from "@/components/ui/sonner";
-import PendingOverlay from "@/components/shared/globals/pendingOverlay/PendingOverlay";
+import PendingOverlay from "@/components/shared/globals/PendingOverlay";
 
 export const Route = createRootRoute({
   component: RootComponent,

@@ -1,4 +1,4 @@
-import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useCreateSemester } from "@/domains/semesters/api/mutations";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {

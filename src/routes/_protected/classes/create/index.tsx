@@ -22,7 +22,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useCreateCourseClass } from "@/domains/classes/api/mutations";
 import {
   Command,

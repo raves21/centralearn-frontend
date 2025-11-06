@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEditDepartment } from "@/domains/departments/api/mutations";
 import { toast } from "sonner";
-import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useDepartmentInfo } from "@/domains/departments/api/queries";
 import { Loader } from "lucide-react";

@@ -10,7 +10,7 @@ import { Form } from "@/components/ui/form";
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePendingOverlay } from "@/components/shared/globals/pendingOverlay/usePendingOverlay";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import ProgramInfoForm from "@/domains/programs/components/createEditProgramFormSteps/ProgramInfoForm";
 import { Loader } from "lucide-react";
 import { useAllDepartments } from "@/domains/departments/api/queries";
