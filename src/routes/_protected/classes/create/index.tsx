@@ -17,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,6 +42,8 @@ import { useAllSemesters } from "@/domains/semesters/api/queries";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
+import { useAllSections } from "@/domains/sections/api/queries";
+import { AxiosError } from "axios";
 
 export const Route = createFileRoute("/_protected/classes/create/")({
   component: RouteComponent,
@@ -51,7 +52,7 @@ export const Route = createFileRoute("/_protected/classes/create/")({
 const formSchema = z.object({
   courseId: z.string().min(1, { error: "This field is required." }),
   semesterId: z.string().min(1, { error: "This field is required." }),
-  sectionName: z.string().min(1, { error: "This field is required." }),
+  sectionId: z.string().min(1, { error: "This field is required." }),
   status: z.enum(["open", "close"]),
 });
 
@@ -67,6 +68,7 @@ function RouteComponent() {
   const { data: allSemesters, status: allSemestersStatus } = useAllSemesters(
     {}
   );
+  const { data: allSections, status: allSectionsStatus } = useAllSections();
 
   usePendingOverlay({
     isPending: createCourseClassStatus === "pending",
@@ -77,7 +79,7 @@ function RouteComponent() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseId: "",
-      sectionName: "",
+      sectionId: "",
       semesterId: "",
       status: "open",
     },
@@ -85,7 +87,7 @@ function RouteComponent() {
 
   async function onSubmit({
     courseId,
-    sectionName,
+    sectionId,
     semesterId,
     status,
   }: z.infer<typeof formSchema>) {
@@ -95,23 +97,35 @@ function RouteComponent() {
         formData.append("image", image);
       }
       formData.append("course_id", courseId);
-      formData.append("section_name", sectionName);
+      formData.append("section_id", sectionId);
       formData.append("semester_id", semesterId);
       formData.append("status", status);
       await createCourseClass(formData);
       navigate({ to: "/classes" });
     } catch (error) {
-      toast.error("An error occured.");
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 422) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("An error occured.");
+        }
+      }
     }
   }
 
-  if ([allCoursesStatus, allSemestersStatus].includes("error")) {
+  if (
+    [allCoursesStatus, allSemestersStatus, allSectionsStatus].includes("error")
+  ) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if ([allCoursesStatus, allSemestersStatus].includes("pending")) {
+  if (
+    [allCoursesStatus, allSemestersStatus, allSectionsStatus].includes(
+      "pending"
+    )
+  ) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -119,7 +133,7 @@ function RouteComponent() {
     );
   }
 
-  if (allCourses && allSemesters) {
+  if (allCourses && allSemesters && allSections) {
     return (
       <div className="flex flex-col gap-16 size-full pb-12">
         <div className="flex flex-col gap-8">
@@ -285,15 +299,64 @@ function RouteComponent() {
               <div className="flex items-start w-full gap-10">
                 <FormField
                   control={form.control}
-                  name="sectionName"
+                  name="sectionId"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>
-                        Section Name <span className="text-red-500">*</span>
+                        Section <span className="text-red-500">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? `${
+                                    allSections.find(
+                                      (section) => section.id === field.value
+                                    )?.name
+                                  }`
+                                : "Select Section..."}
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 font-poppins">
+                          <Command>
+                            <CommandInput placeholder="Search Section..." />
+                            <CommandList>
+                              <CommandEmpty>No section found.</CommandEmpty>
+                              <CommandGroup>
+                                {allSections.map((section) => (
+                                  <CommandItem
+                                    key={section.id}
+                                    value={section.name}
+                                    onSelect={() => {
+                                      field.onChange(section.id);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        section.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {section.name}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}

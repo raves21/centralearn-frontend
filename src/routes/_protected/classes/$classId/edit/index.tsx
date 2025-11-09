@@ -53,7 +53,7 @@ export const Route = createFileRoute("/_protected/classes/$classId/edit/")({
 const formSchema = z.object({
   courseId: z.string().min(1, { error: "This field is required." }),
   semesterId: z.string().min(1, { error: "This field is required." }),
-  sectionName: z.string().min(1, { error: "This field is required." }),
+  sectionId: z.string().min(1, { error: "This field is required." }),
   status: z.enum(["open", "close"]),
 });
 
@@ -82,7 +82,7 @@ function RouteComponent() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseId: "",
-      sectionName: "",
+      sectionId: "",
       semesterId: "",
       status: "open",
     },
@@ -92,7 +92,7 @@ function RouteComponent() {
     if (courseClassInfo) {
       form.reset({
         courseId: courseClassInfo.course.id,
-        sectionName: courseClassInfo.sectionName,
+        sectionId: courseClassInfo.section.id,
         semesterId: courseClassInfo.semester.id,
         status: courseClassInfo.status,
       });
@@ -102,7 +102,7 @@ function RouteComponent() {
 
   async function onSubmit({
     courseId,
-    sectionName,
+    sectionId,
     semesterId,
     status,
   }: z.infer<typeof formSchema>) {
@@ -116,7 +116,7 @@ function RouteComponent() {
         }
       }
       formData.append("course_id", courseId);
-      formData.append("section_name", sectionName);
+      formData.append("section_id", sectionId);
       formData.append("semester_id", semesterId);
       formData.append("status", status);
       await editCourseClass({ id: classId, formData });
@@ -314,11 +314,11 @@ function RouteComponent() {
               <div className="flex items-start w-full gap-10">
                 <FormField
                   control={form.control}
-                  name="sectionName"
+                  name="sectionId"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>
-                        Section Name <span className="text-red-500">*</span>
+                        Section <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
                         <Input {...field} />

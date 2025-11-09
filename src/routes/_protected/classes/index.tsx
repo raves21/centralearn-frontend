@@ -17,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { Section } from "@/domains/sections/types";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -75,8 +76,12 @@ function RouteComponent() {
       },
     },
     {
-      accessorKey: "sectionName",
+      accessorKey: "section",
       header: "Section",
+      cell: ({ getValue }) => {
+        const section = getValue<Section>();
+        return <p>{section.name}</p>;
+      },
     },
     {
       accessorKey: "status",

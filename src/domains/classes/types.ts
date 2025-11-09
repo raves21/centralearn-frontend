@@ -1,5 +1,6 @@
 import type { PaginationProps } from "../../utils/sharedTypes";
 import type { Course } from "../courses/types";
+import type { Section } from "../sections/types";
 import type { Semester } from "../semesters/types";
 
 export type CourseClassesPaginated = PaginationProps & {
@@ -11,7 +12,7 @@ export type CourseClass = {
   name: string;
   course: Course;
   semester: Semester;
-  sectionName: string;
+  section: Section;
   status: "open" | "close";
   imageUrl: string | null;
 };

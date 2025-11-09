@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Course } from "@/domains/courses/types";
+import type { Section } from "@/domains/sections/types";
 import type { Semester } from "@/domains/semesters/types";
 import { useStudentEnrolledClasses } from "@/domains/students/api/queries";
 import { cn } from "@/lib/utils";
@@ -85,8 +86,12 @@ function RouteComponent() {
       },
     },
     {
-      accessorKey: "sectionName",
+      accessorKey: "section",
       header: "Section",
+      cell: ({ getValue }) => {
+        const section = getValue<Section>();
+        return section.name;
+      },
     },
     {
       accessorKey: "status",
