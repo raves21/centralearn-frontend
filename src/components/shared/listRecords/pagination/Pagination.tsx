@@ -56,9 +56,9 @@ export default function Pagination({
                   disabled={item.disabled || selected}
                 >
                   {type === "previous" ? (
-                    <ChevronLeft className="size-6 stroke-white" />
+                    <ChevronLeft className="size-6 stroke-mainaccent group-hover:stroke-white" />
                   ) : (
-                    <ChevronRight className="size-6 stroke-white" />
+                    <ChevronRight className="size-6 stroke-mainaccent group-hover:stroke-white" />
                   )}
                 </PaginationButton>
               );

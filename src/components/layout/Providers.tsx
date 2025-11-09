@@ -6,7 +6,7 @@ import { queryClient } from "../../utils/queryClient";
 export default function Providers({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
       {children}
     </QueryClientProvider>
   );

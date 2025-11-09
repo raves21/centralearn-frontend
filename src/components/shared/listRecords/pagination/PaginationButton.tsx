@@ -11,8 +11,8 @@ const PaginationButton = forwardRef<HTMLButtonElement, Props>(
       <button
         ref={ref}
         className={cn(
-          "font-medium min-h-8 min-w-8 px-2 text-white text-sm mobile-m:size-12 mobile-m:text-base grid place-items-center transition-colors duration-100 rounded-md hover:border-mainAccent hover:bg-mainaccent-disabled",
-          { "bg-mainaccent": isSelected },
+          "font-medium group min-h-8 min-w-8 px-2 border hover:stroke-white hover:text-white text-mainaccent border-mainaccent text-sm mobile-m:size-12 mobile-m:text-base grid place-items-center transition-colors duration-100 rounded-md hover:border-mainAccent hover:bg-mainaccent-disabled",
+          { "bg-mainaccent text-white": isSelected },
           className
         )}
         {...props}

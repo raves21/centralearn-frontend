@@ -22,7 +22,7 @@ export function useEditSection() {
       id: string;
       formData: FormData;
     }) => {
-      await api.put(`/sections/${id}`, formData);
+      await api.post(`/sections/${id}`, formData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sections"] });

@@ -54,8 +54,8 @@ function RouteComponent() {
     {
       accessorKey: "actions",
       header: "",
-      cell: () => {
-        // const section = row.original;
+      cell: ({ row }) => {
+        const section = row.original;
 
         return (
           <DropdownMenu>
@@ -63,7 +63,14 @@ function RouteComponent() {
               <EllipsisVertical className="stroke-mainaccent" />
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="end">
-              <DropdownMenuItem onClick={() => {}}>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate({
+                    to: "/sections/$sectionId/edit",
+                    params: { sectionId: section.id },
+                  })
+                }
+              >
                 Edit
                 <Pencil className="stroke-mainaccent" />
               </DropdownMenuItem>
@@ -97,7 +104,10 @@ function RouteComponent() {
   if (data) {
     return (
       <div className="size-full flex flex-col gap-16">
-        <TitleAndCreateAction headerTitle="Sections" createAction={() => {}} />
+        <TitleAndCreateAction
+          headerTitle="Sections"
+          createAction={() => navigate({ to: "/sections/create" })}
+        />
         <DataTable
           columns={columns}
           data={data.data}
