@@ -16,7 +16,7 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
+import { EllipsisVertical, Loader, Trash } from "lucide-react";
 import z from "zod";
 
 const searchParamSchema = z.object({
@@ -122,12 +122,8 @@ function RouteComponent() {
               <EllipsisVertical className="stroke-mainaccent" />
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="end">
-              <DropdownMenuItem onClick={() => {}}>
-                Edit
-                <Pencil className="stroke-mainaccent" />
-              </DropdownMenuItem>
               <DropdownMenuItem>
-                Delete
+                Unenroll
                 <Trash className="stroke-red-500" />
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -156,7 +152,12 @@ function RouteComponent() {
       <div className="size-full flex flex-col gap-16">
         <TitleAndCreateAction
           headerTitle="Enrolled Classes"
-          createAction={() => navigate({ to: "/departments/create" })}
+          createAction={() =>
+            navigate({
+              to: "/students/$studentId/enroll-to-class",
+              params: { studentId },
+            })
+          }
           createActionLabel="Enroll to Class"
         />
         <DataTable

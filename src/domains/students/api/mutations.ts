@@ -30,3 +30,22 @@ export function useEditStudent() {
     },
   });
 }
+
+export function useEnrollStudentToClass() {
+  return useMutation({
+    mutationFn: async ({
+      studentId,
+      classId,
+    }: {
+      studentId: string;
+      classId: string;
+    }) => {
+      await api.post(`/students/${studentId}/enroll-to-class`, {
+        course_class_id: classId,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["studentEnrolledClasses"] });
+    },
+  });
+}

@@ -35,6 +35,7 @@ import { Route as ProtectedDepartmentsCreateIndexRouteImport } from './routes/_p
 import { Route as ProtectedCoursesCreateIndexRouteImport } from './routes/_protected/courses/create/index'
 import { Route as ProtectedClassesCreateIndexRouteImport } from './routes/_protected/classes/create/index'
 import { Route as ProtectedAdminsCreateIndexRouteImport } from './routes/_protected/admins/create/index'
+import { Route as ProtectedStudentsStudentIdEnrollToClassIndexRouteImport } from './routes/_protected/students/$studentId_/enroll-to-class/index'
 import { Route as ProtectedStudentsStudentIdEditIndexRouteImport } from './routes/_protected/students/$studentId/edit/index'
 import { Route as ProtectedStudentsStudentIdClassesIndexRouteImport } from './routes/_protected/students/$studentId/classes/index'
 import { Route as ProtectedSectionsSectionIdEditIndexRouteImport } from './routes/_protected/sections/$sectionId/edit/index'
@@ -187,6 +188,12 @@ const ProtectedAdminsCreateIndexRoute =
     path: '/admins/create/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedStudentsStudentIdEnrollToClassIndexRoute =
+  ProtectedStudentsStudentIdEnrollToClassIndexRouteImport.update({
+    id: '/students/$studentId_/enroll-to-class/',
+    path: '/students/$studentId/enroll-to-class/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedStudentsStudentIdEditIndexRoute =
   ProtectedStudentsStudentIdEditIndexRouteImport.update({
     id: '/edit/',
@@ -276,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/sections/$sectionId/edit': typeof ProtectedSectionsSectionIdEditIndexRoute
   '/students/$studentId/classes': typeof ProtectedStudentsStudentIdClassesIndexRoute
   '/students/$studentId/edit': typeof ProtectedStudentsStudentIdEditIndexRoute
+  '/students/$studentId/enroll-to-class': typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -310,6 +318,7 @@ export interface FileRoutesByTo {
   '/sections/$sectionId/edit': typeof ProtectedSectionsSectionIdEditIndexRoute
   '/students/$studentId/classes': typeof ProtectedStudentsStudentIdClassesIndexRoute
   '/students/$studentId/edit': typeof ProtectedStudentsStudentIdEditIndexRoute
+  '/students/$studentId/enroll-to-class': typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -348,6 +357,7 @@ export interface FileRoutesById {
   '/_protected/sections/$sectionId/edit/': typeof ProtectedSectionsSectionIdEditIndexRoute
   '/_protected/students/$studentId/classes/': typeof ProtectedStudentsStudentIdClassesIndexRoute
   '/_protected/students/$studentId/edit/': typeof ProtectedStudentsStudentIdEditIndexRoute
+  '/_protected/students/$studentId_/enroll-to-class/': typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
     | '/sections/$sectionId/edit'
     | '/students/$studentId/classes'
     | '/students/$studentId/edit'
+    | '/students/$studentId/enroll-to-class'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -419,6 +430,7 @@ export interface FileRouteTypes {
     | '/sections/$sectionId/edit'
     | '/students/$studentId/classes'
     | '/students/$studentId/edit'
+    | '/students/$studentId/enroll-to-class'
   id:
     | '__root__'
     | '/'
@@ -456,6 +468,7 @@ export interface FileRouteTypes {
     | '/_protected/sections/$sectionId/edit/'
     | '/_protected/students/$studentId/classes/'
     | '/_protected/students/$studentId/edit/'
+    | '/_protected/students/$studentId_/enroll-to-class/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -648,6 +661,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedAdminsCreateIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/students/$studentId_/enroll-to-class/': {
+      id: '/_protected/students/$studentId_/enroll-to-class/'
+      path: '/students/$studentId/enroll-to-class'
+      fullPath: '/students/$studentId/enroll-to-class'
+      preLoaderRoute: typeof ProtectedStudentsStudentIdEnrollToClassIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/students/$studentId/edit/': {
       id: '/_protected/students/$studentId/edit/'
       path: '/edit'
@@ -763,6 +783,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedInstructorsInstructorIdEditIndexRoute: typeof ProtectedInstructorsInstructorIdEditIndexRoute
   ProtectedProgramsProgramIdEditIndexRoute: typeof ProtectedProgramsProgramIdEditIndexRoute
   ProtectedSectionsSectionIdEditIndexRoute: typeof ProtectedSectionsSectionIdEditIndexRoute
+  ProtectedStudentsStudentIdEnrollToClassIndexRoute: typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -800,6 +821,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedProgramsProgramIdEditIndexRoute,
   ProtectedSectionsSectionIdEditIndexRoute:
     ProtectedSectionsSectionIdEditIndexRoute,
+  ProtectedStudentsStudentIdEnrollToClassIndexRoute:
+    ProtectedStudentsStudentIdEnrollToClassIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

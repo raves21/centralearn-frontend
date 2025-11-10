@@ -52,3 +52,31 @@ export function useStudentEnrolledClasses({
     },
   });
 }
+
+export function useStudentEnrollableClasses({
+  studentId,
+  page = 1,
+  searchQuery = undefined,
+}: PaginatedQueryParams & { studentId: string }) {
+  return useQuery({
+    queryKey: [
+      "studentEnrollableClasses",
+      "courseClasses",
+      studentId,
+      page,
+      searchQuery,
+    ],
+    queryFn: async () => {
+      const { data } = await api.get(
+        `/students/${studentId}/enrollable-classes`,
+        {
+          params: {
+            page,
+            query: searchQuery,
+          },
+        }
+      );
+      return data as CourseClassesPaginated;
+    },
+  });
+}

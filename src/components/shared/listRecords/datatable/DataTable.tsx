@@ -33,6 +33,7 @@ interface DataTableProps<TData, TValue> {
     searchInputPlaceholder: string;
     searchInputInitValue: string | undefined;
   };
+  noResultsMessage?: string;
   className?: string;
 }
 
@@ -42,6 +43,7 @@ export function DataTable<TData, TValue>({
   className,
   paginationProps,
   filterProps,
+  noResultsMessage,
   onRowClick = () => {},
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
@@ -107,7 +109,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {noResultsMessage ?? "No results."}
               </TableCell>
             </TableRow>
           )}
