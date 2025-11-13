@@ -5,7 +5,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useStudentInfo } from "@/domains/students/api/queries";
+import { useInstructorInfo } from "@/domains/instructors/api/queries";
 import { cn } from "@/lib/utils";
 import type { NavigationButton } from "@/utils/sharedTypes";
 import {
@@ -17,12 +17,12 @@ import {
 } from "@tanstack/react-router";
 import { Loader, Pencil, Trash } from "lucide-react";
 
-export const Route = createFileRoute("/_protected/students/$studentId")({
+export const Route = createFileRoute("/_protected/instructors/$instructorId")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { studentId } = Route.useParams();
+  const { instructorId } = Route.useParams();
 
   const matchRoute = useMatchRoute();
   const navigate = useNavigate();
@@ -30,27 +30,30 @@ function RouteComponent() {
   const tabRoutes: NavigationButton[] = [
     {
       name: "Profile",
-      linkProps: { to: "/students/$studentId", params: { studentId } },
+      linkProps: {
+        to: "/instructors/$instructorId",
+        params: { studentId: instructorId },
+      },
     },
     {
       name: "Classes",
       linkProps: {
-        to: "/students/$studentId/enrolled-classes",
-        params: { studentId },
+        to: "/instructors/$instructorId/assigned-classes",
+        params: { instructorId },
       },
     },
   ];
 
-  const { data: studentInfo, status: studentInfoStatus } =
-    useStudentInfo(studentId);
+  const { data: instructorInfo, status: instructorInfoStatus } =
+    useInstructorInfo(instructorId);
 
-  if ([studentInfoStatus].includes("error")) {
+  if ([instructorInfoStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if ([studentInfoStatus].includes("pending")) {
+  if ([instructorInfoStatus].includes("pending")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -58,18 +61,18 @@ function RouteComponent() {
     );
   }
 
-  if (studentInfo) {
+  if (instructorInfo) {
     return (
       <div className="flex flex-col gap-8 size-full">
         <div className="flex flex-col gap-8">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link to="/students">Students</Link>
+                <Link to="/instructors">Instructors</Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>View Student</BreadcrumbPage>
+                <BreadcrumbPage>View Instructor</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -84,18 +87,18 @@ function RouteComponent() {
               />
             </div>
             <div className="flex flex-col gap-4">
-              <p className="bg-green-500 w-min text-white rounded-md py-1 px-2">
-                Student
+              <p className="bg-blue-500 w-min text-white rounded-md py-1 px-2">
+                Instructor
               </p>
               <p className="font-semibold text-4xl">
-                {studentInfo.user.firstName} {studentInfo.user.lastName}
+                {instructorInfo.user.firstName} {instructorInfo.user.lastName}
               </p>
               <div className="flex items-center gap-4 mt-auto">
                 <button
                   onClick={() =>
                     navigate({
-                      to: "/students/$studentId/edit",
-                      params: { studentId },
+                      to: "/instructors/$instructorId/edit",
+                      params: { instructorId },
                     })
                   }
                   className="flex items-center rounded-full gap-3 px-4 py-2 text-white bg-mainaccent"

@@ -168,6 +168,12 @@ function RouteComponent() {
                 }),
               }),
           }}
+          onRowClick={(instructor) =>
+            navigate({
+              to: "/instructors/$instructorId",
+              params: { instructorId: instructor.id },
+            })
+          }
         />
       </div>
     );

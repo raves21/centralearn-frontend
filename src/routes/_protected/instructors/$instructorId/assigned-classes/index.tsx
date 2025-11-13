@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { CourseClass } from "@/domains/classes/types";
 import type { Course } from "@/domains/courses/types";
+import { useInstructorAssignedClasses } from "@/domains/instructors/api/queries";
 import type { Section } from "@/domains/sections/types";
 import type { Semester } from "@/domains/semesters/types";
-import { useStudentEnrolledClasses } from "@/domains/students/api/queries";
 import { cn } from "@/lib/utils";
 import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleSearchParamValidationFailure";
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
@@ -28,7 +28,7 @@ type SearchParamsSchema = z.infer<typeof searchParamSchema> &
   SearchSchemaValidationStatus;
 
 export const Route = createFileRoute(
-  "/_protected/students/$studentId/classes/"
+  "/_protected/instructors/$instructorId/assigned-classes/"
 )({
   component: RouteComponent,
   validateSearch: (search): SearchParamsSchema => {
@@ -43,19 +43,19 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const { studentId } = Route.useParams();
+  const { instructorId } = Route.useParams();
   const navigate = useNavigate();
   const { page, searchQuery, success } = Route.useSearch();
 
   useHandleSearchParamsValidationFailure({
     isValidationFail: !success,
     onValidationFail: () =>
-      navigate({ to: "/students/$studentId", params: { studentId } }),
+      navigate({ to: "/instructors/$instructorId", params: { instructorId } }),
   });
 
-  const { data: enrolledClasses, status: enrolledClassesStatus } =
-    useStudentEnrolledClasses({
-      studentId,
+  const { data: assignedClasses, status: assignedClassesStatus } =
+    useInstructorAssignedClasses({
+      instructorId,
       page,
       searchQuery,
     });
@@ -123,7 +123,7 @@ function RouteComponent() {
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="end">
               <DropdownMenuItem>
-                Unenroll
+                Unassign
                 <Trash className="stroke-red-500" />
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -133,13 +133,13 @@ function RouteComponent() {
     },
   ];
 
-  if ([enrolledClassesStatus].includes("error")) {
+  if ([assignedClassesStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">An error occured.</div>
     );
   }
 
-  if ([enrolledClassesStatus].includes("pending")) {
+  if ([assignedClassesStatus].includes("pending")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -147,40 +147,40 @@ function RouteComponent() {
     );
   }
 
-  if (enrolledClasses) {
+  if (assignedClasses) {
     return (
       <div className="size-full flex flex-col gap-16">
         <TitleAndCreateAction
-          headerTitle="Enrolled Classes"
+          headerTitle="Assigned Classes"
           createAction={() =>
             navigate({
-              to: "/students/$studentId/enroll-to-class",
-              params: { studentId },
+              to: "/instructors/$instructorId/assign-to-class",
+              params: { instructorId },
             })
           }
-          createActionLabel="Enroll to Class"
+          createActionLabel="Assign to Class"
         />
         <DataTable
           columns={columns}
-          data={enrolledClasses.data}
+          data={assignedClasses.data}
           paginationProps={{
-            currentPage: enrolledClasses.meta.current_page,
+            currentPage: assignedClasses.meta.current_page,
             handlePageChange: (_, page) => {
               navigate({
-                to: "/students/$studentId/classes",
-                params: { studentId },
+                to: "/instructors/$instructorId/assigned-classes",
+                params: { instructorId },
                 search: (prev) => ({ ...prev, page: page }),
               });
             },
-            totalPages: enrolledClasses.meta.last_page,
+            totalPages: assignedClasses.meta.last_page,
           }}
           filterProps={{
             searchInputPlaceholder: "Search classes by name/code",
             searchInputInitValue: searchQuery,
             onInputSearch: (searchInput) =>
               navigate({
-                to: "/students/$studentId/classes",
-                params: { studentId },
+                to: "/instructors/$instructorId/assigned-classes",
+                params: { instructorId },
                 search: (prev) => ({
                   ...prev,
                   searchQuery: searchInput || undefined,

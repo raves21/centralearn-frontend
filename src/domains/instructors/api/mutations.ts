@@ -30,3 +30,27 @@ export function useEditInstructor() {
     },
   });
 }
+
+export function useAssignInstructorToClass() {
+  return useMutation({
+    mutationFn: async ({
+      instructorId,
+      classId,
+    }: {
+      instructorId: string;
+      classId: string;
+    }) => {
+      await api.post(`/instructors/${instructorId}/assign-to-class`, {
+        course_class_id: classId,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["instructorAssignedClasses"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["instructorAssignableClasses"],
+      });
+    },
+  });
+}

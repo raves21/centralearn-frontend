@@ -46,6 +46,7 @@ export function useEnrollStudentToClass() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["studentEnrolledClasses"] });
+      queryClient.invalidateQueries({ queryKey: ["studentEnrollableClasses"] });
     },
   });
 }

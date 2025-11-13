@@ -23,7 +23,7 @@ import { useInstructorInfo } from "@/domains/instructors/api/queries";
 import { useEffect } from "react";
 
 export const Route = createFileRoute(
-  "/_protected/instructors/$instructorId/edit/"
+  "/_protected/instructors/$instructorId_/edit/"
 )({
   component: RouteComponent,
 });

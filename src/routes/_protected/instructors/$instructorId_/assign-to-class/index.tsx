@@ -5,7 +5,7 @@ import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
 import { Check, Loader } from "lucide-react";
-import { useStudentEnrollableClasses } from "@/domains/students/api/queries";
+import { useInstructorAssignableClasses } from "@/domains/instructors/api/queries";
 import { cn } from "@/lib/utils";
 import type { Section } from "@/domains/sections/types";
 import type { Semester } from "@/domains/semesters/types";
@@ -18,7 +18,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useEnrollStudentToClass } from "@/domains/students/api/mutations";
+import { useAssignInstructorToClass } from "@/domains/instructors/api/mutations";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { toast } from "sonner";
 
@@ -31,7 +31,7 @@ type SearchParamsSchema = z.infer<typeof searchParamsSchema> &
   SearchSchemaValidationStatus;
 
 export const Route = createFileRoute(
-  "/_protected/students/$studentId_/enroll-to-class/"
+  "/_protected/instructors/$instructorId_/assign-to-class/"
 )({
   component: RouteComponent,
   validateSearch: (search): SearchParamsSchema => {
@@ -46,38 +46,38 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const { studentId } = Route.useParams();
+  const { instructorId } = Route.useParams();
   const { searchQuery, page, success } = Route.useSearch();
   const navigate = useNavigate();
   useHandleSearchParamsValidationFailure({
     isValidationFail: !success,
     onValidationFail: () =>
       navigate({
-        to: "/students/$studentId",
-        params: { studentId },
+        to: "/instructors/$instructorId",
+        params: { instructorId },
       }),
   });
 
-  const { data, status } = useStudentEnrollableClasses({
-    studentId,
+  const { data, status } = useInstructorAssignableClasses({
+    instructorId,
     page,
     searchQuery,
   });
 
-  const { mutateAsync: enrollToClass, status: enrollToClassStatus } =
-    useEnrollStudentToClass();
+  const { mutateAsync: assignToClass, status: assignToClassStatus } =
+    useAssignInstructorToClass();
 
   usePendingOverlay({
-    isPending: enrollToClassStatus === "pending",
-    pendingLabel: "Enrolling to Class",
+    isPending: assignToClassStatus === "pending",
+    pendingLabel: "Assigning to Class",
   });
 
   async function selectClass(classId: string) {
     try {
-      await enrollToClass({ studentId, classId });
+      await assignToClass({ instructorId, classId });
       navigate({
-        to: "/students/$studentId/enrolled-classes",
-        params: { studentId },
+        to: "/instructors/$instructorId/assigned-classes",
+        params: { instructorId },
       });
     } catch (error) {
       toast.error("An error occured.");
@@ -175,17 +175,17 @@ function RouteComponent() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <Link to="/students">Students</Link>
+                <Link to="/instructors">Instructors</Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <Link
-                  to="/students/$studentId/enrolled-classes"
+                  to="/instructors/$instructorId/assigned-classes"
                   params={{
-                    studentId,
+                    instructorId,
                   }}
                 >
-                  View Student
+                  View Instructor
                 </Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -203,8 +203,8 @@ function RouteComponent() {
             currentPage: data.meta.current_page,
             handlePageChange: (_, page) => {
               navigate({
-                to: "/students/$studentId/enroll-to-class",
-                params: { studentId },
+                to: "/instructors/$instructorId/assign-to-class",
+                params: { instructorId },
                 search: (prev) => ({ ...prev, page: page }),
               });
             },
@@ -215,8 +215,8 @@ function RouteComponent() {
             searchInputInitValue: searchQuery,
             onInputSearch: (searchInput) =>
               navigate({
-                to: "/students/$studentId/enroll-to-class",
-                params: { studentId },
+                to: "/instructors/$instructorId/assign-to-class",
+                params: { instructorId },
                 search: (prev) => ({
                   ...prev,
                   searchQuery: searchInput || undefined,

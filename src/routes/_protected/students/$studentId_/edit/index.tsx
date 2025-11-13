@@ -22,7 +22,7 @@ import AssignToProgramForm from "@/domains/students/components/createEditStudent
 import { useStudentInfo } from "@/domains/students/api/queries";
 import { useEffect } from "react";
 
-export const Route = createFileRoute("/_protected/students/$studentId/edit/")({
+export const Route = createFileRoute("/_protected/students/$studentId_/edit/")({
   component: RouteComponent,
 });
 
