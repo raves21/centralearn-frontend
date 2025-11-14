@@ -12,43 +12,46 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnprotectedRouteRouteImport } from './routes/_unprotected/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProtectedAdminPanelRouteRouteImport } from './routes/_protected/admin-panel/route'
 import { Route as UnprotectedLoginIndexRouteImport } from './routes/_unprotected/login/index'
-import { Route as ProtectedStudentsIndexRouteImport } from './routes/_protected/students/index'
-import { Route as ProtectedSemestersIndexRouteImport } from './routes/_protected/semesters/index'
-import { Route as ProtectedSectionsIndexRouteImport } from './routes/_protected/sections/index'
-import { Route as ProtectedProgramsIndexRouteImport } from './routes/_protected/programs/index'
-import { Route as ProtectedInstructorsIndexRouteImport } from './routes/_protected/instructors/index'
-import { Route as ProtectedDepartmentsIndexRouteImport } from './routes/_protected/departments/index'
-import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
-import { Route as ProtectedCoursesIndexRouteImport } from './routes/_protected/courses/index'
-import { Route as ProtectedClassesIndexRouteImport } from './routes/_protected/classes/index'
-import { Route as ProtectedAdminsIndexRouteImport } from './routes/_protected/admins/index'
-import { Route as ProtectedStudentsStudentIdRouteRouteImport } from './routes/_protected/students/$studentId/route'
-import { Route as ProtectedInstructorsInstructorIdRouteRouteImport } from './routes/_protected/instructors/$instructorId/route'
-import { Route as ProtectedStudentsCreateIndexRouteImport } from './routes/_protected/students/create/index'
-import { Route as ProtectedStudentsStudentIdIndexRouteImport } from './routes/_protected/students/$studentId/index'
-import { Route as ProtectedSemestersCreateIndexRouteImport } from './routes/_protected/semesters/create/index'
-import { Route as ProtectedSectionsCreateIndexRouteImport } from './routes/_protected/sections/create/index'
-import { Route as ProtectedSectionsSectionIdIndexRouteImport } from './routes/_protected/sections/$sectionId/index'
-import { Route as ProtectedProgramsCreateIndexRouteImport } from './routes/_protected/programs/create/index'
-import { Route as ProtectedInstructorsCreateIndexRouteImport } from './routes/_protected/instructors/create/index'
-import { Route as ProtectedInstructorsInstructorIdIndexRouteImport } from './routes/_protected/instructors/$instructorId/index'
-import { Route as ProtectedDepartmentsCreateIndexRouteImport } from './routes/_protected/departments/create/index'
-import { Route as ProtectedCoursesCreateIndexRouteImport } from './routes/_protected/courses/create/index'
-import { Route as ProtectedClassesCreateIndexRouteImport } from './routes/_protected/classes/create/index'
-import { Route as ProtectedAdminsCreateIndexRouteImport } from './routes/_protected/admins/create/index'
-import { Route as ProtectedStudentsStudentIdEnrollToClassIndexRouteImport } from './routes/_protected/students/$studentId_/enroll-to-class/index'
-import { Route as ProtectedStudentsStudentIdEditIndexRouteImport } from './routes/_protected/students/$studentId_/edit/index'
-import { Route as ProtectedStudentsStudentIdEnrolledClassesIndexRouteImport } from './routes/_protected/students/$studentId/enrolled-classes/index'
-import { Route as ProtectedSectionsSectionIdEditIndexRouteImport } from './routes/_protected/sections/$sectionId/edit/index'
-import { Route as ProtectedProgramsProgramIdEditIndexRouteImport } from './routes/_protected/programs/$programId/edit/index'
-import { Route as ProtectedInstructorsInstructorIdEditIndexRouteImport } from './routes/_protected/instructors/$instructorId_/edit/index'
-import { Route as ProtectedInstructorsInstructorIdAssignToClassIndexRouteImport } from './routes/_protected/instructors/$instructorId_/assign-to-class/index'
-import { Route as ProtectedInstructorsInstructorIdAssignedClassesIndexRouteImport } from './routes/_protected/instructors/$instructorId/assigned-classes/index'
-import { Route as ProtectedDepartmentsDepartmentIdEditIndexRouteImport } from './routes/_protected/departments/$departmentId/edit/index'
-import { Route as ProtectedCoursesCourseIdEditIndexRouteImport } from './routes/_protected/courses/$courseId/edit/index'
-import { Route as ProtectedClassesClassIdEditIndexRouteImport } from './routes/_protected/classes/$classId/edit/index'
-import { Route as ProtectedAdminsAdminIdEditIndexRouteImport } from './routes/_protected/admins/$adminId/edit/index'
+import { Route as ProtectedLmsDashboardIndexRouteImport } from './routes/_protected/lms/dashboard/index'
+import { Route as ProtectedLmsClassesIndexRouteImport } from './routes/_protected/lms/classes/index'
+import { Route as ProtectedAdminPanelStudentsIndexRouteImport } from './routes/_protected/admin-panel/students/index'
+import { Route as ProtectedAdminPanelSemestersIndexRouteImport } from './routes/_protected/admin-panel/semesters/index'
+import { Route as ProtectedAdminPanelSectionsIndexRouteImport } from './routes/_protected/admin-panel/sections/index'
+import { Route as ProtectedAdminPanelProgramsIndexRouteImport } from './routes/_protected/admin-panel/programs/index'
+import { Route as ProtectedAdminPanelInstructorsIndexRouteImport } from './routes/_protected/admin-panel/instructors/index'
+import { Route as ProtectedAdminPanelDepartmentsIndexRouteImport } from './routes/_protected/admin-panel/departments/index'
+import { Route as ProtectedAdminPanelDashboardIndexRouteImport } from './routes/_protected/admin-panel/dashboard/index'
+import { Route as ProtectedAdminPanelCoursesIndexRouteImport } from './routes/_protected/admin-panel/courses/index'
+import { Route as ProtectedAdminPanelClassesIndexRouteImport } from './routes/_protected/admin-panel/classes/index'
+import { Route as ProtectedAdminPanelAdminsIndexRouteImport } from './routes/_protected/admin-panel/admins/index'
+import { Route as ProtectedAdminPanelStudentsStudentIdRouteRouteImport } from './routes/_protected/admin-panel/students/$studentId/route'
+import { Route as ProtectedAdminPanelInstructorsInstructorIdRouteRouteImport } from './routes/_protected/admin-panel/instructors/$instructorId/route'
+import { Route as ProtectedAdminPanelStudentsCreateIndexRouteImport } from './routes/_protected/admin-panel/students/create/index'
+import { Route as ProtectedAdminPanelStudentsStudentIdIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId/index'
+import { Route as ProtectedAdminPanelSemestersCreateIndexRouteImport } from './routes/_protected/admin-panel/semesters/create/index'
+import { Route as ProtectedAdminPanelSectionsCreateIndexRouteImport } from './routes/_protected/admin-panel/sections/create/index'
+import { Route as ProtectedAdminPanelSectionsSectionIdIndexRouteImport } from './routes/_protected/admin-panel/sections/$sectionId/index'
+import { Route as ProtectedAdminPanelProgramsCreateIndexRouteImport } from './routes/_protected/admin-panel/programs/create/index'
+import { Route as ProtectedAdminPanelInstructorsCreateIndexRouteImport } from './routes/_protected/admin-panel/instructors/create/index'
+import { Route as ProtectedAdminPanelInstructorsInstructorIdIndexRouteImport } from './routes/_protected/admin-panel/instructors/$instructorId/index'
+import { Route as ProtectedAdminPanelDepartmentsCreateIndexRouteImport } from './routes/_protected/admin-panel/departments/create/index'
+import { Route as ProtectedAdminPanelCoursesCreateIndexRouteImport } from './routes/_protected/admin-panel/courses/create/index'
+import { Route as ProtectedAdminPanelClassesCreateIndexRouteImport } from './routes/_protected/admin-panel/classes/create/index'
+import { Route as ProtectedAdminPanelAdminsCreateIndexRouteImport } from './routes/_protected/admin-panel/admins/create/index'
+import { Route as ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId_/enroll-to-class/index'
+import { Route as ProtectedAdminPanelStudentsStudentIdEditIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId_/edit/index'
+import { Route as ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId/enrolled-classes/index'
+import { Route as ProtectedAdminPanelSectionsSectionIdEditIndexRouteImport } from './routes/_protected/admin-panel/sections/$sectionId/edit/index'
+import { Route as ProtectedAdminPanelProgramsProgramIdEditIndexRouteImport } from './routes/_protected/admin-panel/programs/$programId/edit/index'
+import { Route as ProtectedAdminPanelInstructorsInstructorIdEditIndexRouteImport } from './routes/_protected/admin-panel/instructors/$instructorId_/edit/index'
+import { Route as ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRouteImport } from './routes/_protected/admin-panel/instructors/$instructorId_/assign-to-class/index'
+import { Route as ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRouteImport } from './routes/_protected/admin-panel/instructors/$instructorId/assigned-classes/index'
+import { Route as ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRouteImport } from './routes/_protected/admin-panel/departments/$departmentId/edit/index'
+import { Route as ProtectedAdminPanelCoursesCourseIdEditIndexRouteImport } from './routes/_protected/admin-panel/courses/$courseId/edit/index'
+import { Route as ProtectedAdminPanelClassesClassIdEditIndexRouteImport } from './routes/_protected/admin-panel/classes/$classId/edit/index'
+import { Route as ProtectedAdminPanelAdminsAdminIdEditIndexRouteImport } from './routes/_protected/admin-panel/admins/$adminId/edit/index'
 
 const UnprotectedRouteRoute = UnprotectedRouteRouteImport.update({
   id: '/_unprotected',
@@ -63,462 +66,511 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedAdminPanelRouteRoute =
+  ProtectedAdminPanelRouteRouteImport.update({
+    id: '/admin-panel',
+    path: '/admin-panel',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const UnprotectedLoginIndexRoute = UnprotectedLoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
   getParentRoute: () => UnprotectedRouteRoute,
 } as any)
-const ProtectedStudentsIndexRoute = ProtectedStudentsIndexRouteImport.update({
-  id: '/students/',
-  path: '/students/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedSemestersIndexRoute = ProtectedSemestersIndexRouteImport.update({
-  id: '/semesters/',
-  path: '/semesters/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedSectionsIndexRoute = ProtectedSectionsIndexRouteImport.update({
-  id: '/sections/',
-  path: '/sections/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedProgramsIndexRoute = ProtectedProgramsIndexRouteImport.update({
-  id: '/programs/',
-  path: '/programs/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedInstructorsIndexRoute =
-  ProtectedInstructorsIndexRouteImport.update({
+const ProtectedLmsDashboardIndexRoute =
+  ProtectedLmsDashboardIndexRouteImport.update({
+    id: '/lms/dashboard/',
+    path: '/lms/dashboard/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedLmsClassesIndexRoute =
+  ProtectedLmsClassesIndexRouteImport.update({
+    id: '/lms/classes/',
+    path: '/lms/classes/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedAdminPanelStudentsIndexRoute =
+  ProtectedAdminPanelStudentsIndexRouteImport.update({
+    id: '/students/',
+    path: '/students/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelSemestersIndexRoute =
+  ProtectedAdminPanelSemestersIndexRouteImport.update({
+    id: '/semesters/',
+    path: '/semesters/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelSectionsIndexRoute =
+  ProtectedAdminPanelSectionsIndexRouteImport.update({
+    id: '/sections/',
+    path: '/sections/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelProgramsIndexRoute =
+  ProtectedAdminPanelProgramsIndexRouteImport.update({
+    id: '/programs/',
+    path: '/programs/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelInstructorsIndexRoute =
+  ProtectedAdminPanelInstructorsIndexRouteImport.update({
     id: '/instructors/',
     path: '/instructors/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedDepartmentsIndexRoute =
-  ProtectedDepartmentsIndexRouteImport.update({
+const ProtectedAdminPanelDepartmentsIndexRoute =
+  ProtectedAdminPanelDepartmentsIndexRouteImport.update({
     id: '/departments/',
     path: '/departments/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedCoursesIndexRoute = ProtectedCoursesIndexRouteImport.update({
-  id: '/courses/',
-  path: '/courses/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedClassesIndexRoute = ProtectedClassesIndexRouteImport.update({
-  id: '/classes/',
-  path: '/classes/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedAdminsIndexRoute = ProtectedAdminsIndexRouteImport.update({
-  id: '/admins/',
-  path: '/admins/',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedStudentsStudentIdRouteRoute =
-  ProtectedStudentsStudentIdRouteRouteImport.update({
+const ProtectedAdminPanelDashboardIndexRoute =
+  ProtectedAdminPanelDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelCoursesIndexRoute =
+  ProtectedAdminPanelCoursesIndexRouteImport.update({
+    id: '/courses/',
+    path: '/courses/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelClassesIndexRoute =
+  ProtectedAdminPanelClassesIndexRouteImport.update({
+    id: '/classes/',
+    path: '/classes/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelAdminsIndexRoute =
+  ProtectedAdminPanelAdminsIndexRouteImport.update({
+    id: '/admins/',
+    path: '/admins/',
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedAdminPanelStudentsStudentIdRouteRoute =
+  ProtectedAdminPanelStudentsStudentIdRouteRouteImport.update({
     id: '/students/$studentId',
     path: '/students/$studentId',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedInstructorsInstructorIdRouteRoute =
-  ProtectedInstructorsInstructorIdRouteRouteImport.update({
+const ProtectedAdminPanelInstructorsInstructorIdRouteRoute =
+  ProtectedAdminPanelInstructorsInstructorIdRouteRouteImport.update({
     id: '/instructors/$instructorId',
     path: '/instructors/$instructorId',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedStudentsCreateIndexRoute =
-  ProtectedStudentsCreateIndexRouteImport.update({
+const ProtectedAdminPanelStudentsCreateIndexRoute =
+  ProtectedAdminPanelStudentsCreateIndexRouteImport.update({
     id: '/students/create/',
     path: '/students/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedStudentsStudentIdIndexRoute =
-  ProtectedStudentsStudentIdIndexRouteImport.update({
+const ProtectedAdminPanelStudentsStudentIdIndexRoute =
+  ProtectedAdminPanelStudentsStudentIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => ProtectedStudentsStudentIdRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelStudentsStudentIdRouteRoute,
   } as any)
-const ProtectedSemestersCreateIndexRoute =
-  ProtectedSemestersCreateIndexRouteImport.update({
+const ProtectedAdminPanelSemestersCreateIndexRoute =
+  ProtectedAdminPanelSemestersCreateIndexRouteImport.update({
     id: '/semesters/create/',
     path: '/semesters/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedSectionsCreateIndexRoute =
-  ProtectedSectionsCreateIndexRouteImport.update({
+const ProtectedAdminPanelSectionsCreateIndexRoute =
+  ProtectedAdminPanelSectionsCreateIndexRouteImport.update({
     id: '/sections/create/',
     path: '/sections/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedSectionsSectionIdIndexRoute =
-  ProtectedSectionsSectionIdIndexRouteImport.update({
+const ProtectedAdminPanelSectionsSectionIdIndexRoute =
+  ProtectedAdminPanelSectionsSectionIdIndexRouteImport.update({
     id: '/sections/$sectionId/',
     path: '/sections/$sectionId/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedProgramsCreateIndexRoute =
-  ProtectedProgramsCreateIndexRouteImport.update({
+const ProtectedAdminPanelProgramsCreateIndexRoute =
+  ProtectedAdminPanelProgramsCreateIndexRouteImport.update({
     id: '/programs/create/',
     path: '/programs/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedInstructorsCreateIndexRoute =
-  ProtectedInstructorsCreateIndexRouteImport.update({
+const ProtectedAdminPanelInstructorsCreateIndexRoute =
+  ProtectedAdminPanelInstructorsCreateIndexRouteImport.update({
     id: '/instructors/create/',
     path: '/instructors/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedInstructorsInstructorIdIndexRoute =
-  ProtectedInstructorsInstructorIdIndexRouteImport.update({
+const ProtectedAdminPanelInstructorsInstructorIdIndexRoute =
+  ProtectedAdminPanelInstructorsInstructorIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => ProtectedInstructorsInstructorIdRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelInstructorsInstructorIdRouteRoute,
   } as any)
-const ProtectedDepartmentsCreateIndexRoute =
-  ProtectedDepartmentsCreateIndexRouteImport.update({
+const ProtectedAdminPanelDepartmentsCreateIndexRoute =
+  ProtectedAdminPanelDepartmentsCreateIndexRouteImport.update({
     id: '/departments/create/',
     path: '/departments/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedCoursesCreateIndexRoute =
-  ProtectedCoursesCreateIndexRouteImport.update({
+const ProtectedAdminPanelCoursesCreateIndexRoute =
+  ProtectedAdminPanelCoursesCreateIndexRouteImport.update({
     id: '/courses/create/',
     path: '/courses/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedClassesCreateIndexRoute =
-  ProtectedClassesCreateIndexRouteImport.update({
+const ProtectedAdminPanelClassesCreateIndexRoute =
+  ProtectedAdminPanelClassesCreateIndexRouteImport.update({
     id: '/classes/create/',
     path: '/classes/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedAdminsCreateIndexRoute =
-  ProtectedAdminsCreateIndexRouteImport.update({
+const ProtectedAdminPanelAdminsCreateIndexRoute =
+  ProtectedAdminPanelAdminsCreateIndexRouteImport.update({
     id: '/admins/create/',
     path: '/admins/create/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedStudentsStudentIdEnrollToClassIndexRoute =
-  ProtectedStudentsStudentIdEnrollToClassIndexRouteImport.update({
+const ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute =
+  ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRouteImport.update({
     id: '/students/$studentId_/enroll-to-class/',
     path: '/students/$studentId/enroll-to-class/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedStudentsStudentIdEditIndexRoute =
-  ProtectedStudentsStudentIdEditIndexRouteImport.update({
+const ProtectedAdminPanelStudentsStudentIdEditIndexRoute =
+  ProtectedAdminPanelStudentsStudentIdEditIndexRouteImport.update({
     id: '/students/$studentId_/edit/',
     path: '/students/$studentId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedStudentsStudentIdEnrolledClassesIndexRoute =
-  ProtectedStudentsStudentIdEnrolledClassesIndexRouteImport.update({
+const ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute =
+  ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRouteImport.update({
     id: '/enrolled-classes/',
     path: '/enrolled-classes/',
-    getParentRoute: () => ProtectedStudentsStudentIdRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelStudentsStudentIdRouteRoute,
   } as any)
-const ProtectedSectionsSectionIdEditIndexRoute =
-  ProtectedSectionsSectionIdEditIndexRouteImport.update({
+const ProtectedAdminPanelSectionsSectionIdEditIndexRoute =
+  ProtectedAdminPanelSectionsSectionIdEditIndexRouteImport.update({
     id: '/sections/$sectionId/edit/',
     path: '/sections/$sectionId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedProgramsProgramIdEditIndexRoute =
-  ProtectedProgramsProgramIdEditIndexRouteImport.update({
+const ProtectedAdminPanelProgramsProgramIdEditIndexRoute =
+  ProtectedAdminPanelProgramsProgramIdEditIndexRouteImport.update({
     id: '/programs/$programId/edit/',
     path: '/programs/$programId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedInstructorsInstructorIdEditIndexRoute =
-  ProtectedInstructorsInstructorIdEditIndexRouteImport.update({
+const ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute =
+  ProtectedAdminPanelInstructorsInstructorIdEditIndexRouteImport.update({
     id: '/instructors/$instructorId_/edit/',
     path: '/instructors/$instructorId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedInstructorsInstructorIdAssignToClassIndexRoute =
-  ProtectedInstructorsInstructorIdAssignToClassIndexRouteImport.update({
-    id: '/instructors/$instructorId_/assign-to-class/',
-    path: '/instructors/$instructorId/assign-to-class/',
-    getParentRoute: () => ProtectedRouteRoute,
-  } as any)
-const ProtectedInstructorsInstructorIdAssignedClassesIndexRoute =
-  ProtectedInstructorsInstructorIdAssignedClassesIndexRouteImport.update({
-    id: '/assigned-classes/',
-    path: '/assigned-classes/',
-    getParentRoute: () => ProtectedInstructorsInstructorIdRouteRoute,
-  } as any)
-const ProtectedDepartmentsDepartmentIdEditIndexRoute =
-  ProtectedDepartmentsDepartmentIdEditIndexRouteImport.update({
+const ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute =
+  ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRouteImport.update(
+    {
+      id: '/instructors/$instructorId_/assign-to-class/',
+      path: '/instructors/$instructorId/assign-to-class/',
+      getParentRoute: () => ProtectedAdminPanelRouteRoute,
+    } as any,
+  )
+const ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute =
+  ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRouteImport.update(
+    {
+      id: '/assigned-classes/',
+      path: '/assigned-classes/',
+      getParentRoute: () =>
+        ProtectedAdminPanelInstructorsInstructorIdRouteRoute,
+    } as any,
+  )
+const ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute =
+  ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRouteImport.update({
     id: '/departments/$departmentId/edit/',
     path: '/departments/$departmentId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedCoursesCourseIdEditIndexRoute =
-  ProtectedCoursesCourseIdEditIndexRouteImport.update({
+const ProtectedAdminPanelCoursesCourseIdEditIndexRoute =
+  ProtectedAdminPanelCoursesCourseIdEditIndexRouteImport.update({
     id: '/courses/$courseId/edit/',
     path: '/courses/$courseId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedClassesClassIdEditIndexRoute =
-  ProtectedClassesClassIdEditIndexRouteImport.update({
+const ProtectedAdminPanelClassesClassIdEditIndexRoute =
+  ProtectedAdminPanelClassesClassIdEditIndexRouteImport.update({
     id: '/classes/$classId/edit/',
     path: '/classes/$classId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
-const ProtectedAdminsAdminIdEditIndexRoute =
-  ProtectedAdminsAdminIdEditIndexRouteImport.update({
+const ProtectedAdminPanelAdminsAdminIdEditIndexRoute =
+  ProtectedAdminPanelAdminsAdminIdEditIndexRouteImport.update({
     id: '/admins/$adminId/edit/',
     path: '/admins/$adminId/edit/',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/instructors/$instructorId': typeof ProtectedInstructorsInstructorIdRouteRouteWithChildren
-  '/students/$studentId': typeof ProtectedStudentsStudentIdRouteRouteWithChildren
-  '/admins': typeof ProtectedAdminsIndexRoute
-  '/classes': typeof ProtectedClassesIndexRoute
-  '/courses': typeof ProtectedCoursesIndexRoute
-  '/dashboard': typeof ProtectedDashboardIndexRoute
-  '/departments': typeof ProtectedDepartmentsIndexRoute
-  '/instructors': typeof ProtectedInstructorsIndexRoute
-  '/programs': typeof ProtectedProgramsIndexRoute
-  '/sections': typeof ProtectedSectionsIndexRoute
-  '/semesters': typeof ProtectedSemestersIndexRoute
-  '/students': typeof ProtectedStudentsIndexRoute
+  '/admin-panel': typeof ProtectedAdminPanelRouteRouteWithChildren
   '/login': typeof UnprotectedLoginIndexRoute
-  '/admins/create': typeof ProtectedAdminsCreateIndexRoute
-  '/classes/create': typeof ProtectedClassesCreateIndexRoute
-  '/courses/create': typeof ProtectedCoursesCreateIndexRoute
-  '/departments/create': typeof ProtectedDepartmentsCreateIndexRoute
-  '/instructors/$instructorId/': typeof ProtectedInstructorsInstructorIdIndexRoute
-  '/instructors/create': typeof ProtectedInstructorsCreateIndexRoute
-  '/programs/create': typeof ProtectedProgramsCreateIndexRoute
-  '/sections/$sectionId': typeof ProtectedSectionsSectionIdIndexRoute
-  '/sections/create': typeof ProtectedSectionsCreateIndexRoute
-  '/semesters/create': typeof ProtectedSemestersCreateIndexRoute
-  '/students/$studentId/': typeof ProtectedStudentsStudentIdIndexRoute
-  '/students/create': typeof ProtectedStudentsCreateIndexRoute
-  '/admins/$adminId/edit': typeof ProtectedAdminsAdminIdEditIndexRoute
-  '/classes/$classId/edit': typeof ProtectedClassesClassIdEditIndexRoute
-  '/courses/$courseId/edit': typeof ProtectedCoursesCourseIdEditIndexRoute
-  '/departments/$departmentId/edit': typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
-  '/instructors/$instructorId/assigned-classes': typeof ProtectedInstructorsInstructorIdAssignedClassesIndexRoute
-  '/instructors/$instructorId/assign-to-class': typeof ProtectedInstructorsInstructorIdAssignToClassIndexRoute
-  '/instructors/$instructorId/edit': typeof ProtectedInstructorsInstructorIdEditIndexRoute
-  '/programs/$programId/edit': typeof ProtectedProgramsProgramIdEditIndexRoute
-  '/sections/$sectionId/edit': typeof ProtectedSectionsSectionIdEditIndexRoute
-  '/students/$studentId/enrolled-classes': typeof ProtectedStudentsStudentIdEnrolledClassesIndexRoute
-  '/students/$studentId/edit': typeof ProtectedStudentsStudentIdEditIndexRoute
-  '/students/$studentId/enroll-to-class': typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
+  '/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
+  '/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
+  '/admin-panel/admins': typeof ProtectedAdminPanelAdminsIndexRoute
+  '/admin-panel/classes': typeof ProtectedAdminPanelClassesIndexRoute
+  '/admin-panel/courses': typeof ProtectedAdminPanelCoursesIndexRoute
+  '/admin-panel/dashboard': typeof ProtectedAdminPanelDashboardIndexRoute
+  '/admin-panel/departments': typeof ProtectedAdminPanelDepartmentsIndexRoute
+  '/admin-panel/instructors': typeof ProtectedAdminPanelInstructorsIndexRoute
+  '/admin-panel/programs': typeof ProtectedAdminPanelProgramsIndexRoute
+  '/admin-panel/sections': typeof ProtectedAdminPanelSectionsIndexRoute
+  '/admin-panel/semesters': typeof ProtectedAdminPanelSemestersIndexRoute
+  '/admin-panel/students': typeof ProtectedAdminPanelStudentsIndexRoute
+  '/lms/classes': typeof ProtectedLmsClassesIndexRoute
+  '/lms/dashboard': typeof ProtectedLmsDashboardIndexRoute
+  '/admin-panel/admins/create': typeof ProtectedAdminPanelAdminsCreateIndexRoute
+  '/admin-panel/classes/create': typeof ProtectedAdminPanelClassesCreateIndexRoute
+  '/admin-panel/courses/create': typeof ProtectedAdminPanelCoursesCreateIndexRoute
+  '/admin-panel/departments/create': typeof ProtectedAdminPanelDepartmentsCreateIndexRoute
+  '/admin-panel/instructors/$instructorId/': typeof ProtectedAdminPanelInstructorsInstructorIdIndexRoute
+  '/admin-panel/instructors/create': typeof ProtectedAdminPanelInstructorsCreateIndexRoute
+  '/admin-panel/programs/create': typeof ProtectedAdminPanelProgramsCreateIndexRoute
+  '/admin-panel/sections/$sectionId': typeof ProtectedAdminPanelSectionsSectionIdIndexRoute
+  '/admin-panel/sections/create': typeof ProtectedAdminPanelSectionsCreateIndexRoute
+  '/admin-panel/semesters/create': typeof ProtectedAdminPanelSemestersCreateIndexRoute
+  '/admin-panel/students/$studentId/': typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
+  '/admin-panel/students/create': typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  '/admin-panel/admins/$adminId/edit': typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
+  '/admin-panel/classes/$classId/edit': typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
+  '/admin-panel/courses/$courseId/edit': typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
+  '/admin-panel/departments/$departmentId/edit': typeof ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute
+  '/admin-panel/instructors/$instructorId/assigned-classes': typeof ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute
+  '/admin-panel/instructors/$instructorId/assign-to-class': typeof ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute
+  '/admin-panel/instructors/$instructorId/edit': typeof ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute
+  '/admin-panel/programs/$programId/edit': typeof ProtectedAdminPanelProgramsProgramIdEditIndexRoute
+  '/admin-panel/sections/$sectionId/edit': typeof ProtectedAdminPanelSectionsSectionIdEditIndexRoute
+  '/admin-panel/students/$studentId/enrolled-classes': typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
+  '/admin-panel/students/$studentId/edit': typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
+  '/admin-panel/students/$studentId/enroll-to-class': typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admins': typeof ProtectedAdminsIndexRoute
-  '/classes': typeof ProtectedClassesIndexRoute
-  '/courses': typeof ProtectedCoursesIndexRoute
-  '/dashboard': typeof ProtectedDashboardIndexRoute
-  '/departments': typeof ProtectedDepartmentsIndexRoute
-  '/instructors': typeof ProtectedInstructorsIndexRoute
-  '/programs': typeof ProtectedProgramsIndexRoute
-  '/sections': typeof ProtectedSectionsIndexRoute
-  '/semesters': typeof ProtectedSemestersIndexRoute
-  '/students': typeof ProtectedStudentsIndexRoute
+  '/admin-panel': typeof ProtectedAdminPanelRouteRouteWithChildren
   '/login': typeof UnprotectedLoginIndexRoute
-  '/admins/create': typeof ProtectedAdminsCreateIndexRoute
-  '/classes/create': typeof ProtectedClassesCreateIndexRoute
-  '/courses/create': typeof ProtectedCoursesCreateIndexRoute
-  '/departments/create': typeof ProtectedDepartmentsCreateIndexRoute
-  '/instructors/$instructorId': typeof ProtectedInstructorsInstructorIdIndexRoute
-  '/instructors/create': typeof ProtectedInstructorsCreateIndexRoute
-  '/programs/create': typeof ProtectedProgramsCreateIndexRoute
-  '/sections/$sectionId': typeof ProtectedSectionsSectionIdIndexRoute
-  '/sections/create': typeof ProtectedSectionsCreateIndexRoute
-  '/semesters/create': typeof ProtectedSemestersCreateIndexRoute
-  '/students/$studentId': typeof ProtectedStudentsStudentIdIndexRoute
-  '/students/create': typeof ProtectedStudentsCreateIndexRoute
-  '/admins/$adminId/edit': typeof ProtectedAdminsAdminIdEditIndexRoute
-  '/classes/$classId/edit': typeof ProtectedClassesClassIdEditIndexRoute
-  '/courses/$courseId/edit': typeof ProtectedCoursesCourseIdEditIndexRoute
-  '/departments/$departmentId/edit': typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
-  '/instructors/$instructorId/assigned-classes': typeof ProtectedInstructorsInstructorIdAssignedClassesIndexRoute
-  '/instructors/$instructorId/assign-to-class': typeof ProtectedInstructorsInstructorIdAssignToClassIndexRoute
-  '/instructors/$instructorId/edit': typeof ProtectedInstructorsInstructorIdEditIndexRoute
-  '/programs/$programId/edit': typeof ProtectedProgramsProgramIdEditIndexRoute
-  '/sections/$sectionId/edit': typeof ProtectedSectionsSectionIdEditIndexRoute
-  '/students/$studentId/enrolled-classes': typeof ProtectedStudentsStudentIdEnrolledClassesIndexRoute
-  '/students/$studentId/edit': typeof ProtectedStudentsStudentIdEditIndexRoute
-  '/students/$studentId/enroll-to-class': typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
+  '/admin-panel/admins': typeof ProtectedAdminPanelAdminsIndexRoute
+  '/admin-panel/classes': typeof ProtectedAdminPanelClassesIndexRoute
+  '/admin-panel/courses': typeof ProtectedAdminPanelCoursesIndexRoute
+  '/admin-panel/dashboard': typeof ProtectedAdminPanelDashboardIndexRoute
+  '/admin-panel/departments': typeof ProtectedAdminPanelDepartmentsIndexRoute
+  '/admin-panel/instructors': typeof ProtectedAdminPanelInstructorsIndexRoute
+  '/admin-panel/programs': typeof ProtectedAdminPanelProgramsIndexRoute
+  '/admin-panel/sections': typeof ProtectedAdminPanelSectionsIndexRoute
+  '/admin-panel/semesters': typeof ProtectedAdminPanelSemestersIndexRoute
+  '/admin-panel/students': typeof ProtectedAdminPanelStudentsIndexRoute
+  '/lms/classes': typeof ProtectedLmsClassesIndexRoute
+  '/lms/dashboard': typeof ProtectedLmsDashboardIndexRoute
+  '/admin-panel/admins/create': typeof ProtectedAdminPanelAdminsCreateIndexRoute
+  '/admin-panel/classes/create': typeof ProtectedAdminPanelClassesCreateIndexRoute
+  '/admin-panel/courses/create': typeof ProtectedAdminPanelCoursesCreateIndexRoute
+  '/admin-panel/departments/create': typeof ProtectedAdminPanelDepartmentsCreateIndexRoute
+  '/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdIndexRoute
+  '/admin-panel/instructors/create': typeof ProtectedAdminPanelInstructorsCreateIndexRoute
+  '/admin-panel/programs/create': typeof ProtectedAdminPanelProgramsCreateIndexRoute
+  '/admin-panel/sections/$sectionId': typeof ProtectedAdminPanelSectionsSectionIdIndexRoute
+  '/admin-panel/sections/create': typeof ProtectedAdminPanelSectionsCreateIndexRoute
+  '/admin-panel/semesters/create': typeof ProtectedAdminPanelSemestersCreateIndexRoute
+  '/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
+  '/admin-panel/students/create': typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  '/admin-panel/admins/$adminId/edit': typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
+  '/admin-panel/classes/$classId/edit': typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
+  '/admin-panel/courses/$courseId/edit': typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
+  '/admin-panel/departments/$departmentId/edit': typeof ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute
+  '/admin-panel/instructors/$instructorId/assigned-classes': typeof ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute
+  '/admin-panel/instructors/$instructorId/assign-to-class': typeof ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute
+  '/admin-panel/instructors/$instructorId/edit': typeof ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute
+  '/admin-panel/programs/$programId/edit': typeof ProtectedAdminPanelProgramsProgramIdEditIndexRoute
+  '/admin-panel/sections/$sectionId/edit': typeof ProtectedAdminPanelSectionsSectionIdEditIndexRoute
+  '/admin-panel/students/$studentId/enrolled-classes': typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
+  '/admin-panel/students/$studentId/edit': typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
+  '/admin-panel/students/$studentId/enroll-to-class': typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_unprotected': typeof UnprotectedRouteRouteWithChildren
-  '/_protected/instructors/$instructorId': typeof ProtectedInstructorsInstructorIdRouteRouteWithChildren
-  '/_protected/students/$studentId': typeof ProtectedStudentsStudentIdRouteRouteWithChildren
-  '/_protected/admins/': typeof ProtectedAdminsIndexRoute
-  '/_protected/classes/': typeof ProtectedClassesIndexRoute
-  '/_protected/courses/': typeof ProtectedCoursesIndexRoute
-  '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
-  '/_protected/departments/': typeof ProtectedDepartmentsIndexRoute
-  '/_protected/instructors/': typeof ProtectedInstructorsIndexRoute
-  '/_protected/programs/': typeof ProtectedProgramsIndexRoute
-  '/_protected/sections/': typeof ProtectedSectionsIndexRoute
-  '/_protected/semesters/': typeof ProtectedSemestersIndexRoute
-  '/_protected/students/': typeof ProtectedStudentsIndexRoute
+  '/_protected/admin-panel': typeof ProtectedAdminPanelRouteRouteWithChildren
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
-  '/_protected/admins/create/': typeof ProtectedAdminsCreateIndexRoute
-  '/_protected/classes/create/': typeof ProtectedClassesCreateIndexRoute
-  '/_protected/courses/create/': typeof ProtectedCoursesCreateIndexRoute
-  '/_protected/departments/create/': typeof ProtectedDepartmentsCreateIndexRoute
-  '/_protected/instructors/$instructorId/': typeof ProtectedInstructorsInstructorIdIndexRoute
-  '/_protected/instructors/create/': typeof ProtectedInstructorsCreateIndexRoute
-  '/_protected/programs/create/': typeof ProtectedProgramsCreateIndexRoute
-  '/_protected/sections/$sectionId/': typeof ProtectedSectionsSectionIdIndexRoute
-  '/_protected/sections/create/': typeof ProtectedSectionsCreateIndexRoute
-  '/_protected/semesters/create/': typeof ProtectedSemestersCreateIndexRoute
-  '/_protected/students/$studentId/': typeof ProtectedStudentsStudentIdIndexRoute
-  '/_protected/students/create/': typeof ProtectedStudentsCreateIndexRoute
-  '/_protected/admins/$adminId/edit/': typeof ProtectedAdminsAdminIdEditIndexRoute
-  '/_protected/classes/$classId/edit/': typeof ProtectedClassesClassIdEditIndexRoute
-  '/_protected/courses/$courseId/edit/': typeof ProtectedCoursesCourseIdEditIndexRoute
-  '/_protected/departments/$departmentId/edit/': typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
-  '/_protected/instructors/$instructorId/assigned-classes/': typeof ProtectedInstructorsInstructorIdAssignedClassesIndexRoute
-  '/_protected/instructors/$instructorId_/assign-to-class/': typeof ProtectedInstructorsInstructorIdAssignToClassIndexRoute
-  '/_protected/instructors/$instructorId_/edit/': typeof ProtectedInstructorsInstructorIdEditIndexRoute
-  '/_protected/programs/$programId/edit/': typeof ProtectedProgramsProgramIdEditIndexRoute
-  '/_protected/sections/$sectionId/edit/': typeof ProtectedSectionsSectionIdEditIndexRoute
-  '/_protected/students/$studentId/enrolled-classes/': typeof ProtectedStudentsStudentIdEnrolledClassesIndexRoute
-  '/_protected/students/$studentId_/edit/': typeof ProtectedStudentsStudentIdEditIndexRoute
-  '/_protected/students/$studentId_/enroll-to-class/': typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
+  '/_protected/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
+  '/_protected/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
+  '/_protected/admin-panel/admins/': typeof ProtectedAdminPanelAdminsIndexRoute
+  '/_protected/admin-panel/classes/': typeof ProtectedAdminPanelClassesIndexRoute
+  '/_protected/admin-panel/courses/': typeof ProtectedAdminPanelCoursesIndexRoute
+  '/_protected/admin-panel/dashboard/': typeof ProtectedAdminPanelDashboardIndexRoute
+  '/_protected/admin-panel/departments/': typeof ProtectedAdminPanelDepartmentsIndexRoute
+  '/_protected/admin-panel/instructors/': typeof ProtectedAdminPanelInstructorsIndexRoute
+  '/_protected/admin-panel/programs/': typeof ProtectedAdminPanelProgramsIndexRoute
+  '/_protected/admin-panel/sections/': typeof ProtectedAdminPanelSectionsIndexRoute
+  '/_protected/admin-panel/semesters/': typeof ProtectedAdminPanelSemestersIndexRoute
+  '/_protected/admin-panel/students/': typeof ProtectedAdminPanelStudentsIndexRoute
+  '/_protected/lms/classes/': typeof ProtectedLmsClassesIndexRoute
+  '/_protected/lms/dashboard/': typeof ProtectedLmsDashboardIndexRoute
+  '/_protected/admin-panel/admins/create/': typeof ProtectedAdminPanelAdminsCreateIndexRoute
+  '/_protected/admin-panel/classes/create/': typeof ProtectedAdminPanelClassesCreateIndexRoute
+  '/_protected/admin-panel/courses/create/': typeof ProtectedAdminPanelCoursesCreateIndexRoute
+  '/_protected/admin-panel/departments/create/': typeof ProtectedAdminPanelDepartmentsCreateIndexRoute
+  '/_protected/admin-panel/instructors/$instructorId/': typeof ProtectedAdminPanelInstructorsInstructorIdIndexRoute
+  '/_protected/admin-panel/instructors/create/': typeof ProtectedAdminPanelInstructorsCreateIndexRoute
+  '/_protected/admin-panel/programs/create/': typeof ProtectedAdminPanelProgramsCreateIndexRoute
+  '/_protected/admin-panel/sections/$sectionId/': typeof ProtectedAdminPanelSectionsSectionIdIndexRoute
+  '/_protected/admin-panel/sections/create/': typeof ProtectedAdminPanelSectionsCreateIndexRoute
+  '/_protected/admin-panel/semesters/create/': typeof ProtectedAdminPanelSemestersCreateIndexRoute
+  '/_protected/admin-panel/students/$studentId/': typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
+  '/_protected/admin-panel/students/create/': typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  '/_protected/admin-panel/admins/$adminId/edit/': typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
+  '/_protected/admin-panel/classes/$classId/edit/': typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
+  '/_protected/admin-panel/courses/$courseId/edit/': typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
+  '/_protected/admin-panel/departments/$departmentId/edit/': typeof ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute
+  '/_protected/admin-panel/instructors/$instructorId/assigned-classes/': typeof ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute
+  '/_protected/admin-panel/instructors/$instructorId_/assign-to-class/': typeof ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute
+  '/_protected/admin-panel/instructors/$instructorId_/edit/': typeof ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute
+  '/_protected/admin-panel/programs/$programId/edit/': typeof ProtectedAdminPanelProgramsProgramIdEditIndexRoute
+  '/_protected/admin-panel/sections/$sectionId/edit/': typeof ProtectedAdminPanelSectionsSectionIdEditIndexRoute
+  '/_protected/admin-panel/students/$studentId/enrolled-classes/': typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
+  '/_protected/admin-panel/students/$studentId_/edit/': typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
+  '/_protected/admin-panel/students/$studentId_/enroll-to-class/': typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/instructors/$instructorId'
-    | '/students/$studentId'
-    | '/admins'
-    | '/classes'
-    | '/courses'
-    | '/dashboard'
-    | '/departments'
-    | '/instructors'
-    | '/programs'
-    | '/sections'
-    | '/semesters'
-    | '/students'
+    | '/admin-panel'
     | '/login'
-    | '/admins/create'
-    | '/classes/create'
-    | '/courses/create'
-    | '/departments/create'
-    | '/instructors/$instructorId/'
-    | '/instructors/create'
-    | '/programs/create'
-    | '/sections/$sectionId'
-    | '/sections/create'
-    | '/semesters/create'
-    | '/students/$studentId/'
-    | '/students/create'
-    | '/admins/$adminId/edit'
-    | '/classes/$classId/edit'
-    | '/courses/$courseId/edit'
-    | '/departments/$departmentId/edit'
-    | '/instructors/$instructorId/assigned-classes'
-    | '/instructors/$instructorId/assign-to-class'
-    | '/instructors/$instructorId/edit'
-    | '/programs/$programId/edit'
-    | '/sections/$sectionId/edit'
-    | '/students/$studentId/enrolled-classes'
-    | '/students/$studentId/edit'
-    | '/students/$studentId/enroll-to-class'
+    | '/admin-panel/instructors/$instructorId'
+    | '/admin-panel/students/$studentId'
+    | '/admin-panel/admins'
+    | '/admin-panel/classes'
+    | '/admin-panel/courses'
+    | '/admin-panel/dashboard'
+    | '/admin-panel/departments'
+    | '/admin-panel/instructors'
+    | '/admin-panel/programs'
+    | '/admin-panel/sections'
+    | '/admin-panel/semesters'
+    | '/admin-panel/students'
+    | '/lms/classes'
+    | '/lms/dashboard'
+    | '/admin-panel/admins/create'
+    | '/admin-panel/classes/create'
+    | '/admin-panel/courses/create'
+    | '/admin-panel/departments/create'
+    | '/admin-panel/instructors/$instructorId/'
+    | '/admin-panel/instructors/create'
+    | '/admin-panel/programs/create'
+    | '/admin-panel/sections/$sectionId'
+    | '/admin-panel/sections/create'
+    | '/admin-panel/semesters/create'
+    | '/admin-panel/students/$studentId/'
+    | '/admin-panel/students/create'
+    | '/admin-panel/admins/$adminId/edit'
+    | '/admin-panel/classes/$classId/edit'
+    | '/admin-panel/courses/$courseId/edit'
+    | '/admin-panel/departments/$departmentId/edit'
+    | '/admin-panel/instructors/$instructorId/assigned-classes'
+    | '/admin-panel/instructors/$instructorId/assign-to-class'
+    | '/admin-panel/instructors/$instructorId/edit'
+    | '/admin-panel/programs/$programId/edit'
+    | '/admin-panel/sections/$sectionId/edit'
+    | '/admin-panel/students/$studentId/enrolled-classes'
+    | '/admin-panel/students/$studentId/edit'
+    | '/admin-panel/students/$studentId/enroll-to-class'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admins'
-    | '/classes'
-    | '/courses'
-    | '/dashboard'
-    | '/departments'
-    | '/instructors'
-    | '/programs'
-    | '/sections'
-    | '/semesters'
-    | '/students'
+    | '/admin-panel'
     | '/login'
-    | '/admins/create'
-    | '/classes/create'
-    | '/courses/create'
-    | '/departments/create'
-    | '/instructors/$instructorId'
-    | '/instructors/create'
-    | '/programs/create'
-    | '/sections/$sectionId'
-    | '/sections/create'
-    | '/semesters/create'
-    | '/students/$studentId'
-    | '/students/create'
-    | '/admins/$adminId/edit'
-    | '/classes/$classId/edit'
-    | '/courses/$courseId/edit'
-    | '/departments/$departmentId/edit'
-    | '/instructors/$instructorId/assigned-classes'
-    | '/instructors/$instructorId/assign-to-class'
-    | '/instructors/$instructorId/edit'
-    | '/programs/$programId/edit'
-    | '/sections/$sectionId/edit'
-    | '/students/$studentId/enrolled-classes'
-    | '/students/$studentId/edit'
-    | '/students/$studentId/enroll-to-class'
+    | '/admin-panel/admins'
+    | '/admin-panel/classes'
+    | '/admin-panel/courses'
+    | '/admin-panel/dashboard'
+    | '/admin-panel/departments'
+    | '/admin-panel/instructors'
+    | '/admin-panel/programs'
+    | '/admin-panel/sections'
+    | '/admin-panel/semesters'
+    | '/admin-panel/students'
+    | '/lms/classes'
+    | '/lms/dashboard'
+    | '/admin-panel/admins/create'
+    | '/admin-panel/classes/create'
+    | '/admin-panel/courses/create'
+    | '/admin-panel/departments/create'
+    | '/admin-panel/instructors/$instructorId'
+    | '/admin-panel/instructors/create'
+    | '/admin-panel/programs/create'
+    | '/admin-panel/sections/$sectionId'
+    | '/admin-panel/sections/create'
+    | '/admin-panel/semesters/create'
+    | '/admin-panel/students/$studentId'
+    | '/admin-panel/students/create'
+    | '/admin-panel/admins/$adminId/edit'
+    | '/admin-panel/classes/$classId/edit'
+    | '/admin-panel/courses/$courseId/edit'
+    | '/admin-panel/departments/$departmentId/edit'
+    | '/admin-panel/instructors/$instructorId/assigned-classes'
+    | '/admin-panel/instructors/$instructorId/assign-to-class'
+    | '/admin-panel/instructors/$instructorId/edit'
+    | '/admin-panel/programs/$programId/edit'
+    | '/admin-panel/sections/$sectionId/edit'
+    | '/admin-panel/students/$studentId/enrolled-classes'
+    | '/admin-panel/students/$studentId/edit'
+    | '/admin-panel/students/$studentId/enroll-to-class'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/_unprotected'
-    | '/_protected/instructors/$instructorId'
-    | '/_protected/students/$studentId'
-    | '/_protected/admins/'
-    | '/_protected/classes/'
-    | '/_protected/courses/'
-    | '/_protected/dashboard/'
-    | '/_protected/departments/'
-    | '/_protected/instructors/'
-    | '/_protected/programs/'
-    | '/_protected/sections/'
-    | '/_protected/semesters/'
-    | '/_protected/students/'
+    | '/_protected/admin-panel'
     | '/_unprotected/login/'
-    | '/_protected/admins/create/'
-    | '/_protected/classes/create/'
-    | '/_protected/courses/create/'
-    | '/_protected/departments/create/'
-    | '/_protected/instructors/$instructorId/'
-    | '/_protected/instructors/create/'
-    | '/_protected/programs/create/'
-    | '/_protected/sections/$sectionId/'
-    | '/_protected/sections/create/'
-    | '/_protected/semesters/create/'
-    | '/_protected/students/$studentId/'
-    | '/_protected/students/create/'
-    | '/_protected/admins/$adminId/edit/'
-    | '/_protected/classes/$classId/edit/'
-    | '/_protected/courses/$courseId/edit/'
-    | '/_protected/departments/$departmentId/edit/'
-    | '/_protected/instructors/$instructorId/assigned-classes/'
-    | '/_protected/instructors/$instructorId_/assign-to-class/'
-    | '/_protected/instructors/$instructorId_/edit/'
-    | '/_protected/programs/$programId/edit/'
-    | '/_protected/sections/$sectionId/edit/'
-    | '/_protected/students/$studentId/enrolled-classes/'
-    | '/_protected/students/$studentId_/edit/'
-    | '/_protected/students/$studentId_/enroll-to-class/'
+    | '/_protected/admin-panel/instructors/$instructorId'
+    | '/_protected/admin-panel/students/$studentId'
+    | '/_protected/admin-panel/admins/'
+    | '/_protected/admin-panel/classes/'
+    | '/_protected/admin-panel/courses/'
+    | '/_protected/admin-panel/dashboard/'
+    | '/_protected/admin-panel/departments/'
+    | '/_protected/admin-panel/instructors/'
+    | '/_protected/admin-panel/programs/'
+    | '/_protected/admin-panel/sections/'
+    | '/_protected/admin-panel/semesters/'
+    | '/_protected/admin-panel/students/'
+    | '/_protected/lms/classes/'
+    | '/_protected/lms/dashboard/'
+    | '/_protected/admin-panel/admins/create/'
+    | '/_protected/admin-panel/classes/create/'
+    | '/_protected/admin-panel/courses/create/'
+    | '/_protected/admin-panel/departments/create/'
+    | '/_protected/admin-panel/instructors/$instructorId/'
+    | '/_protected/admin-panel/instructors/create/'
+    | '/_protected/admin-panel/programs/create/'
+    | '/_protected/admin-panel/sections/$sectionId/'
+    | '/_protected/admin-panel/sections/create/'
+    | '/_protected/admin-panel/semesters/create/'
+    | '/_protected/admin-panel/students/$studentId/'
+    | '/_protected/admin-panel/students/create/'
+    | '/_protected/admin-panel/admins/$adminId/edit/'
+    | '/_protected/admin-panel/classes/$classId/edit/'
+    | '/_protected/admin-panel/courses/$courseId/edit/'
+    | '/_protected/admin-panel/departments/$departmentId/edit/'
+    | '/_protected/admin-panel/instructors/$instructorId/assigned-classes/'
+    | '/_protected/admin-panel/instructors/$instructorId_/assign-to-class/'
+    | '/_protected/admin-panel/instructors/$instructorId_/edit/'
+    | '/_protected/admin-panel/programs/$programId/edit/'
+    | '/_protected/admin-panel/sections/$sectionId/edit/'
+    | '/_protected/admin-panel/students/$studentId/enrolled-classes/'
+    | '/_protected/admin-panel/students/$studentId_/edit/'
+    | '/_protected/admin-panel/students/$studentId_/enroll-to-class/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -550,6 +602,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/admin-panel': {
+      id: '/_protected/admin-panel'
+      path: '/admin-panel'
+      fullPath: '/admin-panel'
+      preLoaderRoute: typeof ProtectedAdminPanelRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_unprotected/login/': {
       id: '/_unprotected/login/'
       path: '/login'
@@ -557,374 +616,426 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnprotectedLoginIndexRouteImport
       parentRoute: typeof UnprotectedRouteRoute
     }
-    '/_protected/students/': {
-      id: '/_protected/students/'
+    '/_protected/lms/dashboard/': {
+      id: '/_protected/lms/dashboard/'
+      path: '/lms/dashboard'
+      fullPath: '/lms/dashboard'
+      preLoaderRoute: typeof ProtectedLmsDashboardIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/lms/classes/': {
+      id: '/_protected/lms/classes/'
+      path: '/lms/classes'
+      fullPath: '/lms/classes'
+      preLoaderRoute: typeof ProtectedLmsClassesIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/admin-panel/students/': {
+      id: '/_protected/admin-panel/students/'
       path: '/students'
-      fullPath: '/students'
-      preLoaderRoute: typeof ProtectedStudentsIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/students'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/semesters/': {
-      id: '/_protected/semesters/'
+    '/_protected/admin-panel/semesters/': {
+      id: '/_protected/admin-panel/semesters/'
       path: '/semesters'
-      fullPath: '/semesters'
-      preLoaderRoute: typeof ProtectedSemestersIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/semesters'
+      preLoaderRoute: typeof ProtectedAdminPanelSemestersIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/sections/': {
-      id: '/_protected/sections/'
+    '/_protected/admin-panel/sections/': {
+      id: '/_protected/admin-panel/sections/'
       path: '/sections'
-      fullPath: '/sections'
-      preLoaderRoute: typeof ProtectedSectionsIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/sections'
+      preLoaderRoute: typeof ProtectedAdminPanelSectionsIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/programs/': {
-      id: '/_protected/programs/'
+    '/_protected/admin-panel/programs/': {
+      id: '/_protected/admin-panel/programs/'
       path: '/programs'
-      fullPath: '/programs'
-      preLoaderRoute: typeof ProtectedProgramsIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/programs'
+      preLoaderRoute: typeof ProtectedAdminPanelProgramsIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/': {
-      id: '/_protected/instructors/'
+    '/_protected/admin-panel/instructors/': {
+      id: '/_protected/admin-panel/instructors/'
       path: '/instructors'
-      fullPath: '/instructors'
-      preLoaderRoute: typeof ProtectedInstructorsIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/instructors'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/departments/': {
-      id: '/_protected/departments/'
+    '/_protected/admin-panel/departments/': {
+      id: '/_protected/admin-panel/departments/'
       path: '/departments'
-      fullPath: '/departments'
-      preLoaderRoute: typeof ProtectedDepartmentsIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/departments'
+      preLoaderRoute: typeof ProtectedAdminPanelDepartmentsIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/dashboard/': {
-      id: '/_protected/dashboard/'
+    '/_protected/admin-panel/dashboard/': {
+      id: '/_protected/admin-panel/dashboard/'
       path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/dashboard'
+      preLoaderRoute: typeof ProtectedAdminPanelDashboardIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/courses/': {
-      id: '/_protected/courses/'
+    '/_protected/admin-panel/courses/': {
+      id: '/_protected/admin-panel/courses/'
       path: '/courses'
-      fullPath: '/courses'
-      preLoaderRoute: typeof ProtectedCoursesIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/courses'
+      preLoaderRoute: typeof ProtectedAdminPanelCoursesIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/classes/': {
-      id: '/_protected/classes/'
+    '/_protected/admin-panel/classes/': {
+      id: '/_protected/admin-panel/classes/'
       path: '/classes'
-      fullPath: '/classes'
-      preLoaderRoute: typeof ProtectedClassesIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/classes'
+      preLoaderRoute: typeof ProtectedAdminPanelClassesIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/admins/': {
-      id: '/_protected/admins/'
+    '/_protected/admin-panel/admins/': {
+      id: '/_protected/admin-panel/admins/'
       path: '/admins'
-      fullPath: '/admins'
-      preLoaderRoute: typeof ProtectedAdminsIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/admins'
+      preLoaderRoute: typeof ProtectedAdminPanelAdminsIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/students/$studentId': {
-      id: '/_protected/students/$studentId'
+    '/_protected/admin-panel/students/$studentId': {
+      id: '/_protected/admin-panel/students/$studentId'
       path: '/students/$studentId'
-      fullPath: '/students/$studentId'
-      preLoaderRoute: typeof ProtectedStudentsStudentIdRouteRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/students/$studentId'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsStudentIdRouteRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/$instructorId': {
-      id: '/_protected/instructors/$instructorId'
+    '/_protected/admin-panel/instructors/$instructorId': {
+      id: '/_protected/admin-panel/instructors/$instructorId'
       path: '/instructors/$instructorId'
-      fullPath: '/instructors/$instructorId'
-      preLoaderRoute: typeof ProtectedInstructorsInstructorIdRouteRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/instructors/$instructorId'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/students/create/': {
-      id: '/_protected/students/create/'
+    '/_protected/admin-panel/students/create/': {
+      id: '/_protected/admin-panel/students/create/'
       path: '/students/create'
-      fullPath: '/students/create'
-      preLoaderRoute: typeof ProtectedStudentsCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/students/create'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/students/$studentId/': {
-      id: '/_protected/students/$studentId/'
+    '/_protected/admin-panel/students/$studentId/': {
+      id: '/_protected/admin-panel/students/$studentId/'
       path: '/'
-      fullPath: '/students/$studentId/'
-      preLoaderRoute: typeof ProtectedStudentsStudentIdIndexRouteImport
-      parentRoute: typeof ProtectedStudentsStudentIdRouteRoute
+      fullPath: '/admin-panel/students/$studentId/'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsStudentIdIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelStudentsStudentIdRouteRoute
     }
-    '/_protected/semesters/create/': {
-      id: '/_protected/semesters/create/'
+    '/_protected/admin-panel/semesters/create/': {
+      id: '/_protected/admin-panel/semesters/create/'
       path: '/semesters/create'
-      fullPath: '/semesters/create'
-      preLoaderRoute: typeof ProtectedSemestersCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/semesters/create'
+      preLoaderRoute: typeof ProtectedAdminPanelSemestersCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/sections/create/': {
-      id: '/_protected/sections/create/'
+    '/_protected/admin-panel/sections/create/': {
+      id: '/_protected/admin-panel/sections/create/'
       path: '/sections/create'
-      fullPath: '/sections/create'
-      preLoaderRoute: typeof ProtectedSectionsCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/sections/create'
+      preLoaderRoute: typeof ProtectedAdminPanelSectionsCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/sections/$sectionId/': {
-      id: '/_protected/sections/$sectionId/'
+    '/_protected/admin-panel/sections/$sectionId/': {
+      id: '/_protected/admin-panel/sections/$sectionId/'
       path: '/sections/$sectionId'
-      fullPath: '/sections/$sectionId'
-      preLoaderRoute: typeof ProtectedSectionsSectionIdIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/sections/$sectionId'
+      preLoaderRoute: typeof ProtectedAdminPanelSectionsSectionIdIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/programs/create/': {
-      id: '/_protected/programs/create/'
+    '/_protected/admin-panel/programs/create/': {
+      id: '/_protected/admin-panel/programs/create/'
       path: '/programs/create'
-      fullPath: '/programs/create'
-      preLoaderRoute: typeof ProtectedProgramsCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/programs/create'
+      preLoaderRoute: typeof ProtectedAdminPanelProgramsCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/create/': {
-      id: '/_protected/instructors/create/'
+    '/_protected/admin-panel/instructors/create/': {
+      id: '/_protected/admin-panel/instructors/create/'
       path: '/instructors/create'
-      fullPath: '/instructors/create'
-      preLoaderRoute: typeof ProtectedInstructorsCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/instructors/create'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/$instructorId/': {
-      id: '/_protected/instructors/$instructorId/'
+    '/_protected/admin-panel/instructors/$instructorId/': {
+      id: '/_protected/admin-panel/instructors/$instructorId/'
       path: '/'
-      fullPath: '/instructors/$instructorId/'
-      preLoaderRoute: typeof ProtectedInstructorsInstructorIdIndexRouteImport
-      parentRoute: typeof ProtectedInstructorsInstructorIdRouteRoute
+      fullPath: '/admin-panel/instructors/$instructorId/'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsInstructorIdIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelInstructorsInstructorIdRouteRoute
     }
-    '/_protected/departments/create/': {
-      id: '/_protected/departments/create/'
+    '/_protected/admin-panel/departments/create/': {
+      id: '/_protected/admin-panel/departments/create/'
       path: '/departments/create'
-      fullPath: '/departments/create'
-      preLoaderRoute: typeof ProtectedDepartmentsCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/departments/create'
+      preLoaderRoute: typeof ProtectedAdminPanelDepartmentsCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/courses/create/': {
-      id: '/_protected/courses/create/'
+    '/_protected/admin-panel/courses/create/': {
+      id: '/_protected/admin-panel/courses/create/'
       path: '/courses/create'
-      fullPath: '/courses/create'
-      preLoaderRoute: typeof ProtectedCoursesCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/courses/create'
+      preLoaderRoute: typeof ProtectedAdminPanelCoursesCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/classes/create/': {
-      id: '/_protected/classes/create/'
+    '/_protected/admin-panel/classes/create/': {
+      id: '/_protected/admin-panel/classes/create/'
       path: '/classes/create'
-      fullPath: '/classes/create'
-      preLoaderRoute: typeof ProtectedClassesCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/classes/create'
+      preLoaderRoute: typeof ProtectedAdminPanelClassesCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/admins/create/': {
-      id: '/_protected/admins/create/'
+    '/_protected/admin-panel/admins/create/': {
+      id: '/_protected/admin-panel/admins/create/'
       path: '/admins/create'
-      fullPath: '/admins/create'
-      preLoaderRoute: typeof ProtectedAdminsCreateIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/admins/create'
+      preLoaderRoute: typeof ProtectedAdminPanelAdminsCreateIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/students/$studentId_/enroll-to-class/': {
-      id: '/_protected/students/$studentId_/enroll-to-class/'
+    '/_protected/admin-panel/students/$studentId_/enroll-to-class/': {
+      id: '/_protected/admin-panel/students/$studentId_/enroll-to-class/'
       path: '/students/$studentId/enroll-to-class'
-      fullPath: '/students/$studentId/enroll-to-class'
-      preLoaderRoute: typeof ProtectedStudentsStudentIdEnrollToClassIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/students/$studentId/enroll-to-class'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/students/$studentId_/edit/': {
-      id: '/_protected/students/$studentId_/edit/'
+    '/_protected/admin-panel/students/$studentId_/edit/': {
+      id: '/_protected/admin-panel/students/$studentId_/edit/'
       path: '/students/$studentId/edit'
-      fullPath: '/students/$studentId/edit'
-      preLoaderRoute: typeof ProtectedStudentsStudentIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/students/$studentId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsStudentIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/students/$studentId/enrolled-classes/': {
-      id: '/_protected/students/$studentId/enrolled-classes/'
+    '/_protected/admin-panel/students/$studentId/enrolled-classes/': {
+      id: '/_protected/admin-panel/students/$studentId/enrolled-classes/'
       path: '/enrolled-classes'
-      fullPath: '/students/$studentId/enrolled-classes'
-      preLoaderRoute: typeof ProtectedStudentsStudentIdEnrolledClassesIndexRouteImport
-      parentRoute: typeof ProtectedStudentsStudentIdRouteRoute
+      fullPath: '/admin-panel/students/$studentId/enrolled-classes'
+      preLoaderRoute: typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelStudentsStudentIdRouteRoute
     }
-    '/_protected/sections/$sectionId/edit/': {
-      id: '/_protected/sections/$sectionId/edit/'
+    '/_protected/admin-panel/sections/$sectionId/edit/': {
+      id: '/_protected/admin-panel/sections/$sectionId/edit/'
       path: '/sections/$sectionId/edit'
-      fullPath: '/sections/$sectionId/edit'
-      preLoaderRoute: typeof ProtectedSectionsSectionIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/sections/$sectionId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelSectionsSectionIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/programs/$programId/edit/': {
-      id: '/_protected/programs/$programId/edit/'
+    '/_protected/admin-panel/programs/$programId/edit/': {
+      id: '/_protected/admin-panel/programs/$programId/edit/'
       path: '/programs/$programId/edit'
-      fullPath: '/programs/$programId/edit'
-      preLoaderRoute: typeof ProtectedProgramsProgramIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/programs/$programId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelProgramsProgramIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/$instructorId_/edit/': {
-      id: '/_protected/instructors/$instructorId_/edit/'
+    '/_protected/admin-panel/instructors/$instructorId_/edit/': {
+      id: '/_protected/admin-panel/instructors/$instructorId_/edit/'
       path: '/instructors/$instructorId/edit'
-      fullPath: '/instructors/$instructorId/edit'
-      preLoaderRoute: typeof ProtectedInstructorsInstructorIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/instructors/$instructorId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsInstructorIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/$instructorId_/assign-to-class/': {
-      id: '/_protected/instructors/$instructorId_/assign-to-class/'
+    '/_protected/admin-panel/instructors/$instructorId_/assign-to-class/': {
+      id: '/_protected/admin-panel/instructors/$instructorId_/assign-to-class/'
       path: '/instructors/$instructorId/assign-to-class'
-      fullPath: '/instructors/$instructorId/assign-to-class'
-      preLoaderRoute: typeof ProtectedInstructorsInstructorIdAssignToClassIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/instructors/$instructorId/assign-to-class'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/instructors/$instructorId/assigned-classes/': {
-      id: '/_protected/instructors/$instructorId/assigned-classes/'
+    '/_protected/admin-panel/instructors/$instructorId/assigned-classes/': {
+      id: '/_protected/admin-panel/instructors/$instructorId/assigned-classes/'
       path: '/assigned-classes'
-      fullPath: '/instructors/$instructorId/assigned-classes'
-      preLoaderRoute: typeof ProtectedInstructorsInstructorIdAssignedClassesIndexRouteImport
-      parentRoute: typeof ProtectedInstructorsInstructorIdRouteRoute
+      fullPath: '/admin-panel/instructors/$instructorId/assigned-classes'
+      preLoaderRoute: typeof ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelInstructorsInstructorIdRouteRoute
     }
-    '/_protected/departments/$departmentId/edit/': {
-      id: '/_protected/departments/$departmentId/edit/'
+    '/_protected/admin-panel/departments/$departmentId/edit/': {
+      id: '/_protected/admin-panel/departments/$departmentId/edit/'
       path: '/departments/$departmentId/edit'
-      fullPath: '/departments/$departmentId/edit'
-      preLoaderRoute: typeof ProtectedDepartmentsDepartmentIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/departments/$departmentId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/courses/$courseId/edit/': {
-      id: '/_protected/courses/$courseId/edit/'
+    '/_protected/admin-panel/courses/$courseId/edit/': {
+      id: '/_protected/admin-panel/courses/$courseId/edit/'
       path: '/courses/$courseId/edit'
-      fullPath: '/courses/$courseId/edit'
-      preLoaderRoute: typeof ProtectedCoursesCourseIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/courses/$courseId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelCoursesCourseIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/classes/$classId/edit/': {
-      id: '/_protected/classes/$classId/edit/'
+    '/_protected/admin-panel/classes/$classId/edit/': {
+      id: '/_protected/admin-panel/classes/$classId/edit/'
       path: '/classes/$classId/edit'
-      fullPath: '/classes/$classId/edit'
-      preLoaderRoute: typeof ProtectedClassesClassIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/classes/$classId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelClassesClassIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
-    '/_protected/admins/$adminId/edit/': {
-      id: '/_protected/admins/$adminId/edit/'
+    '/_protected/admin-panel/admins/$adminId/edit/': {
+      id: '/_protected/admin-panel/admins/$adminId/edit/'
       path: '/admins/$adminId/edit'
-      fullPath: '/admins/$adminId/edit'
-      preLoaderRoute: typeof ProtectedAdminsAdminIdEditIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      fullPath: '/admin-panel/admins/$adminId/edit'
+      preLoaderRoute: typeof ProtectedAdminPanelAdminsAdminIdEditIndexRouteImport
+      parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
   }
 }
 
-interface ProtectedInstructorsInstructorIdRouteRouteChildren {
-  ProtectedInstructorsInstructorIdIndexRoute: typeof ProtectedInstructorsInstructorIdIndexRoute
-  ProtectedInstructorsInstructorIdAssignedClassesIndexRoute: typeof ProtectedInstructorsInstructorIdAssignedClassesIndexRoute
+interface ProtectedAdminPanelInstructorsInstructorIdRouteRouteChildren {
+  ProtectedAdminPanelInstructorsInstructorIdIndexRoute: typeof ProtectedAdminPanelInstructorsInstructorIdIndexRoute
+  ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute: typeof ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute
 }
 
-const ProtectedInstructorsInstructorIdRouteRouteChildren: ProtectedInstructorsInstructorIdRouteRouteChildren =
+const ProtectedAdminPanelInstructorsInstructorIdRouteRouteChildren: ProtectedAdminPanelInstructorsInstructorIdRouteRouteChildren =
   {
-    ProtectedInstructorsInstructorIdIndexRoute:
-      ProtectedInstructorsInstructorIdIndexRoute,
-    ProtectedInstructorsInstructorIdAssignedClassesIndexRoute:
-      ProtectedInstructorsInstructorIdAssignedClassesIndexRoute,
+    ProtectedAdminPanelInstructorsInstructorIdIndexRoute:
+      ProtectedAdminPanelInstructorsInstructorIdIndexRoute,
+    ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute:
+      ProtectedAdminPanelInstructorsInstructorIdAssignedClassesIndexRoute,
   }
 
-const ProtectedInstructorsInstructorIdRouteRouteWithChildren =
-  ProtectedInstructorsInstructorIdRouteRoute._addFileChildren(
-    ProtectedInstructorsInstructorIdRouteRouteChildren,
+const ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren =
+  ProtectedAdminPanelInstructorsInstructorIdRouteRoute._addFileChildren(
+    ProtectedAdminPanelInstructorsInstructorIdRouteRouteChildren,
   )
 
-interface ProtectedStudentsStudentIdRouteRouteChildren {
-  ProtectedStudentsStudentIdIndexRoute: typeof ProtectedStudentsStudentIdIndexRoute
-  ProtectedStudentsStudentIdEnrolledClassesIndexRoute: typeof ProtectedStudentsStudentIdEnrolledClassesIndexRoute
+interface ProtectedAdminPanelStudentsStudentIdRouteRouteChildren {
+  ProtectedAdminPanelStudentsStudentIdIndexRoute: typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
+  ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute: typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
 }
 
-const ProtectedStudentsStudentIdRouteRouteChildren: ProtectedStudentsStudentIdRouteRouteChildren =
+const ProtectedAdminPanelStudentsStudentIdRouteRouteChildren: ProtectedAdminPanelStudentsStudentIdRouteRouteChildren =
   {
-    ProtectedStudentsStudentIdIndexRoute: ProtectedStudentsStudentIdIndexRoute,
-    ProtectedStudentsStudentIdEnrolledClassesIndexRoute:
-      ProtectedStudentsStudentIdEnrolledClassesIndexRoute,
+    ProtectedAdminPanelStudentsStudentIdIndexRoute:
+      ProtectedAdminPanelStudentsStudentIdIndexRoute,
+    ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute:
+      ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute,
   }
 
-const ProtectedStudentsStudentIdRouteRouteWithChildren =
-  ProtectedStudentsStudentIdRouteRoute._addFileChildren(
-    ProtectedStudentsStudentIdRouteRouteChildren,
+const ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren =
+  ProtectedAdminPanelStudentsStudentIdRouteRoute._addFileChildren(
+    ProtectedAdminPanelStudentsStudentIdRouteRouteChildren,
+  )
+
+interface ProtectedAdminPanelRouteRouteChildren {
+  ProtectedAdminPanelInstructorsInstructorIdRouteRoute: typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
+  ProtectedAdminPanelStudentsStudentIdRouteRoute: typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
+  ProtectedAdminPanelAdminsIndexRoute: typeof ProtectedAdminPanelAdminsIndexRoute
+  ProtectedAdminPanelClassesIndexRoute: typeof ProtectedAdminPanelClassesIndexRoute
+  ProtectedAdminPanelCoursesIndexRoute: typeof ProtectedAdminPanelCoursesIndexRoute
+  ProtectedAdminPanelDashboardIndexRoute: typeof ProtectedAdminPanelDashboardIndexRoute
+  ProtectedAdminPanelDepartmentsIndexRoute: typeof ProtectedAdminPanelDepartmentsIndexRoute
+  ProtectedAdminPanelInstructorsIndexRoute: typeof ProtectedAdminPanelInstructorsIndexRoute
+  ProtectedAdminPanelProgramsIndexRoute: typeof ProtectedAdminPanelProgramsIndexRoute
+  ProtectedAdminPanelSectionsIndexRoute: typeof ProtectedAdminPanelSectionsIndexRoute
+  ProtectedAdminPanelSemestersIndexRoute: typeof ProtectedAdminPanelSemestersIndexRoute
+  ProtectedAdminPanelStudentsIndexRoute: typeof ProtectedAdminPanelStudentsIndexRoute
+  ProtectedAdminPanelAdminsCreateIndexRoute: typeof ProtectedAdminPanelAdminsCreateIndexRoute
+  ProtectedAdminPanelClassesCreateIndexRoute: typeof ProtectedAdminPanelClassesCreateIndexRoute
+  ProtectedAdminPanelCoursesCreateIndexRoute: typeof ProtectedAdminPanelCoursesCreateIndexRoute
+  ProtectedAdminPanelDepartmentsCreateIndexRoute: typeof ProtectedAdminPanelDepartmentsCreateIndexRoute
+  ProtectedAdminPanelInstructorsCreateIndexRoute: typeof ProtectedAdminPanelInstructorsCreateIndexRoute
+  ProtectedAdminPanelProgramsCreateIndexRoute: typeof ProtectedAdminPanelProgramsCreateIndexRoute
+  ProtectedAdminPanelSectionsSectionIdIndexRoute: typeof ProtectedAdminPanelSectionsSectionIdIndexRoute
+  ProtectedAdminPanelSectionsCreateIndexRoute: typeof ProtectedAdminPanelSectionsCreateIndexRoute
+  ProtectedAdminPanelSemestersCreateIndexRoute: typeof ProtectedAdminPanelSemestersCreateIndexRoute
+  ProtectedAdminPanelStudentsCreateIndexRoute: typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  ProtectedAdminPanelAdminsAdminIdEditIndexRoute: typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
+  ProtectedAdminPanelClassesClassIdEditIndexRoute: typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
+  ProtectedAdminPanelCoursesCourseIdEditIndexRoute: typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
+  ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute: typeof ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute
+  ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute: typeof ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute
+  ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute: typeof ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute
+  ProtectedAdminPanelProgramsProgramIdEditIndexRoute: typeof ProtectedAdminPanelProgramsProgramIdEditIndexRoute
+  ProtectedAdminPanelSectionsSectionIdEditIndexRoute: typeof ProtectedAdminPanelSectionsSectionIdEditIndexRoute
+  ProtectedAdminPanelStudentsStudentIdEditIndexRoute: typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
+  ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute: typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
+}
+
+const ProtectedAdminPanelRouteRouteChildren: ProtectedAdminPanelRouteRouteChildren =
+  {
+    ProtectedAdminPanelInstructorsInstructorIdRouteRoute:
+      ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren,
+    ProtectedAdminPanelStudentsStudentIdRouteRoute:
+      ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren,
+    ProtectedAdminPanelAdminsIndexRoute: ProtectedAdminPanelAdminsIndexRoute,
+    ProtectedAdminPanelClassesIndexRoute: ProtectedAdminPanelClassesIndexRoute,
+    ProtectedAdminPanelCoursesIndexRoute: ProtectedAdminPanelCoursesIndexRoute,
+    ProtectedAdminPanelDashboardIndexRoute:
+      ProtectedAdminPanelDashboardIndexRoute,
+    ProtectedAdminPanelDepartmentsIndexRoute:
+      ProtectedAdminPanelDepartmentsIndexRoute,
+    ProtectedAdminPanelInstructorsIndexRoute:
+      ProtectedAdminPanelInstructorsIndexRoute,
+    ProtectedAdminPanelProgramsIndexRoute:
+      ProtectedAdminPanelProgramsIndexRoute,
+    ProtectedAdminPanelSectionsIndexRoute:
+      ProtectedAdminPanelSectionsIndexRoute,
+    ProtectedAdminPanelSemestersIndexRoute:
+      ProtectedAdminPanelSemestersIndexRoute,
+    ProtectedAdminPanelStudentsIndexRoute:
+      ProtectedAdminPanelStudentsIndexRoute,
+    ProtectedAdminPanelAdminsCreateIndexRoute:
+      ProtectedAdminPanelAdminsCreateIndexRoute,
+    ProtectedAdminPanelClassesCreateIndexRoute:
+      ProtectedAdminPanelClassesCreateIndexRoute,
+    ProtectedAdminPanelCoursesCreateIndexRoute:
+      ProtectedAdminPanelCoursesCreateIndexRoute,
+    ProtectedAdminPanelDepartmentsCreateIndexRoute:
+      ProtectedAdminPanelDepartmentsCreateIndexRoute,
+    ProtectedAdminPanelInstructorsCreateIndexRoute:
+      ProtectedAdminPanelInstructorsCreateIndexRoute,
+    ProtectedAdminPanelProgramsCreateIndexRoute:
+      ProtectedAdminPanelProgramsCreateIndexRoute,
+    ProtectedAdminPanelSectionsSectionIdIndexRoute:
+      ProtectedAdminPanelSectionsSectionIdIndexRoute,
+    ProtectedAdminPanelSectionsCreateIndexRoute:
+      ProtectedAdminPanelSectionsCreateIndexRoute,
+    ProtectedAdminPanelSemestersCreateIndexRoute:
+      ProtectedAdminPanelSemestersCreateIndexRoute,
+    ProtectedAdminPanelStudentsCreateIndexRoute:
+      ProtectedAdminPanelStudentsCreateIndexRoute,
+    ProtectedAdminPanelAdminsAdminIdEditIndexRoute:
+      ProtectedAdminPanelAdminsAdminIdEditIndexRoute,
+    ProtectedAdminPanelClassesClassIdEditIndexRoute:
+      ProtectedAdminPanelClassesClassIdEditIndexRoute,
+    ProtectedAdminPanelCoursesCourseIdEditIndexRoute:
+      ProtectedAdminPanelCoursesCourseIdEditIndexRoute,
+    ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute:
+      ProtectedAdminPanelDepartmentsDepartmentIdEditIndexRoute,
+    ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute:
+      ProtectedAdminPanelInstructorsInstructorIdAssignToClassIndexRoute,
+    ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute:
+      ProtectedAdminPanelInstructorsInstructorIdEditIndexRoute,
+    ProtectedAdminPanelProgramsProgramIdEditIndexRoute:
+      ProtectedAdminPanelProgramsProgramIdEditIndexRoute,
+    ProtectedAdminPanelSectionsSectionIdEditIndexRoute:
+      ProtectedAdminPanelSectionsSectionIdEditIndexRoute,
+    ProtectedAdminPanelStudentsStudentIdEditIndexRoute:
+      ProtectedAdminPanelStudentsStudentIdEditIndexRoute,
+    ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute:
+      ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute,
+  }
+
+const ProtectedAdminPanelRouteRouteWithChildren =
+  ProtectedAdminPanelRouteRoute._addFileChildren(
+    ProtectedAdminPanelRouteRouteChildren,
   )
 
 interface ProtectedRouteRouteChildren {
-  ProtectedInstructorsInstructorIdRouteRoute: typeof ProtectedInstructorsInstructorIdRouteRouteWithChildren
-  ProtectedStudentsStudentIdRouteRoute: typeof ProtectedStudentsStudentIdRouteRouteWithChildren
-  ProtectedAdminsIndexRoute: typeof ProtectedAdminsIndexRoute
-  ProtectedClassesIndexRoute: typeof ProtectedClassesIndexRoute
-  ProtectedCoursesIndexRoute: typeof ProtectedCoursesIndexRoute
-  ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
-  ProtectedDepartmentsIndexRoute: typeof ProtectedDepartmentsIndexRoute
-  ProtectedInstructorsIndexRoute: typeof ProtectedInstructorsIndexRoute
-  ProtectedProgramsIndexRoute: typeof ProtectedProgramsIndexRoute
-  ProtectedSectionsIndexRoute: typeof ProtectedSectionsIndexRoute
-  ProtectedSemestersIndexRoute: typeof ProtectedSemestersIndexRoute
-  ProtectedStudentsIndexRoute: typeof ProtectedStudentsIndexRoute
-  ProtectedAdminsCreateIndexRoute: typeof ProtectedAdminsCreateIndexRoute
-  ProtectedClassesCreateIndexRoute: typeof ProtectedClassesCreateIndexRoute
-  ProtectedCoursesCreateIndexRoute: typeof ProtectedCoursesCreateIndexRoute
-  ProtectedDepartmentsCreateIndexRoute: typeof ProtectedDepartmentsCreateIndexRoute
-  ProtectedInstructorsCreateIndexRoute: typeof ProtectedInstructorsCreateIndexRoute
-  ProtectedProgramsCreateIndexRoute: typeof ProtectedProgramsCreateIndexRoute
-  ProtectedSectionsSectionIdIndexRoute: typeof ProtectedSectionsSectionIdIndexRoute
-  ProtectedSectionsCreateIndexRoute: typeof ProtectedSectionsCreateIndexRoute
-  ProtectedSemestersCreateIndexRoute: typeof ProtectedSemestersCreateIndexRoute
-  ProtectedStudentsCreateIndexRoute: typeof ProtectedStudentsCreateIndexRoute
-  ProtectedAdminsAdminIdEditIndexRoute: typeof ProtectedAdminsAdminIdEditIndexRoute
-  ProtectedClassesClassIdEditIndexRoute: typeof ProtectedClassesClassIdEditIndexRoute
-  ProtectedCoursesCourseIdEditIndexRoute: typeof ProtectedCoursesCourseIdEditIndexRoute
-  ProtectedDepartmentsDepartmentIdEditIndexRoute: typeof ProtectedDepartmentsDepartmentIdEditIndexRoute
-  ProtectedInstructorsInstructorIdAssignToClassIndexRoute: typeof ProtectedInstructorsInstructorIdAssignToClassIndexRoute
-  ProtectedInstructorsInstructorIdEditIndexRoute: typeof ProtectedInstructorsInstructorIdEditIndexRoute
-  ProtectedProgramsProgramIdEditIndexRoute: typeof ProtectedProgramsProgramIdEditIndexRoute
-  ProtectedSectionsSectionIdEditIndexRoute: typeof ProtectedSectionsSectionIdEditIndexRoute
-  ProtectedStudentsStudentIdEditIndexRoute: typeof ProtectedStudentsStudentIdEditIndexRoute
-  ProtectedStudentsStudentIdEnrollToClassIndexRoute: typeof ProtectedStudentsStudentIdEnrollToClassIndexRoute
+  ProtectedAdminPanelRouteRoute: typeof ProtectedAdminPanelRouteRouteWithChildren
+  ProtectedLmsClassesIndexRoute: typeof ProtectedLmsClassesIndexRoute
+  ProtectedLmsDashboardIndexRoute: typeof ProtectedLmsDashboardIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
-  ProtectedInstructorsInstructorIdRouteRoute:
-    ProtectedInstructorsInstructorIdRouteRouteWithChildren,
-  ProtectedStudentsStudentIdRouteRoute:
-    ProtectedStudentsStudentIdRouteRouteWithChildren,
-  ProtectedAdminsIndexRoute: ProtectedAdminsIndexRoute,
-  ProtectedClassesIndexRoute: ProtectedClassesIndexRoute,
-  ProtectedCoursesIndexRoute: ProtectedCoursesIndexRoute,
-  ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
-  ProtectedDepartmentsIndexRoute: ProtectedDepartmentsIndexRoute,
-  ProtectedInstructorsIndexRoute: ProtectedInstructorsIndexRoute,
-  ProtectedProgramsIndexRoute: ProtectedProgramsIndexRoute,
-  ProtectedSectionsIndexRoute: ProtectedSectionsIndexRoute,
-  ProtectedSemestersIndexRoute: ProtectedSemestersIndexRoute,
-  ProtectedStudentsIndexRoute: ProtectedStudentsIndexRoute,
-  ProtectedAdminsCreateIndexRoute: ProtectedAdminsCreateIndexRoute,
-  ProtectedClassesCreateIndexRoute: ProtectedClassesCreateIndexRoute,
-  ProtectedCoursesCreateIndexRoute: ProtectedCoursesCreateIndexRoute,
-  ProtectedDepartmentsCreateIndexRoute: ProtectedDepartmentsCreateIndexRoute,
-  ProtectedInstructorsCreateIndexRoute: ProtectedInstructorsCreateIndexRoute,
-  ProtectedProgramsCreateIndexRoute: ProtectedProgramsCreateIndexRoute,
-  ProtectedSectionsSectionIdIndexRoute: ProtectedSectionsSectionIdIndexRoute,
-  ProtectedSectionsCreateIndexRoute: ProtectedSectionsCreateIndexRoute,
-  ProtectedSemestersCreateIndexRoute: ProtectedSemestersCreateIndexRoute,
-  ProtectedStudentsCreateIndexRoute: ProtectedStudentsCreateIndexRoute,
-  ProtectedAdminsAdminIdEditIndexRoute: ProtectedAdminsAdminIdEditIndexRoute,
-  ProtectedClassesClassIdEditIndexRoute: ProtectedClassesClassIdEditIndexRoute,
-  ProtectedCoursesCourseIdEditIndexRoute:
-    ProtectedCoursesCourseIdEditIndexRoute,
-  ProtectedDepartmentsDepartmentIdEditIndexRoute:
-    ProtectedDepartmentsDepartmentIdEditIndexRoute,
-  ProtectedInstructorsInstructorIdAssignToClassIndexRoute:
-    ProtectedInstructorsInstructorIdAssignToClassIndexRoute,
-  ProtectedInstructorsInstructorIdEditIndexRoute:
-    ProtectedInstructorsInstructorIdEditIndexRoute,
-  ProtectedProgramsProgramIdEditIndexRoute:
-    ProtectedProgramsProgramIdEditIndexRoute,
-  ProtectedSectionsSectionIdEditIndexRoute:
-    ProtectedSectionsSectionIdEditIndexRoute,
-  ProtectedStudentsStudentIdEditIndexRoute:
-    ProtectedStudentsStudentIdEditIndexRoute,
-  ProtectedStudentsStudentIdEnrollToClassIndexRoute:
-    ProtectedStudentsStudentIdEnrollToClassIndexRoute,
+  ProtectedAdminPanelRouteRoute: ProtectedAdminPanelRouteRouteWithChildren,
+  ProtectedLmsClassesIndexRoute: ProtectedLmsClassesIndexRoute,
+  ProtectedLmsDashboardIndexRoute: ProtectedLmsDashboardIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

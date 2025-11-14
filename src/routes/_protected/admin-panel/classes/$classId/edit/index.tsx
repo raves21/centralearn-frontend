@@ -1,0 +1,502 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import ImageUpload from "@/components/shared/form/ImageUpload";
+import { useEffect } from "react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
+import { useEditCourseClass } from "@/domains/classes/api/mutations";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { useAllCourses } from "@/domains/courses/api/queries";
+import { useAllSemesters } from "@/domains/semesters/api/queries";
+import { Check, ChevronsUpDown, Loader } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
+import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
+import { useCourseClassInfo } from "@/domains/classes/api/queries";
+import { useAllSections } from "@/domains/sections/api/queries";
+import { AxiosError } from "axios";
+
+export const Route = createFileRoute(
+  "/_protected/admin-panel/classes/$classId/edit/"
+)({
+  component: RouteComponent,
+});
+
+const formSchema = z.object({
+  courseId: z.string().min(1, { error: "This field is required." }),
+  semesterId: z.string().min(1, { error: "This field is required." }),
+  sectionId: z.string().min(1, { error: "This field is required." }),
+  status: z.enum(["open", "close"]),
+});
+
+function RouteComponent() {
+  const { classId } = Route.useParams();
+  const { image, preview, setImage, setPreview } = useImageUploadState();
+
+  const navigate = useNavigate();
+  const { mutateAsync: editCourseClass, status: editCourseClassStatus } =
+    useEditCourseClass();
+
+  const { data: courseClassInfo, status: courseClassInfoStatus } =
+    useCourseClassInfo(classId);
+
+  const { data: allCourses, status: allCoursesStatus } = useAllCourses({});
+  const { data: allSemesters, status: allSemestersStatus } = useAllSemesters(
+    {}
+  );
+  const { data: allSections, status: allSectionsStatus } = useAllSections();
+
+  usePendingOverlay({
+    isPending: editCourseClassStatus === "pending",
+    pendingLabel: "Updating Class",
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      courseId: "",
+      sectionId: "",
+      semesterId: "",
+      status: "open",
+    },
+  });
+
+  useEffect(() => {
+    if (courseClassInfo) {
+      console.log(courseClassInfo);
+      form.reset({
+        courseId: courseClassInfo.course.id,
+        sectionId: courseClassInfo.section.id,
+        semesterId: courseClassInfo.semester.id,
+        status: courseClassInfo.status,
+      });
+      setPreview(courseClassInfo.imageUrl);
+    }
+  }, [courseClassInfo]);
+
+  async function onSubmit({
+    courseId,
+    sectionId,
+    semesterId,
+    status,
+  }: z.infer<typeof formSchema>) {
+    try {
+      const formData = new FormData();
+      if (courseClassInfo && courseClassInfo.imageUrl && !preview) {
+        formData.append("image", "__DELETED__");
+      } else {
+        if (image) {
+          formData.append("image", image);
+        }
+      }
+      formData.append("course_id", courseId);
+      formData.append("section_id", sectionId);
+      formData.append("semester_id", semesterId);
+      formData.append("status", status);
+      await editCourseClass({ id: classId, formData });
+      navigate({ to: "/admin-panel/classes" });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message);
+      } else {
+        toast.error("An error occured.");
+      }
+    }
+  }
+
+  if (
+    [
+      allCoursesStatus,
+      allSemestersStatus,
+      courseClassInfoStatus,
+      allSectionsStatus,
+    ].includes("error")
+  ) {
+    return (
+      <div className="size-full grid place-items-center">An error occured.</div>
+    );
+  }
+
+  if (
+    [
+      allCoursesStatus,
+      allSemestersStatus,
+      courseClassInfoStatus,
+      allSectionsStatus,
+    ].includes("pending")
+  ) {
+    return (
+      <div className="size-full grid place-items-center">
+        <Loader className="size-15 stroke-mainaccent animate-spin" />
+      </div>
+    );
+  }
+
+  if (allCourses && allSemesters && courseClassInfoStatus && allSections) {
+    return (
+      <div className="flex flex-col gap-16 size-full pb-12">
+        <div className="flex flex-col gap-8">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  onClick={() => navigate({ to: "/admin-panel/classes" })}
+                >
+                  Classes
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Edit</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <p className="text-2xl font-bold">Edit Class</p>
+        </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col w-full gap-8"
+          >
+            <div className="flex flex-col gap-8">
+              <div className="flex w-full gap-10">
+                <FormField
+                  control={form.control}
+                  name="courseId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 font-poppins">
+                      <FormLabel>
+                        Course <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? `${
+                                    allCourses.find(
+                                      (course) => course.id === field.value
+                                    )?.name
+                                  } (${
+                                    allCourses.find(
+                                      (course) => course.id === field.value
+                                    )?.code
+                                  })`
+                                : "Select Course..."}
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 font-poppins">
+                          <Command>
+                            <CommandInput placeholder="Search Course..." />
+                            <CommandList>
+                              <CommandEmpty>No course found.</CommandEmpty>
+                              <CommandGroup>
+                                {allCourses.map((course) => (
+                                  <CommandItem
+                                    key={course.id}
+                                    value={`${course.name} (${course.code})`}
+                                    onSelect={() => {
+                                      field.onChange(course.id);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        course.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {`${course.name} (${course.code})`}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="semesterId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 font-poppins">
+                      <FormLabel>
+                        Semester <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? formatToSemesterNameAndTimestamps(
+                                    allSemesters.find(
+                                      (semester) => semester.id === field.value
+                                    )!
+                                  )
+                                : "Select Department..."}
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 font-poppins">
+                          <Command>
+                            <CommandInput placeholder="Search Department..." />
+                            <CommandList>
+                              <CommandEmpty>No department found.</CommandEmpty>
+                              <CommandGroup>
+                                {allSemesters.map((semester) => (
+                                  <CommandItem
+                                    key={semester.id}
+                                    value={formatToSemesterNameAndTimestamps(
+                                      semester
+                                    )}
+                                    onSelect={() => {
+                                      field.onChange(semester.id);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        semester.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {formatToSemesterNameAndTimestamps(
+                                      semester
+                                    )}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex items-start w-full gap-10">
+                <FormField
+                  control={form.control}
+                  name="sectionId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>
+                        Section <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? `${
+                                    allSections.find(
+                                      (section) => section.id === field.value
+                                    )?.name
+                                  }`
+                                : "Select Section..."}
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 font-poppins">
+                          <Command>
+                            <CommandInput placeholder="Search Section..." />
+                            <CommandList>
+                              <CommandEmpty>No section found.</CommandEmpty>
+                              <CommandGroup>
+                                {allSections.map((section) => (
+                                  <CommandItem
+                                    key={section.id}
+                                    value={section.name}
+                                    onSelect={() => {
+                                      field.onChange(section.id);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        section.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {section.name}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 font-poppins">
+                      <FormLabel>
+                        Status <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value === "open" ? "Open" : "Close"}
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 font-poppins">
+                          <Command>
+                            <CommandList>
+                              <CommandGroup>
+                                <CommandItem
+                                  value="open"
+                                  onSelect={() => {
+                                    field.onChange("open");
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      field.value === "open"
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  Open
+                                </CommandItem>
+                                <CommandItem
+                                  value="close"
+                                  onSelect={() => {
+                                    field.onChange("close");
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      field.value === "close"
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  Close
+                                </CommandItem>
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col flex-1 gap-2">
+                <p>Image</p>
+                <ImageUpload
+                  className="w-[360px]"
+                  imageProps={{
+                    image,
+                    setImage,
+                  }}
+                  previewProps={{
+                    preview,
+                    setPreview,
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-5">
+              <button
+                type="submit"
+                className="flex hover:bg-indigo-800 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-2 py-[10px] text-white rounded-md bg-mainaccent"
+              >
+                Save
+              </button>
+              <button
+                disabled={editCourseClassStatus === "pending"}
+                onClick={() => navigate({ to: "/admin-panel/classes" })}
+                type="button"
+                className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    );
+  }
+}

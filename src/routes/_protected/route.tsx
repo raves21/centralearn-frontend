@@ -1,7 +1,5 @@
 import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 import { Loader } from "lucide-react";
-import SidePanel from "../../components/layout/SidePanel";
-import TopPanel from "../../components/layout/TopPanel";
 import { useCurrentUser } from "../../domains/auth/api/queries";
 
 export const Route = createFileRoute("/_protected")({
@@ -25,16 +23,6 @@ function RouteComponent() {
   }
 
   if (getCurrentUserStatus === "success") {
-    return (
-      <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
-        <TopPanel />
-        <div className="flex flex-grow overflow-hidden size-full">
-          <SidePanel />
-          <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
-            <Outlet />
-          </div>
-        </div>
-      </div>
-    );
+    return <Outlet />;
   }
 }

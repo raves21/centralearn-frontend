@@ -18,70 +18,70 @@ export default function SidePanel() {
     {
       name: "Dashboard",
       linkProps: {
-        to: "/dashboard",
+        to: "/admin-panel/dashboard",
       },
       icon: <LayoutGrid key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Semesters",
       linkProps: {
-        to: "/semesters",
+        to: "/admin-panel/semesters",
       },
       icon: <Calendar key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Departments",
       linkProps: {
-        to: "/departments",
+        to: "/admin-panel/departments",
       },
       icon: <Landmark key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Programs",
       linkProps: {
-        to: "/programs",
+        to: "/admin-panel/programs",
       },
       icon: <Layers key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Courses",
       linkProps: {
-        to: "/courses",
+        to: "/admin-panel/courses",
       },
       icon: <Layers key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Classes",
       linkProps: {
-        to: "/classes",
+        to: "/admin-panel/classes",
       },
       icon: <Clipboard key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Sections",
       linkProps: {
-        to: "/sections",
+        to: "/admin-panel/sections",
       },
       icon: <Component key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Admins",
       linkProps: {
-        to: "/admins",
+        to: "/admin-panel/admins",
       },
       icon: <UserRoundCog key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Students",
       linkProps: {
-        to: "/students",
+        to: "/admin-panel/students",
       },
       icon: <GraduationCap key={crypto.randomUUID()} className="size-6" />,
     },
     {
       name: "Instructors",
       linkProps: {
-        to: "/instructors",
+        to: "/admin-panel/instructors",
       },
       icon: <BriefcaseBusiness key={crypto.randomUUID()} className="size-6" />,
     },

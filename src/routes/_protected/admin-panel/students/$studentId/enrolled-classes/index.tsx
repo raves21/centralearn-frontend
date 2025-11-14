@@ -1,0 +1,197 @@
+import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
+import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import type { CourseClass } from "@/domains/classes/types";
+import type { Course } from "@/domains/courses/types";
+import type { Section } from "@/domains/sections/types";
+import type { Semester } from "@/domains/semesters/types";
+import { useStudentEnrolledClasses } from "@/domains/students/api/queries";
+import { cn } from "@/lib/utils";
+import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleSearchParamValidationFailure";
+import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import type { ColumnDef } from "@tanstack/react-table";
+import { EllipsisVertical, Loader, Trash } from "lucide-react";
+import z from "zod";
+
+const searchParamSchema = z.object({
+  searchQuery: z.string().optional(),
+  page: z.number().optional(),
+});
+
+type SearchParamsSchema = z.infer<typeof searchParamSchema> &
+  SearchSchemaValidationStatus;
+
+export const Route = createFileRoute(
+  "/_protected/admin-panel/students/$studentId/enrolled-classes/"
+)({
+  component: RouteComponent,
+  validateSearch: (search): SearchParamsSchema => {
+    const validated = searchParamSchema.safeParse(search);
+    if (validated.success) {
+      return { ...search, success: true };
+    }
+    return {
+      success: false,
+    };
+  },
+});
+
+function RouteComponent() {
+  const { studentId } = Route.useParams();
+  const navigate = useNavigate();
+  const { page, searchQuery, success } = Route.useSearch();
+
+  useHandleSearchParamsValidationFailure({
+    isValidationFail: !success,
+    onValidationFail: () =>
+      navigate({
+        to: "/admin-panel/students/$studentId",
+        params: { studentId },
+      }),
+  });
+
+  const { data: enrolledClasses, status: enrolledClassesStatus } =
+    useStudentEnrolledClasses({
+      studentId,
+      page,
+      searchQuery,
+    });
+
+  const columns: ColumnDef<CourseClass>[] = [
+    {
+      accessorKey: "course",
+      header: "Course",
+      cell: ({ getValue }) => {
+        const course = getValue<Course>();
+        return <p>{course.name}</p>;
+      },
+    },
+    {
+      accessorKey: "courseCode",
+      header: "Course Code",
+      cell: ({ row }) => {
+        const courseClass = row.original;
+        return <p>{courseClass.course.code}</p>;
+      },
+    },
+    {
+      accessorKey: "semester",
+      header: "Semester",
+      cell: ({ getValue }) => {
+        const semester = getValue<Semester>();
+        return semester.name;
+      },
+    },
+    {
+      accessorKey: "section",
+      header: "Section",
+      cell: ({ getValue }) => {
+        const section = getValue<Section>();
+        return section.name;
+      },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ getValue }) => {
+        const status = getValue<"open" | "close">();
+        return (
+          <p
+            className={cn(
+              "rounded-md px-2 py-1 text-white w-min text-xs",
+              status === "open" ? "bg-green-500" : "bg-red-600"
+            )}
+          >
+            {status.split("")[0].toUpperCase() + status.substring(1)}
+          </p>
+        );
+      },
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: () => {
+        // const rowClass = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="stroke-mainaccent" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem>
+                Unenroll
+                <Trash className="stroke-red-500" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  if ([enrolledClassesStatus].includes("error")) {
+    return (
+      <div className="size-full grid place-items-center">An error occured.</div>
+    );
+  }
+
+  if ([enrolledClassesStatus].includes("pending")) {
+    return (
+      <div className="size-full grid place-items-center">
+        <Loader className="size-15 stroke-mainaccent animate-spin" />
+      </div>
+    );
+  }
+
+  if (enrolledClasses) {
+    return (
+      <div className="size-full flex flex-col gap-16">
+        <TitleAndCreateAction
+          headerTitle="Enrolled Classes"
+          createAction={() =>
+            navigate({
+              to: "/admin-panel/students/$studentId/enroll-to-class",
+              params: { studentId },
+            })
+          }
+          createActionLabel="Enroll to Class"
+        />
+        <DataTable
+          columns={columns}
+          data={enrolledClasses.data}
+          paginationProps={{
+            currentPage: enrolledClasses.meta.current_page,
+            handlePageChange: (_, page) => {
+              navigate({
+                to: "/admin-panel/students/$studentId/enrolled-classes",
+                params: { studentId },
+                search: (prev) => ({ ...prev, page: page }),
+              });
+            },
+            totalPages: enrolledClasses.meta.last_page,
+          }}
+          filterProps={{
+            searchInputPlaceholder: "Search classes by name/code",
+            searchInputInitValue: searchQuery,
+            onInputSearch: (searchInput) =>
+              navigate({
+                to: "/admin-panel/students/$studentId/enrolled-classes",
+                params: { studentId },
+                search: (prev) => ({
+                  ...prev,
+                  searchQuery: searchInput || undefined,
+                }),
+              }),
+          }}
+        />
+      </div>
+    );
+  }
+}

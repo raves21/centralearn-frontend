@@ -4,6 +4,7 @@ import axios from "axios";
 import type { CurrentUser } from "../types";
 import { queryClient } from "../../../utils/queryClient";
 import { setCurrentUser } from "../functions";
+import { Role } from "@/utils/sharedTypes";
 
 type UseLoginArgs = {
   email: string;
@@ -17,9 +18,14 @@ export function useLogin() {
       return data.data as CurrentUser;
     },
     onSuccess: (data) => {
+      const currentUser = data;
       queryClient.clear();
-      setCurrentUser(data);
-      history.replaceState(null, "", "/dashboard");
+      setCurrentUser(currentUser);
+      if ([Role.ADMIN, Role.SUPERADMIN].includes(currentUser.roles[0])) {
+        history.replaceState(null, "", "/admin-panel/dashboard");
+      } else {
+        history.replaceState(null, "", "/lms/dashboard");
+      }
     },
   });
 }

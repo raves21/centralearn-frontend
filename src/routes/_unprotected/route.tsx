@@ -1,13 +1,14 @@
 import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 import { Loader } from "lucide-react";
 import { useCurrentUser } from "../../domains/auth/api/queries";
+import { Role } from "@/utils/sharedTypes";
 
 export const Route = createFileRoute("/_unprotected")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { status: getCurrentUserStatus } = useCurrentUser();
+  const { data: currentUser, status: getCurrentUserStatus } = useCurrentUser();
   if (getCurrentUserStatus === "pending") {
     return (
       <div className="h-dvh flex items-center justify-center gap-6 bg-gray-bg text-mainaccent font-semibold">
@@ -16,12 +17,14 @@ function RouteComponent() {
       </div>
     );
   }
-
-  if (getCurrentUserStatus === "success") {
-    return <Navigate to="/dashboard" />;
-  }
-
   if (getCurrentUserStatus === "error") {
     return <Outlet />;
+  }
+
+  if (currentUser) {
+    if ([Role.ADMIN, Role.SUPERADMIN].includes(currentUser.roles[0])) {
+      return <Navigate to="/admin-panel/dashboard" />;
+    }
+    return <Navigate to="/lms/dashboard" />;
   }
 }

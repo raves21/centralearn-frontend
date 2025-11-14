@@ -97,7 +97,7 @@ export default function CourseInfoForm({ onNext, imageProps }: Props) {
       </div>
       <div className="flex justify-between">
         <button
-          onClick={() => navigate({ to: "/courses" })}
+          onClick={() => navigate({ to: "/admin-panel/courses" })}
           type="button"
           className="flex hover:bg-gray-400 transition-colors font-medium px-4 hover:cursor-pointer disabled:hover:cursor-auto items-center justify-center gap-4 py-[10px] rounded-md bg-gray-300 border-2 text-black"
         >

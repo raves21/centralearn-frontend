@@ -1,13 +1,20 @@
 import type { LinkProps } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+export enum Role {
+  SUPERADMIN = "superadmin",
+  ADMIN = "admin",
+  INSTRUCTOR = "instructor",
+  STUDENT = "student",
+}
+
 export type User = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   address: string;
-  roles: string[];
+  roles: Role[];
 };
 
 export type PaginationProps = {
