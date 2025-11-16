@@ -1,10 +1,11 @@
 import InfoSection from "@/components/shared/infoPage/InfoSection";
 import { useInstructorInfo } from "@/domains/instructors/api/queries";
-import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader } from "lucide-react";
 
-export const Route = createFileRoute("/_protected/admin-panel/instructors/$instructorId/")({
+export const Route = createFileRoute(
+  "/_protected/admin-panel/instructors/$instructorId/"
+)({
   component: RouteComponent,
 });
 
@@ -50,19 +51,6 @@ function RouteComponent() {
               {
                 label: "Address",
                 value: instructorInfo.user.address,
-              },
-              {
-                label: "Is Admin",
-                value: (
-                  <p
-                    className={cn(
-                      "rounded-md px-2 py-1 text-white w-min text-xs",
-                      instructorInfo.isAdmin ? "bg-green-500" : "bg-blue-500"
-                    )}
-                  >
-                    {instructorInfo.isAdmin ? "Yes" : "No"}
-                  </p>
-                ),
               },
             ],
             header: "Personal Information",

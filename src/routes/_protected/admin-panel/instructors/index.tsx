@@ -8,7 +8,6 @@ import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import { useInstructors } from "@/domains/instructors/api/queries";
 import type { Instructor } from "@/domains/instructors/types";
-import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -66,23 +65,6 @@ function RouteComponent() {
     {
       accessorKey: "jobTitle",
       header: "Job Title",
-    },
-    {
-      accessorKey: "isAdmin",
-      header: "Admin",
-      cell: ({ getValue }) => {
-        const isAdmin = getValue<boolean>();
-        return (
-          <p
-            className={cn(
-              "rounded-md px-2 py-1 text-white w-min text-xs",
-              isAdmin ? "bg-green-500" : "bg-blue-500"
-            )}
-          >
-            {isAdmin ? "Yes" : "No"}
-          </p>
-        );
-      },
     },
     {
       accessorKey: "actions",

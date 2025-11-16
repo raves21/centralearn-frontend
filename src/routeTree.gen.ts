@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnprotectedRouteRouteImport } from './routes/_unprotected/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProtectedLmsRouteRouteImport } from './routes/_protected/lms/route'
 import { Route as ProtectedAdminPanelRouteRouteImport } from './routes/_protected/admin-panel/route'
 import { Route as UnprotectedLoginIndexRouteImport } from './routes/_unprotected/login/index'
+import { Route as ProtectedLmsIndexRouteImport } from './routes/_protected/lms/index'
+import { Route as ProtectedLmsGradesIndexRouteImport } from './routes/_protected/lms/grades/index'
 import { Route as ProtectedLmsDashboardIndexRouteImport } from './routes/_protected/lms/dashboard/index'
 import { Route as ProtectedLmsClassesIndexRouteImport } from './routes/_protected/lms/classes/index'
 import { Route as ProtectedAdminPanelStudentsIndexRouteImport } from './routes/_protected/admin-panel/students/index'
@@ -66,6 +69,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedLmsRouteRoute = ProtectedLmsRouteRouteImport.update({
+  id: '/lms',
+  path: '/lms',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const ProtectedAdminPanelRouteRoute =
   ProtectedAdminPanelRouteRouteImport.update({
     id: '/admin-panel',
@@ -77,17 +85,27 @@ const UnprotectedLoginIndexRoute = UnprotectedLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => UnprotectedRouteRoute,
 } as any)
+const ProtectedLmsIndexRoute = ProtectedLmsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProtectedLmsRouteRoute,
+} as any)
+const ProtectedLmsGradesIndexRoute = ProtectedLmsGradesIndexRouteImport.update({
+  id: '/grades/',
+  path: '/grades/',
+  getParentRoute: () => ProtectedLmsRouteRoute,
+} as any)
 const ProtectedLmsDashboardIndexRoute =
   ProtectedLmsDashboardIndexRouteImport.update({
-    id: '/lms/dashboard/',
-    path: '/lms/dashboard/',
-    getParentRoute: () => ProtectedRouteRoute,
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => ProtectedLmsRouteRoute,
   } as any)
 const ProtectedLmsClassesIndexRoute =
   ProtectedLmsClassesIndexRouteImport.update({
-    id: '/lms/classes/',
-    path: '/lms/classes/',
-    getParentRoute: () => ProtectedRouteRoute,
+    id: '/classes/',
+    path: '/classes/',
+    getParentRoute: () => ProtectedLmsRouteRoute,
   } as any)
 const ProtectedAdminPanelStudentsIndexRoute =
   ProtectedAdminPanelStudentsIndexRouteImport.update({
@@ -314,6 +332,8 @@ const ProtectedAdminPanelAdminsAdminIdEditIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-panel': typeof ProtectedAdminPanelRouteRouteWithChildren
+  '/lms': typeof ProtectedLmsRouteRouteWithChildren
+  '/lms/': typeof ProtectedLmsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
   '/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
   '/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
@@ -329,6 +349,7 @@ export interface FileRoutesByFullPath {
   '/admin-panel/students': typeof ProtectedAdminPanelStudentsIndexRoute
   '/lms/classes': typeof ProtectedLmsClassesIndexRoute
   '/lms/dashboard': typeof ProtectedLmsDashboardIndexRoute
+  '/lms/grades': typeof ProtectedLmsGradesIndexRoute
   '/admin-panel/admins/create': typeof ProtectedAdminPanelAdminsCreateIndexRoute
   '/admin-panel/classes/create': typeof ProtectedAdminPanelClassesCreateIndexRoute
   '/admin-panel/courses/create': typeof ProtectedAdminPanelCoursesCreateIndexRoute
@@ -357,6 +378,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-panel': typeof ProtectedAdminPanelRouteRouteWithChildren
+  '/lms': typeof ProtectedLmsIndexRoute
   '/login': typeof UnprotectedLoginIndexRoute
   '/admin-panel/admins': typeof ProtectedAdminPanelAdminsIndexRoute
   '/admin-panel/classes': typeof ProtectedAdminPanelClassesIndexRoute
@@ -370,6 +392,7 @@ export interface FileRoutesByTo {
   '/admin-panel/students': typeof ProtectedAdminPanelStudentsIndexRoute
   '/lms/classes': typeof ProtectedLmsClassesIndexRoute
   '/lms/dashboard': typeof ProtectedLmsDashboardIndexRoute
+  '/lms/grades': typeof ProtectedLmsGradesIndexRoute
   '/admin-panel/admins/create': typeof ProtectedAdminPanelAdminsCreateIndexRoute
   '/admin-panel/classes/create': typeof ProtectedAdminPanelClassesCreateIndexRoute
   '/admin-panel/courses/create': typeof ProtectedAdminPanelCoursesCreateIndexRoute
@@ -401,6 +424,8 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_unprotected': typeof UnprotectedRouteRouteWithChildren
   '/_protected/admin-panel': typeof ProtectedAdminPanelRouteRouteWithChildren
+  '/_protected/lms': typeof ProtectedLmsRouteRouteWithChildren
+  '/_protected/lms/': typeof ProtectedLmsIndexRoute
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
   '/_protected/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
   '/_protected/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
@@ -416,6 +441,7 @@ export interface FileRoutesById {
   '/_protected/admin-panel/students/': typeof ProtectedAdminPanelStudentsIndexRoute
   '/_protected/lms/classes/': typeof ProtectedLmsClassesIndexRoute
   '/_protected/lms/dashboard/': typeof ProtectedLmsDashboardIndexRoute
+  '/_protected/lms/grades/': typeof ProtectedLmsGradesIndexRoute
   '/_protected/admin-panel/admins/create/': typeof ProtectedAdminPanelAdminsCreateIndexRoute
   '/_protected/admin-panel/classes/create/': typeof ProtectedAdminPanelClassesCreateIndexRoute
   '/_protected/admin-panel/courses/create/': typeof ProtectedAdminPanelCoursesCreateIndexRoute
@@ -446,6 +472,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin-panel'
+    | '/lms'
+    | '/lms/'
     | '/login'
     | '/admin-panel/instructors/$instructorId'
     | '/admin-panel/students/$studentId'
@@ -461,6 +489,7 @@ export interface FileRouteTypes {
     | '/admin-panel/students'
     | '/lms/classes'
     | '/lms/dashboard'
+    | '/lms/grades'
     | '/admin-panel/admins/create'
     | '/admin-panel/classes/create'
     | '/admin-panel/courses/create'
@@ -489,6 +518,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin-panel'
+    | '/lms'
     | '/login'
     | '/admin-panel/admins'
     | '/admin-panel/classes'
@@ -502,6 +532,7 @@ export interface FileRouteTypes {
     | '/admin-panel/students'
     | '/lms/classes'
     | '/lms/dashboard'
+    | '/lms/grades'
     | '/admin-panel/admins/create'
     | '/admin-panel/classes/create'
     | '/admin-panel/courses/create'
@@ -532,6 +563,8 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/_unprotected'
     | '/_protected/admin-panel'
+    | '/_protected/lms'
+    | '/_protected/lms/'
     | '/_unprotected/login/'
     | '/_protected/admin-panel/instructors/$instructorId'
     | '/_protected/admin-panel/students/$studentId'
@@ -547,6 +580,7 @@ export interface FileRouteTypes {
     | '/_protected/admin-panel/students/'
     | '/_protected/lms/classes/'
     | '/_protected/lms/dashboard/'
+    | '/_protected/lms/grades/'
     | '/_protected/admin-panel/admins/create/'
     | '/_protected/admin-panel/classes/create/'
     | '/_protected/admin-panel/courses/create/'
@@ -602,6 +636,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/lms': {
+      id: '/_protected/lms'
+      path: '/lms'
+      fullPath: '/lms'
+      preLoaderRoute: typeof ProtectedLmsRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/admin-panel': {
       id: '/_protected/admin-panel'
       path: '/admin-panel'
@@ -616,19 +657,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnprotectedLoginIndexRouteImport
       parentRoute: typeof UnprotectedRouteRoute
     }
+    '/_protected/lms/': {
+      id: '/_protected/lms/'
+      path: '/'
+      fullPath: '/lms/'
+      preLoaderRoute: typeof ProtectedLmsIndexRouteImport
+      parentRoute: typeof ProtectedLmsRouteRoute
+    }
+    '/_protected/lms/grades/': {
+      id: '/_protected/lms/grades/'
+      path: '/grades'
+      fullPath: '/lms/grades'
+      preLoaderRoute: typeof ProtectedLmsGradesIndexRouteImport
+      parentRoute: typeof ProtectedLmsRouteRoute
+    }
     '/_protected/lms/dashboard/': {
       id: '/_protected/lms/dashboard/'
-      path: '/lms/dashboard'
+      path: '/dashboard'
       fullPath: '/lms/dashboard'
       preLoaderRoute: typeof ProtectedLmsDashboardIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      parentRoute: typeof ProtectedLmsRouteRoute
     }
     '/_protected/lms/classes/': {
       id: '/_protected/lms/classes/'
-      path: '/lms/classes'
+      path: '/classes'
       fullPath: '/lms/classes'
       preLoaderRoute: typeof ProtectedLmsClassesIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      parentRoute: typeof ProtectedLmsRouteRoute
     }
     '/_protected/admin-panel/students/': {
       id: '/_protected/admin-panel/students/'
@@ -1026,16 +1081,31 @@ const ProtectedAdminPanelRouteRouteWithChildren =
     ProtectedAdminPanelRouteRouteChildren,
   )
 
-interface ProtectedRouteRouteChildren {
-  ProtectedAdminPanelRouteRoute: typeof ProtectedAdminPanelRouteRouteWithChildren
+interface ProtectedLmsRouteRouteChildren {
+  ProtectedLmsIndexRoute: typeof ProtectedLmsIndexRoute
   ProtectedLmsClassesIndexRoute: typeof ProtectedLmsClassesIndexRoute
   ProtectedLmsDashboardIndexRoute: typeof ProtectedLmsDashboardIndexRoute
+  ProtectedLmsGradesIndexRoute: typeof ProtectedLmsGradesIndexRoute
+}
+
+const ProtectedLmsRouteRouteChildren: ProtectedLmsRouteRouteChildren = {
+  ProtectedLmsIndexRoute: ProtectedLmsIndexRoute,
+  ProtectedLmsClassesIndexRoute: ProtectedLmsClassesIndexRoute,
+  ProtectedLmsDashboardIndexRoute: ProtectedLmsDashboardIndexRoute,
+  ProtectedLmsGradesIndexRoute: ProtectedLmsGradesIndexRoute,
+}
+
+const ProtectedLmsRouteRouteWithChildren =
+  ProtectedLmsRouteRoute._addFileChildren(ProtectedLmsRouteRouteChildren)
+
+interface ProtectedRouteRouteChildren {
+  ProtectedAdminPanelRouteRoute: typeof ProtectedAdminPanelRouteRouteWithChildren
+  ProtectedLmsRouteRoute: typeof ProtectedLmsRouteRouteWithChildren
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedAdminPanelRouteRoute: ProtectedAdminPanelRouteRouteWithChildren,
-  ProtectedLmsClassesIndexRoute: ProtectedLmsClassesIndexRoute,
-  ProtectedLmsDashboardIndexRoute: ProtectedLmsDashboardIndexRoute,
+  ProtectedLmsRouteRoute: ProtectedLmsRouteRouteWithChildren,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

@@ -3,14 +3,18 @@ import { useCurrentUser } from "../../domains/auth/api/queries";
 import { Navigate } from "@tanstack/react-router";
 import Logo from "../shared/Logo";
 
-export default function TopPanel() {
+type Props = {
+  type: "admin-panel" | "lms";
+};
+
+export default function TopPanel({ type }: Props) {
   const { data: currentUser } = useCurrentUser();
 
   if (!currentUser) return <Navigate to="/login" replace />;
 
   return (
     <div className="px-3 h-[9dvh] fixed top-0 z-50 left-0 max-h-[90px] bg-main-bg w-full flex items-center justify-between">
-      <Logo />
+      <Logo type={type} />
       <div className="flex items-center h-full gap-3 mr-3 group">
         <div className="rounded-full overflow-hidden aspect-square h-[60%]">
           <img

@@ -34,7 +34,6 @@ const step1Schema = z.object({
   address: z.string().min(1, { error: "This field is required." }),
   jobTitle: z.string().min(1, { error: "This field is required." }),
   email: z.email().min(1, { error: "This field is required." }),
-  isAdmin: z.boolean(),
   password: z.string().refine((val) => val === "" || val.length >= 8, {
     message: "Must be at least 8 characters or empty",
   }),
@@ -98,7 +97,6 @@ function RouteComponent() {
         firstName: "",
         lastName: "",
         password: "",
-        isAdmin: false,
       },
       step2: {
         departmentId: null,
@@ -113,7 +111,6 @@ function RouteComponent() {
           address: instructorInfo.user.address,
           email: instructorInfo.user.email,
           firstName: instructorInfo.user.firstName,
-          isAdmin: instructorInfo.isAdmin,
           jobTitle: instructorInfo.jobTitle,
           lastName: instructorInfo.user.lastName,
           password: "",
@@ -131,7 +128,7 @@ function RouteComponent() {
   });
 
   async function onSubmit({
-    step1: { address, email, firstName, lastName, password, jobTitle, isAdmin },
+    step1: { address, email, firstName, lastName, password, jobTitle },
     step2: { departmentId },
   }: TFormSchema) {
     let formData = new FormData();
@@ -141,7 +138,6 @@ function RouteComponent() {
     formData.append("password", password);
     formData.append("address", address);
     formData.append("job_title", jobTitle);
-    formData.append("is_admin", Number(isAdmin).toString());
     formData.append("department_id", departmentId!);
 
     try {
