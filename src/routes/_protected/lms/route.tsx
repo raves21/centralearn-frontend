@@ -1,8 +1,8 @@
 import SidePanel from "@/components/layout/SidePanel";
 import TopPanel from "@/components/layout/TopPanel";
-import { useCurrentUser } from "@/domains/auth/api/queries";
-import { Role, type NavigationButton } from "@/utils/sharedTypes";
-import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
+import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
+import { type NavigationButton } from "@/utils/sharedTypes";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { ChartColumnBig, Clipboard, LayoutGrid } from "lucide-react";
 
 export const Route = createFileRoute("/_protected/lms")({
@@ -10,10 +10,6 @@ export const Route = createFileRoute("/_protected/lms")({
 });
 
 function RouteComponent() {
-  const { data: currentUser } = useCurrentUser();
-
-  if (!currentUser) return <Navigate to="/login" replace />;
-
   const adminLmsRoutes: NavigationButton[] = [
     {
       name: "Classes",
@@ -65,45 +61,41 @@ function RouteComponent() {
     },
   ];
 
-  if ([Role.ADMIN, Role.SUPERADMIN].includes(currentUser.roles[0])) {
-    return (
-      <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
-        <TopPanel type="lms" />
-        <div className="flex flex-grow overflow-hidden size-full">
-          <SidePanel routes={adminLmsRoutes} />
-          <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
-            <Outlet />
+  return (
+    <RoleBasedComponent
+      adminComponent={
+        <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
+          <TopPanel type="lms" />
+          <div className="flex flex-grow overflow-hidden size-full">
+            <SidePanel routes={adminLmsRoutes} />
+            <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  if (currentUser.roles[0] === Role.INSTRUCTOR) {
-    return (
-      <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
-        <TopPanel type="lms" />
-        <div className="flex flex-grow overflow-hidden size-full">
-          <SidePanel routes={instructorLmsRoutes} />
-          <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
-            <Outlet />
+      }
+      instructorComponent={
+        <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
+          <TopPanel type="lms" />
+          <div className="flex flex-grow overflow-hidden size-full">
+            <SidePanel routes={instructorLmsRoutes} />
+            <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  if (currentUser.roles[0] === Role.STUDENT) {
-    return (
-      <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
-        <TopPanel type="lms" />
-        <div className="flex flex-grow overflow-hidden size-full">
-          <SidePanel routes={studentLmsRoutes} />
-          <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
-            <Outlet />
+      }
+      studentComponent={
+        <div className="relative flex flex-col overflow-hidden min-h-dvh w-dvw bg-gray-bg">
+          <TopPanel type="lms" />
+          <div className="flex flex-grow overflow-hidden size-full">
+            <SidePanel routes={studentLmsRoutes} />
+            <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      }
+    />
+  );
 }

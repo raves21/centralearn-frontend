@@ -1,7 +1,7 @@
 import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 import { Loader } from "lucide-react";
 import { useCurrentUser } from "../../domains/auth/api/queries";
-import { Role } from "@/utils/sharedTypes";
+import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
 
 export const Route = createFileRoute("/_unprotected")({
   component: RouteComponent,
@@ -22,9 +22,12 @@ function RouteComponent() {
   }
 
   if (currentUser) {
-    if ([Role.ADMIN, Role.SUPERADMIN].includes(currentUser.roles[0])) {
-      return <Navigate to="/admin-panel/dashboard" />;
-    }
-    return <Navigate to="/lms/dashboard" />;
+    return (
+      <RoleBasedComponent
+        adminComponent={<Navigate to="/admin-panel/dashboard" />}
+        instructorComponent={<Navigate to="/lms/dashboard" />}
+        studentComponent={<Navigate to="/lms/dashboard" />}
+      />
+    );
   }
 }
