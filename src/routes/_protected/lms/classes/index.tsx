@@ -1,3 +1,4 @@
+import AdminLmsClasses from "@/domains/admins/lms/AdminLmsClasses";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected/lms/classes/")({
@@ -5,5 +6,5 @@ export const Route = createFileRoute("/_protected/lms/classes/")({
 });
 
 function RouteComponent() {
-  return <p>classes</p>;
+  return <AdminLmsClasses />;
 }

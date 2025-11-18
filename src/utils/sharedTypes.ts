@@ -47,8 +47,8 @@ export type PaginationLink = {
 };
 
 export type PaginatedQueryParams = {
-  page: number | undefined;
-  searchQuery: string | undefined;
+  page?: number | undefined;
+  searchQuery?: string | undefined;
 };
 
 export type SearchSchemaValidationStatus = {
