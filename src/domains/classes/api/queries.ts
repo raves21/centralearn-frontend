@@ -18,6 +18,21 @@ export function useCourseClasses({
   });
 }
 
+export function useAllCourseClasses(filters: Record<string, any>) {
+  return useQuery({
+    queryKey: ["allCourseClasses", "courseClasses", JSON.stringify(filters)],
+    queryFn: async () => {
+      const { data } = await api.get("/course-classes", {
+        params: {
+          ...filters,
+          paginate: false,
+        },
+      });
+      return data;
+    },
+  });
+}
+
 export function useCourseClassInfo(courseClassId: string) {
   return useQuery({
     queryKey: ["courseClass", courseClassId],
