@@ -1,3 +1,4 @@
+import Pagination from "@/components/shared/listRecords/pagination/Pagination";
 import CourseClassCard from "@/components/shared/LMS/CourseClassCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,15 +15,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useCourseClasses } from "@/domains/classes/api/queries";
-import { useAllSemesters } from "@/domains/semesters/api/queries";
 import { cn } from "@/lib/utils";
 import { useDebounceInput } from "@/utils/hooks/useDebounceInput";
-import { useFocusInput } from "@/utils/hooks/useFocusInput";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { useState } from "react";
+import {
+  useStudentEnrolledClasses,
+  useStudentEnrolledSemesters,
+} from "../../api/queries";
 
-export default function AdminLmsClasses() {
+type Props = {
+  studentId: string;
+};
+
+export default function StudentLmsClasses({ studentId }: Props) {
   const [searchQuery, setSearchQUery] = useState("");
   const [semesterFilter, setSemesterFilter] = useState("");
   const [isSemesterFilterPopoverOpen, setIsSemesterFilterPopoverOpen] =
@@ -30,21 +36,26 @@ export default function AdminLmsClasses() {
   const [statusFilter, setStatusFilter] = useState<"open" | "close" | null>(
     null
   );
+  const [currentPage, setCurrentPage] = useState(1);
   const [isStatusFilterPopoverOpen, setIsStatusFilterPopoverOpen] =
     useState(false);
-  const debouncedInput = useDebounceInput({ value: searchQuery, delay: 400 });
+  const debouncedInput = useDebounceInput({ value: searchQuery });
 
-  const { inputRef } = useFocusInput({});
+  const { data: enrolledClasses, status: enrolledClassesStatus } =
+    useStudentEnrolledClasses({
+      studentId,
+      searchQuery: debouncedInput,
+      page: currentPage,
+      filters: {
+        semester_id: semesterFilter,
+        status: statusFilter ?? undefined,
+      },
+    });
 
-  const { data: courseClasses, status: courseClassesStatus } = useCourseClasses(
-    {}
-  );
+  const { data: enrolledSemesters, status: enrolledSemestersStatus } =
+    useStudentEnrolledSemesters(studentId);
 
-  const { data: allSemesters, status: allSemestersStatus } = useAllSemesters(
-    {}
-  );
-
-  if ([allSemestersStatus, courseClassesStatus].includes("error")) {
+  if ([enrolledSemestersStatus, enrolledClassesStatus].includes("error")) {
     return (
       <div className="size-full grid place-items-center">
         <p className="text-xl font-medium">An error occured.</p>
@@ -52,7 +63,7 @@ export default function AdminLmsClasses() {
     );
   }
 
-  if ([allSemestersStatus, courseClassesStatus].includes("pending")) {
+  if ([enrolledSemestersStatus, enrolledClassesStatus].includes("pending")) {
     return (
       <div className="size-full grid place-items-center">
         <Loader className="size-15 stroke-mainaccent animate-spin" />
@@ -60,13 +71,12 @@ export default function AdminLmsClasses() {
     );
   }
 
-  if (courseClasses && allSemesters) {
+  if (enrolledClasses && enrolledSemesters) {
     return (
       <div className="flex flex-col gap-8 h-full pb-12">
         <p className="text-2xl font-bold">Classes</p>
         <div className="w-[80%] self-end flex items-center gap-4">
           <Input
-            ref={inputRef}
             placeholder={"Search classes by name/code"}
             value={searchQuery}
             onChange={(e) => setSearchQUery(e.currentTarget.value)}
@@ -88,7 +98,7 @@ export default function AdminLmsClasses() {
               >
                 {semesterFilter
                   ? `${
-                      allSemesters.find(
+                      enrolledSemesters.find(
                         (semester) => semester.id === semesterFilter
                       )?.name
                     }`
@@ -113,12 +123,12 @@ export default function AdminLmsClasses() {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          statusFilter === null ? "opacity-100" : "opacity-0"
+                          !semesterFilter ? "opacity-100" : "opacity-0"
                         )}
                       />
                       Any
                     </CommandItem>
-                    {allSemesters.map((semester) => (
+                    {enrolledSemesters.map((semester) => (
                       <CommandItem
                         key={semester.id}
                         value={`${semester.name}`}
@@ -184,24 +194,24 @@ export default function AdminLmsClasses() {
                       />
                       Any
                     </CommandItem>
-                    {["Open", "Close"].map((status) => {
+                    {["Open classes", "Closed classes"].map((status) => {
+                      const value =
+                        status === "Open classes" ? "open" : "close";
                       const lowercaseStatus =
                         status.charAt(0).toLowerCase() + status.slice(1);
                       return (
                         <CommandItem
                           key={lowercaseStatus}
-                          value={status}
+                          value={value}
                           onSelect={() => {
-                            setStatusFilter(
-                              lowercaseStatus as "open" | "close"
-                            );
+                            setStatusFilter(value);
                             setIsStatusFilterPopoverOpen(false);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              statusFilter === lowercaseStatus
+                              statusFilter === value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
@@ -216,9 +226,9 @@ export default function AdminLmsClasses() {
             </PopoverContent>
           </Popover>
         </div>
-        {courseClasses.data.length > 0 ? (
+        {enrolledClasses.data.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {courseClasses.data.map((courseClass) => (
+            {enrolledClasses.data.map((courseClass) => (
               <CourseClassCard courseClass={courseClass} />
             ))}
           </div>
@@ -227,6 +237,11 @@ export default function AdminLmsClasses() {
             <p className="pb-30 text-lg">No results</p>
           </div>
         )}
+        <Pagination
+          currentPage={currentPage}
+          handlePageChange={() => setCurrentPage((prev) => prev + 1)}
+          totalPages={enrolledClasses.meta.last_page}
+        />
       </div>
     );
   }

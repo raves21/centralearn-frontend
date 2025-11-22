@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { InstructorsPaginated, Instructor } from "../types";
 import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 import type { CourseClassesPaginated } from "@/domains/classes/types";
+import type { Semester } from "@/domains/semesters/types";
 
 export function useInstructors({
   page = 1,
@@ -33,7 +34,11 @@ export function useInstructorAssignedClasses({
   instructorId,
   page = 1,
   searchQuery = undefined,
-}: PaginatedQueryParams & { instructorId: string }) {
+  filters,
+}: PaginatedQueryParams & {
+  instructorId: string;
+  filters?: Record<string, any>;
+}) {
   return useQuery({
     queryKey: [
       "instructorAssignedClasses",
@@ -41,6 +46,7 @@ export function useInstructorAssignedClasses({
       instructorId,
       page,
       searchQuery,
+      JSON.stringify(filters),
     ],
     queryFn: async () => {
       const { data } = await api.get(
@@ -49,7 +55,7 @@ export function useInstructorAssignedClasses({
           params: {
             page,
             query: searchQuery,
-            paginate: 1,
+            ...filters,
           },
         }
       );
@@ -82,6 +88,18 @@ export function useInstructorAssignableClasses({
         }
       );
       return data as CourseClassesPaginated;
+    },
+  });
+}
+
+export function useInstructorAssignedSemesters(instructorId: string) {
+  return useQuery({
+    queryKey: ["instructorAssignedSemesters", "semesters", instructorId],
+    queryFn: async () => {
+      const { data } = await api.get(
+        `/instructors/${instructorId}/semesters-assigned`
+      );
+      return data.data as Semester[];
     },
   });
 }

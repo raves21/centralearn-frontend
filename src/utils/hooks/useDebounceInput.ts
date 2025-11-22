@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 
 type Args = {
   value: string;
-  delay: number;
+  delay?: number;
 };
 
-export function useDebounceInput({ value, delay }: Args) {
+export function useDebounceInput({ value, delay = 400 }: Args) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {

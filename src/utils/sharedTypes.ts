@@ -15,6 +15,9 @@ export type User = {
   email: string;
   address: string;
   roles: Role[];
+  instructorId?: string;
+  studentId?: string;
+  adminId?: string;
 };
 
 export type PaginationProps = {
@@ -49,6 +52,7 @@ export type PaginationLink = {
 export type PaginatedQueryParams = {
   page?: number | undefined;
   searchQuery?: string | undefined;
+  filters?: Record<string, any>;
 };
 
 export type SearchSchemaValidationStatus = {

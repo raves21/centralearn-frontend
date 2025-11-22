@@ -6,25 +6,25 @@ import type { PaginatedQueryParams } from "@/utils/sharedTypes";
 export function useCourseClasses({
   page = 1,
   searchQuery = undefined,
+  filters,
 }: PaginatedQueryParams) {
   return useQuery({
-    queryKey: ["courseClasses", page, searchQuery],
+    queryKey: ["courseClasses", page, searchQuery, JSON.stringify(filters)],
     queryFn: async () => {
       const { data } = await api.get("/course-classes", {
-        params: { page, query: searchQuery },
+        params: { page, query: searchQuery, ...filters },
       });
       return data as CourseClassesPaginated;
     },
   });
 }
 
-export function useAllCourseClasses(filters: Record<string, any>) {
+export function useAllCourseClasses() {
   return useQuery({
-    queryKey: ["allCourseClasses", "courseClasses", JSON.stringify(filters)],
+    queryKey: ["allCourseClasses", "courseClasses"],
     queryFn: async () => {
       const { data } = await api.get("/course-classes", {
         params: {
-          ...filters,
           paginate: false,
         },
       });

@@ -21,6 +21,8 @@ export default function Pagination({
     page: currentPage,
   });
 
+  if (totalPages <= 1) return null;
+
   return (
     <nav className={className}>
       <ul className="flex flex-wrap items-center justify-end w-full gap-2 px-2">
