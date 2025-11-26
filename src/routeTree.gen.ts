@@ -29,8 +29,10 @@ import { Route as ProtectedAdminPanelDashboardIndexRouteImport } from './routes/
 import { Route as ProtectedAdminPanelCoursesIndexRouteImport } from './routes/_protected/admin-panel/courses/index'
 import { Route as ProtectedAdminPanelClassesIndexRouteImport } from './routes/_protected/admin-panel/classes/index'
 import { Route as ProtectedAdminPanelAdminsIndexRouteImport } from './routes/_protected/admin-panel/admins/index'
+import { Route as ProtectedLmsClassesClassIdRouteRouteImport } from './routes/_protected/lms/classes/$classId/route'
 import { Route as ProtectedAdminPanelStudentsStudentIdRouteRouteImport } from './routes/_protected/admin-panel/students/$studentId/route'
 import { Route as ProtectedAdminPanelInstructorsInstructorIdRouteRouteImport } from './routes/_protected/admin-panel/instructors/$instructorId/route'
+import { Route as ProtectedLmsClassesClassIdIndexRouteImport } from './routes/_protected/lms/classes/$classId/index'
 import { Route as ProtectedAdminPanelStudentsCreateIndexRouteImport } from './routes/_protected/admin-panel/students/create/index'
 import { Route as ProtectedAdminPanelStudentsStudentIdIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId/index'
 import { Route as ProtectedAdminPanelSemestersCreateIndexRouteImport } from './routes/_protected/admin-panel/semesters/create/index'
@@ -43,6 +45,8 @@ import { Route as ProtectedAdminPanelDepartmentsCreateIndexRouteImport } from '.
 import { Route as ProtectedAdminPanelCoursesCreateIndexRouteImport } from './routes/_protected/admin-panel/courses/create/index'
 import { Route as ProtectedAdminPanelClassesCreateIndexRouteImport } from './routes/_protected/admin-panel/classes/create/index'
 import { Route as ProtectedAdminPanelAdminsCreateIndexRouteImport } from './routes/_protected/admin-panel/admins/create/index'
+import { Route as ProtectedLmsClassesClassIdMembersIndexRouteImport } from './routes/_protected/lms/classes/$classId/members/index'
+import { Route as ProtectedLmsClassesClassIdAnnouncementsIndexRouteImport } from './routes/_protected/lms/classes/$classId/announcements/index'
 import { Route as ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId_/enroll-to-class/index'
 import { Route as ProtectedAdminPanelStudentsStudentIdEditIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId_/edit/index'
 import { Route as ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRouteImport } from './routes/_protected/admin-panel/students/$studentId/enrolled-classes/index'
@@ -167,6 +171,12 @@ const ProtectedAdminPanelAdminsIndexRoute =
     path: '/admins/',
     getParentRoute: () => ProtectedAdminPanelRouteRoute,
   } as any)
+const ProtectedLmsClassesClassIdRouteRoute =
+  ProtectedLmsClassesClassIdRouteRouteImport.update({
+    id: '/classes/$classId',
+    path: '/classes/$classId',
+    getParentRoute: () => ProtectedLmsRouteRoute,
+  } as any)
 const ProtectedAdminPanelStudentsStudentIdRouteRoute =
   ProtectedAdminPanelStudentsStudentIdRouteRouteImport.update({
     id: '/students/$studentId',
@@ -178,6 +188,12 @@ const ProtectedAdminPanelInstructorsInstructorIdRouteRoute =
     id: '/instructors/$instructorId',
     path: '/instructors/$instructorId',
     getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedLmsClassesClassIdIndexRoute =
+  ProtectedLmsClassesClassIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ProtectedLmsClassesClassIdRouteRoute,
   } as any)
 const ProtectedAdminPanelStudentsCreateIndexRoute =
   ProtectedAdminPanelStudentsCreateIndexRouteImport.update({
@@ -250,6 +266,18 @@ const ProtectedAdminPanelAdminsCreateIndexRoute =
     id: '/admins/create/',
     path: '/admins/create/',
     getParentRoute: () => ProtectedAdminPanelRouteRoute,
+  } as any)
+const ProtectedLmsClassesClassIdMembersIndexRoute =
+  ProtectedLmsClassesClassIdMembersIndexRouteImport.update({
+    id: '/members/',
+    path: '/members/',
+    getParentRoute: () => ProtectedLmsClassesClassIdRouteRoute,
+  } as any)
+const ProtectedLmsClassesClassIdAnnouncementsIndexRoute =
+  ProtectedLmsClassesClassIdAnnouncementsIndexRouteImport.update({
+    id: '/announcements/',
+    path: '/announcements/',
+    getParentRoute: () => ProtectedLmsClassesClassIdRouteRoute,
   } as any)
 const ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute =
   ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRouteImport.update({
@@ -337,6 +365,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof UnprotectedLoginIndexRoute
   '/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
   '/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
+  '/lms/classes/$classId': typeof ProtectedLmsClassesClassIdRouteRouteWithChildren
   '/admin-panel/admins': typeof ProtectedAdminPanelAdminsIndexRoute
   '/admin-panel/classes': typeof ProtectedAdminPanelClassesIndexRoute
   '/admin-panel/courses': typeof ProtectedAdminPanelCoursesIndexRoute
@@ -362,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/admin-panel/semesters/create': typeof ProtectedAdminPanelSemestersCreateIndexRoute
   '/admin-panel/students/$studentId/': typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
   '/admin-panel/students/create': typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  '/lms/classes/$classId/': typeof ProtectedLmsClassesClassIdIndexRoute
   '/admin-panel/admins/$adminId/edit': typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
   '/admin-panel/classes/$classId/edit': typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
   '/admin-panel/courses/$courseId/edit': typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
@@ -374,6 +404,8 @@ export interface FileRoutesByFullPath {
   '/admin-panel/students/$studentId/enrolled-classes': typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
   '/admin-panel/students/$studentId/edit': typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
   '/admin-panel/students/$studentId/enroll-to-class': typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
+  '/lms/classes/$classId/announcements': typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
+  '/lms/classes/$classId/members': typeof ProtectedLmsClassesClassIdMembersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -405,6 +437,7 @@ export interface FileRoutesByTo {
   '/admin-panel/semesters/create': typeof ProtectedAdminPanelSemestersCreateIndexRoute
   '/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
   '/admin-panel/students/create': typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  '/lms/classes/$classId': typeof ProtectedLmsClassesClassIdIndexRoute
   '/admin-panel/admins/$adminId/edit': typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
   '/admin-panel/classes/$classId/edit': typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
   '/admin-panel/courses/$courseId/edit': typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
@@ -417,6 +450,8 @@ export interface FileRoutesByTo {
   '/admin-panel/students/$studentId/enrolled-classes': typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
   '/admin-panel/students/$studentId/edit': typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
   '/admin-panel/students/$studentId/enroll-to-class': typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
+  '/lms/classes/$classId/announcements': typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
+  '/lms/classes/$classId/members': typeof ProtectedLmsClassesClassIdMembersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -429,6 +464,7 @@ export interface FileRoutesById {
   '/_unprotected/login/': typeof UnprotectedLoginIndexRoute
   '/_protected/admin-panel/instructors/$instructorId': typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteWithChildren
   '/_protected/admin-panel/students/$studentId': typeof ProtectedAdminPanelStudentsStudentIdRouteRouteWithChildren
+  '/_protected/lms/classes/$classId': typeof ProtectedLmsClassesClassIdRouteRouteWithChildren
   '/_protected/admin-panel/admins/': typeof ProtectedAdminPanelAdminsIndexRoute
   '/_protected/admin-panel/classes/': typeof ProtectedAdminPanelClassesIndexRoute
   '/_protected/admin-panel/courses/': typeof ProtectedAdminPanelCoursesIndexRoute
@@ -454,6 +490,7 @@ export interface FileRoutesById {
   '/_protected/admin-panel/semesters/create/': typeof ProtectedAdminPanelSemestersCreateIndexRoute
   '/_protected/admin-panel/students/$studentId/': typeof ProtectedAdminPanelStudentsStudentIdIndexRoute
   '/_protected/admin-panel/students/create/': typeof ProtectedAdminPanelStudentsCreateIndexRoute
+  '/_protected/lms/classes/$classId/': typeof ProtectedLmsClassesClassIdIndexRoute
   '/_protected/admin-panel/admins/$adminId/edit/': typeof ProtectedAdminPanelAdminsAdminIdEditIndexRoute
   '/_protected/admin-panel/classes/$classId/edit/': typeof ProtectedAdminPanelClassesClassIdEditIndexRoute
   '/_protected/admin-panel/courses/$courseId/edit/': typeof ProtectedAdminPanelCoursesCourseIdEditIndexRoute
@@ -466,6 +503,8 @@ export interface FileRoutesById {
   '/_protected/admin-panel/students/$studentId/enrolled-classes/': typeof ProtectedAdminPanelStudentsStudentIdEnrolledClassesIndexRoute
   '/_protected/admin-panel/students/$studentId_/edit/': typeof ProtectedAdminPanelStudentsStudentIdEditIndexRoute
   '/_protected/admin-panel/students/$studentId_/enroll-to-class/': typeof ProtectedAdminPanelStudentsStudentIdEnrollToClassIndexRoute
+  '/_protected/lms/classes/$classId/announcements/': typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
+  '/_protected/lms/classes/$classId/members/': typeof ProtectedLmsClassesClassIdMembersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -477,6 +516,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/admin-panel/instructors/$instructorId'
     | '/admin-panel/students/$studentId'
+    | '/lms/classes/$classId'
     | '/admin-panel/admins'
     | '/admin-panel/classes'
     | '/admin-panel/courses'
@@ -502,6 +542,7 @@ export interface FileRouteTypes {
     | '/admin-panel/semesters/create'
     | '/admin-panel/students/$studentId/'
     | '/admin-panel/students/create'
+    | '/lms/classes/$classId/'
     | '/admin-panel/admins/$adminId/edit'
     | '/admin-panel/classes/$classId/edit'
     | '/admin-panel/courses/$courseId/edit'
@@ -514,6 +555,8 @@ export interface FileRouteTypes {
     | '/admin-panel/students/$studentId/enrolled-classes'
     | '/admin-panel/students/$studentId/edit'
     | '/admin-panel/students/$studentId/enroll-to-class'
+    | '/lms/classes/$classId/announcements'
+    | '/lms/classes/$classId/members'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -545,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin-panel/semesters/create'
     | '/admin-panel/students/$studentId'
     | '/admin-panel/students/create'
+    | '/lms/classes/$classId'
     | '/admin-panel/admins/$adminId/edit'
     | '/admin-panel/classes/$classId/edit'
     | '/admin-panel/courses/$courseId/edit'
@@ -557,6 +601,8 @@ export interface FileRouteTypes {
     | '/admin-panel/students/$studentId/enrolled-classes'
     | '/admin-panel/students/$studentId/edit'
     | '/admin-panel/students/$studentId/enroll-to-class'
+    | '/lms/classes/$classId/announcements'
+    | '/lms/classes/$classId/members'
   id:
     | '__root__'
     | '/'
@@ -568,6 +614,7 @@ export interface FileRouteTypes {
     | '/_unprotected/login/'
     | '/_protected/admin-panel/instructors/$instructorId'
     | '/_protected/admin-panel/students/$studentId'
+    | '/_protected/lms/classes/$classId'
     | '/_protected/admin-panel/admins/'
     | '/_protected/admin-panel/classes/'
     | '/_protected/admin-panel/courses/'
@@ -593,6 +640,7 @@ export interface FileRouteTypes {
     | '/_protected/admin-panel/semesters/create/'
     | '/_protected/admin-panel/students/$studentId/'
     | '/_protected/admin-panel/students/create/'
+    | '/_protected/lms/classes/$classId/'
     | '/_protected/admin-panel/admins/$adminId/edit/'
     | '/_protected/admin-panel/classes/$classId/edit/'
     | '/_protected/admin-panel/courses/$courseId/edit/'
@@ -605,6 +653,8 @@ export interface FileRouteTypes {
     | '/_protected/admin-panel/students/$studentId/enrolled-classes/'
     | '/_protected/admin-panel/students/$studentId_/edit/'
     | '/_protected/admin-panel/students/$studentId_/enroll-to-class/'
+    | '/_protected/lms/classes/$classId/announcements/'
+    | '/_protected/lms/classes/$classId/members/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -755,6 +805,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedAdminPanelAdminsIndexRouteImport
       parentRoute: typeof ProtectedAdminPanelRouteRoute
     }
+    '/_protected/lms/classes/$classId': {
+      id: '/_protected/lms/classes/$classId'
+      path: '/classes/$classId'
+      fullPath: '/lms/classes/$classId'
+      preLoaderRoute: typeof ProtectedLmsClassesClassIdRouteRouteImport
+      parentRoute: typeof ProtectedLmsRouteRoute
+    }
     '/_protected/admin-panel/students/$studentId': {
       id: '/_protected/admin-panel/students/$studentId'
       path: '/students/$studentId'
@@ -768,6 +825,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin-panel/instructors/$instructorId'
       preLoaderRoute: typeof ProtectedAdminPanelInstructorsInstructorIdRouteRouteImport
       parentRoute: typeof ProtectedAdminPanelRouteRoute
+    }
+    '/_protected/lms/classes/$classId/': {
+      id: '/_protected/lms/classes/$classId/'
+      path: '/'
+      fullPath: '/lms/classes/$classId/'
+      preLoaderRoute: typeof ProtectedLmsClassesClassIdIndexRouteImport
+      parentRoute: typeof ProtectedLmsClassesClassIdRouteRoute
     }
     '/_protected/admin-panel/students/create/': {
       id: '/_protected/admin-panel/students/create/'
@@ -852,6 +916,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin-panel/admins/create'
       preLoaderRoute: typeof ProtectedAdminPanelAdminsCreateIndexRouteImport
       parentRoute: typeof ProtectedAdminPanelRouteRoute
+    }
+    '/_protected/lms/classes/$classId/members/': {
+      id: '/_protected/lms/classes/$classId/members/'
+      path: '/members'
+      fullPath: '/lms/classes/$classId/members'
+      preLoaderRoute: typeof ProtectedLmsClassesClassIdMembersIndexRouteImport
+      parentRoute: typeof ProtectedLmsClassesClassIdRouteRoute
+    }
+    '/_protected/lms/classes/$classId/announcements/': {
+      id: '/_protected/lms/classes/$classId/announcements/'
+      path: '/announcements'
+      fullPath: '/lms/classes/$classId/announcements'
+      preLoaderRoute: typeof ProtectedLmsClassesClassIdAnnouncementsIndexRouteImport
+      parentRoute: typeof ProtectedLmsClassesClassIdRouteRoute
     }
     '/_protected/admin-panel/students/$studentId_/enroll-to-class/': {
       id: '/_protected/admin-panel/students/$studentId_/enroll-to-class/'
@@ -1081,8 +1159,29 @@ const ProtectedAdminPanelRouteRouteWithChildren =
     ProtectedAdminPanelRouteRouteChildren,
   )
 
+interface ProtectedLmsClassesClassIdRouteRouteChildren {
+  ProtectedLmsClassesClassIdIndexRoute: typeof ProtectedLmsClassesClassIdIndexRoute
+  ProtectedLmsClassesClassIdAnnouncementsIndexRoute: typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
+  ProtectedLmsClassesClassIdMembersIndexRoute: typeof ProtectedLmsClassesClassIdMembersIndexRoute
+}
+
+const ProtectedLmsClassesClassIdRouteRouteChildren: ProtectedLmsClassesClassIdRouteRouteChildren =
+  {
+    ProtectedLmsClassesClassIdIndexRoute: ProtectedLmsClassesClassIdIndexRoute,
+    ProtectedLmsClassesClassIdAnnouncementsIndexRoute:
+      ProtectedLmsClassesClassIdAnnouncementsIndexRoute,
+    ProtectedLmsClassesClassIdMembersIndexRoute:
+      ProtectedLmsClassesClassIdMembersIndexRoute,
+  }
+
+const ProtectedLmsClassesClassIdRouteRouteWithChildren =
+  ProtectedLmsClassesClassIdRouteRoute._addFileChildren(
+    ProtectedLmsClassesClassIdRouteRouteChildren,
+  )
+
 interface ProtectedLmsRouteRouteChildren {
   ProtectedLmsIndexRoute: typeof ProtectedLmsIndexRoute
+  ProtectedLmsClassesClassIdRouteRoute: typeof ProtectedLmsClassesClassIdRouteRouteWithChildren
   ProtectedLmsClassesIndexRoute: typeof ProtectedLmsClassesIndexRoute
   ProtectedLmsDashboardIndexRoute: typeof ProtectedLmsDashboardIndexRoute
   ProtectedLmsGradesIndexRoute: typeof ProtectedLmsGradesIndexRoute
@@ -1090,6 +1189,8 @@ interface ProtectedLmsRouteRouteChildren {
 
 const ProtectedLmsRouteRouteChildren: ProtectedLmsRouteRouteChildren = {
   ProtectedLmsIndexRoute: ProtectedLmsIndexRoute,
+  ProtectedLmsClassesClassIdRouteRoute:
+    ProtectedLmsClassesClassIdRouteRouteWithChildren,
   ProtectedLmsClassesIndexRoute: ProtectedLmsClassesIndexRoute,
   ProtectedLmsDashboardIndexRoute: ProtectedLmsDashboardIndexRoute,
   ProtectedLmsGradesIndexRoute: ProtectedLmsGradesIndexRoute,

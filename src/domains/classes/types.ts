@@ -9,10 +9,9 @@ export type CourseClassesPaginated = PaginationProps & {
 
 export type CourseClass = {
   id: string;
-  name: string;
   course: Course;
   semester: Semester;
   section: Section;
   status: "open" | "close";
-  imageUrl: string | null;
+  imageUrl: string;
 };

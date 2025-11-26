@@ -3,11 +3,15 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   courseClass: CourseClass;
+  onClick: () => void;
 };
 
-export default function CourseClassCard({ courseClass }: Props) {
+export default function CourseClassCard({ courseClass, onClick }: Props) {
   return (
-    <button className="hover:border hover:border-mainaccent transition-all text-start bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm flex flex-col">
+    <button
+      onClick={onClick}
+      className="hover:border hover:border-mainaccent transition-all text-start bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm flex flex-col"
+    >
       <div className="h-40 w-full">
         {courseClass.imageUrl ? (
           <img src={courseClass.imageUrl} className="size-full object-cover" />

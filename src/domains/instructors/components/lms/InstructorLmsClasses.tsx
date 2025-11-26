@@ -16,30 +16,36 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { useDebounceInput } from "@/utils/hooks/useDebounceInput";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
-import { useState } from "react";
 import {
   useInstructorAssignedClasses,
   useInstructorAssignedSemesters,
 } from "../../api/queries";
+import { useLmsClassesPageState } from "@/utils/hooks/useLmsClassesPageState";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
   instructorId: string;
 };
 
 export default function InstructorLmsClasses({ instructorId }: Props) {
-  const [searchQuery, setSearchQUery] = useState("");
-  const [semesterFilter, setSemesterFilter] = useState("");
-  const [isSemesterFilterPopoverOpen, setIsSemesterFilterPopoverOpen] =
-    useState(false);
-  const [statusFilter, setStatusFilter] = useState<"open" | "close" | null>(
-    null
-  );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isStatusFilterPopoverOpen, setIsStatusFilterPopoverOpen] =
-    useState(false);
-  const debouncedInput = useDebounceInput({ value: searchQuery });
+  const {
+    currentPage,
+    debouncedInput,
+    isSemesterFilterPopoverOpen,
+    isStatusFilterPopoverOpen,
+    searchQuery,
+    semesterFilter,
+    statusFilter,
+    setCurrentPage,
+    setIsSemesterFilterPopoverOpen,
+    setIsStatusFilterPopoverOpen,
+    setSearchQUery,
+    setSemesterFilter,
+    setStatusFilter,
+  } = useLmsClassesPageState();
+
+  const navigate = useNavigate();
 
   const { data: assignedClasses, status: assignedClassesStatus } =
     useInstructorAssignedClasses({
@@ -229,7 +235,16 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
         {assignedClasses.data.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {assignedClasses.data.map((courseClass) => (
-              <CourseClassCard courseClass={courseClass} />
+              <CourseClassCard
+                key={courseClass.id}
+                onClick={() =>
+                  navigate({
+                    to: "/lms/classes/$classId",
+                    params: { classId: courseClass.id },
+                  })
+                }
+                courseClass={courseClass}
+              />
             ))}
           </div>
         ) : (
