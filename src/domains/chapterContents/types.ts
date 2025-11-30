@@ -1,3 +1,5 @@
+import type { Chapter } from "../chapters/types";
+
 export enum ContentType {
   Lecture = "App\\Models\\Lecture",
   Assessment = "App\\Models\\Assessment",
@@ -10,7 +12,7 @@ export type ChapterContent = {
   isOpen: boolean;
   opensAt: Date | null;
   closesAt: Date | null;
-  chapterId: string;
+  chapter: Chapter
   isPublished: true;
   publishesAt: null;
   order: number;

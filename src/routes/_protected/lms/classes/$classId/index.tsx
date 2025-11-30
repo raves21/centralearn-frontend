@@ -1,5 +1,5 @@
 import { useCourseClassChapters } from "@/domains/chapters/api/queries";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, ChevronDown, Loader, NotebookPen } from "lucide-react";
 import {
   Accordion,
@@ -52,7 +52,12 @@ function RouteComponent() {
               <AccordionContent className="flex flex-col gap-2 w-full relative pl-16 pb-0">
                 <div className="h-full absolute w-[6px] bg-mainaccent top-0 left-2 rounded-full" />
                 {chapter.contents.map((content) => (
-                  <button
+                  <Link
+                    to="/lms/classes/$classId/contents/$chapterContentId"
+                    params={{
+                      classId,
+                      chapterContentId: content.id
+                    }}
                     key={content.id}
                     className="flex items-center w-full gap-4 p-5 bg-white rounded-lg hover:border-mainaccent hover:border-[2px] transition-all"
                   >
@@ -63,7 +68,7 @@ function RouteComponent() {
                       <NotebookPen className="size-5" />
                     )}
                     <p className="text-[16px] font-medium">{content.name}</p>
-                  </button>
+                  </Link>
                 ))}
               </AccordionContent>
             </AccordionItem>
