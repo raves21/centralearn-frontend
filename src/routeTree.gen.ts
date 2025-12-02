@@ -60,6 +60,7 @@ import { Route as ProtectedAdminPanelCoursesCourseIdEditIndexRouteImport } from 
 import { Route as ProtectedAdminPanelClassesClassIdEditIndexRouteImport } from './routes/_protected/admin-panel/classes/$classId/edit/index'
 import { Route as ProtectedAdminPanelAdminsAdminIdEditIndexRouteImport } from './routes/_protected/admin-panel/admins/$adminId/edit/index'
 import { Route as ProtectedLmsClassesClassIdContentsChapterContentIdIndexRouteImport } from './routes/_protected/lms/classes/$classId_/contents/$chapterContentId/index'
+import { Route as ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRouteImport } from './routes/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/index'
 
 const UnprotectedRouteRoute = UnprotectedRouteRouteImport.update({
   id: '/_unprotected',
@@ -363,6 +364,14 @@ const ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute =
     path: '/classes/$classId/contents/$chapterContentId/',
     getParentRoute: () => ProtectedLmsRouteRoute,
   } as any)
+const ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute =
+  ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRouteImport.update(
+    {
+      id: '/classes/$classId_/contents/$chapterContentId/edit/',
+      path: '/classes/$classId/contents/$chapterContentId/edit/',
+      getParentRoute: () => ProtectedLmsRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -414,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/lms/classes/$classId/announcements': typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
   '/lms/classes/$classId/members': typeof ProtectedLmsClassesClassIdMembersIndexRoute
   '/lms/classes/$classId/contents/$chapterContentId': typeof ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute
+  '/lms/classes/$classId/contents/$chapterContentId/edit': typeof ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -461,6 +471,7 @@ export interface FileRoutesByTo {
   '/lms/classes/$classId/announcements': typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
   '/lms/classes/$classId/members': typeof ProtectedLmsClassesClassIdMembersIndexRoute
   '/lms/classes/$classId/contents/$chapterContentId': typeof ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute
+  '/lms/classes/$classId/contents/$chapterContentId/edit': typeof ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -515,6 +526,7 @@ export interface FileRoutesById {
   '/_protected/lms/classes/$classId/announcements/': typeof ProtectedLmsClassesClassIdAnnouncementsIndexRoute
   '/_protected/lms/classes/$classId/members/': typeof ProtectedLmsClassesClassIdMembersIndexRoute
   '/_protected/lms/classes/$classId_/contents/$chapterContentId/': typeof ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute
+  '/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/': typeof ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -568,6 +580,7 @@ export interface FileRouteTypes {
     | '/lms/classes/$classId/announcements'
     | '/lms/classes/$classId/members'
     | '/lms/classes/$classId/contents/$chapterContentId'
+    | '/lms/classes/$classId/contents/$chapterContentId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -615,6 +628,7 @@ export interface FileRouteTypes {
     | '/lms/classes/$classId/announcements'
     | '/lms/classes/$classId/members'
     | '/lms/classes/$classId/contents/$chapterContentId'
+    | '/lms/classes/$classId/contents/$chapterContentId/edit'
   id:
     | '__root__'
     | '/'
@@ -668,6 +682,7 @@ export interface FileRouteTypes {
     | '/_protected/lms/classes/$classId/announcements/'
     | '/_protected/lms/classes/$classId/members/'
     | '/_protected/lms/classes/$classId_/contents/$chapterContentId/'
+    | '/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1035,6 +1050,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedLmsClassesClassIdContentsChapterContentIdIndexRouteImport
       parentRoute: typeof ProtectedLmsRouteRoute
     }
+    '/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/': {
+      id: '/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/'
+      path: '/classes/$classId/contents/$chapterContentId/edit'
+      fullPath: '/lms/classes/$classId/contents/$chapterContentId/edit'
+      preLoaderRoute: typeof ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRouteImport
+      parentRoute: typeof ProtectedLmsRouteRoute
+    }
   }
 }
 
@@ -1206,6 +1228,7 @@ interface ProtectedLmsRouteRouteChildren {
   ProtectedLmsDashboardIndexRoute: typeof ProtectedLmsDashboardIndexRoute
   ProtectedLmsGradesIndexRoute: typeof ProtectedLmsGradesIndexRoute
   ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute: typeof ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute
+  ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute: typeof ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute
 }
 
 const ProtectedLmsRouteRouteChildren: ProtectedLmsRouteRouteChildren = {
@@ -1217,6 +1240,8 @@ const ProtectedLmsRouteRouteChildren: ProtectedLmsRouteRouteChildren = {
   ProtectedLmsGradesIndexRoute: ProtectedLmsGradesIndexRoute,
   ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute:
     ProtectedLmsClassesClassIdContentsChapterContentIdIndexRoute,
+  ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute:
+    ProtectedLmsClassesClassIdContentsChapterContentIdEditIndexRoute,
 }
 
 const ProtectedLmsRouteRouteWithChildren =
