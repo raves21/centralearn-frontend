@@ -9,11 +9,24 @@ import {
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import { ContentType } from "@/domains/chapterContents/types";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Loader, BookOpen, NotebookPen, X, Plus } from "lucide-react";
+import {
+  Loader,
+  BookOpen,
+  NotebookPen,
+  X,
+  Plus,
+  GripVertical,
+  Trash,
+  Edit,
+} from "lucide-react";
 import { useManageLectureContentStore } from "@/utils/stores/useManageLectureContentStore";
-import TiptapEditor from "@/components/shared/LMS/tiptap/TiptapEditor";
+import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 import { useShallow } from "zustand/react/shallow";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import AddLectureContentBlockDialog from "@/domains/chapterContents/components/AddLectureContentBlockDialog";
+import { ReactSortable } from "react-sortablejs";
+import FileLectureContentBlock from "@/domains/chapterContents/components/FileLectureContentBlock";
+import { useGeneralStore } from "@/utils/stores/useGeneralStore";
 
 export const Route = createFileRoute(
   "/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/"
@@ -30,11 +43,31 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
-  const [blocks, addBlock, updateBlock] = useManageLectureContentStore(
-    useShallow((state) => [state.blocks, state.addBlock, state.updateBlock])
+  const [blocks, addBlock, updateBlock, setBlocks, removeBlock] =
+    useManageLectureContentStore(
+      useShallow((state) => [
+        state.blocks,
+        state.addBlock,
+        state.updateBlock,
+        state.setBlocks,
+        state.removeBlock,
+      ])
+    );
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const setTopPanelPointerEventsNone = useGeneralStore(
+    (state) => state.setTopPanelPointerEventsNone
   );
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (isDragging) {
+      setTopPanelPointerEventsNone(true);
+    } else {
+      setTopPanelPointerEventsNone(false);
+    }
+  }, [isDragging]);
 
   if ([chapterContentInfoStatus].includes("error")) {
     return (
@@ -52,7 +85,7 @@ function RouteComponent() {
 
   if (chapterContentInfo) {
     return (
-      <div className="flex flex-col gap-12 w-full">
+      <div className="flex flex-col gap-12 w-full pb-12">
         <div className="flex items-center justify-between w-full">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-8">
@@ -101,98 +134,75 @@ function RouteComponent() {
             <p>Exit edit mode</p>
           </button>
         </div>
-        <div className="flex flex-col gap-4">
+        <ReactSortable
+          list={blocks}
+          setList={setBlocks}
+          handle=".drag-handle"
+          animation={150}
+          scroll={true}
+          scrollSensitivity={100}
+          scrollSpeed={10}
+          className="flex flex-col gap-4"
+          onStart={() => setIsDragging(true)}
+          onEnd={() => setIsDragging(false)}
+        >
           {blocks.map((block) => (
-            <div key={block.id}>
-              {block.type === "text" && (
-                <TiptapEditor
-                  content={block.content}
-                  onChange={(content) => updateBlock(block.id, content)}
-                />
-              )}
-              {block.type === "file" &&
-                (() => {
-                  const fileType = block.content.type;
-                  const fileName = block.content.name.toLowerCase();
-
-                  // Check if it's an image
-                  if (
-                    fileType.startsWith("image/") ||
-                    fileName.match(/\.(jpg|jpeg|png)$/)
-                  ) {
-                    const imageUrl = URL.createObjectURL(block.content);
-                    return (
-                      <div className="aspect-[16/9] w-[800px] border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
-                        <img
-                          src={imageUrl}
-                          alt={block.content.name}
-                          className="w-full h-auto object-contain"
-                        />
-                      </div>
-                    );
-                  }
-
-                  // Check if it's a video
-                  if (
-                    fileType.startsWith("video/") ||
-                    fileName.match(/\.(mp4|mkv)$/)
-                  ) {
-                    const videoUrl = URL.createObjectURL(block.content);
-                    return (
-                      <div className="aspect-[16/9] w-[800px] border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
-                        <video src={videoUrl} controls className="size-full">
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
-                    );
-                  }
-
-                  // Default: show filename for other file types
-                  return (
-                    <div className="w-full h-[100px] border-2 border-gray-300 rounded-lg grid place-items-center bg-gray-50">
-                      <p className="text-lg font-medium text-gray-700">
-                        {block.content.name}
-                      </p>
-                    </div>
-                  );
-                })()}
+            <div key={block.id} className="flex items-start gap-3">
+              <div className="flex flex-col gap-6">
+                <button className="drag-handle relative cursor-grab rounded-full active:cursor-grabbing group p-3">
+                  <span className="absolute inset-0 rounded-full bg-gray-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
+                  <GripVertical className="size-5 relative z-10 text-gray-500 group-hover:text-gray-500 transition-colors duration-200" />
+                </button>
+                {block.type === "file" && (
+                  <button
+                    // onClick={() => removeBlock(block.id)}
+                    className="rounded-full relative group p-3"
+                  >
+                    <span className="absolute inset-0 rounded-full bg-blue-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
+                    <Edit className="size-5 relative z-10 text-gray-500 group-hover:text-blue-500 transition-colors duration-200" />
+                  </button>
+                )}
+                <button
+                  onClick={() => removeBlock(block.id)}
+                  className="rounded-full relative group p-3"
+                >
+                  <span className="absolute inset-0 rounded-full bg-red-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
+                  <Trash className="size-5 relative z-10 text-gray-500 group-hover:text-red-500 transition-colors duration-200" />
+                </button>
+              </div>
+              <div className="flex-1">
+                {block.type === "text" && (
+                  <TiptapEditor
+                    content={block.content}
+                    onChange={(content) => updateBlock(block.id, content)}
+                  />
+                )}
+                {block.type === "file" && (
+                  <FileLectureContentBlock block={block} />
+                )}
+              </div>
             </div>
           ))}
-        </div>
+        </ReactSortable>
         <button
           onClick={() =>
             toggleOpenDialog(
-              <div className="w-[600px] h-[300px] flex rounded-lg overflow-hidden p-2 bg-gray-bg gap-3">
-                <button
-                  onClick={() => {
-                    addBlock({ type: "text" });
+              <AddLectureContentBlockDialog
+                onClickText={() => {
+                  addBlock({ type: "text" });
+                  toggleOpenDialog(null);
+                }}
+                onSelectFile={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    addBlock({ type: "file", file });
                     toggleOpenDialog(null);
-                  }}
-                  className="flex-1 bg-white hover:bg-mainaccent/80 hover:text-white transition-colors shadow-sm rounded-lg grid place-items-center text-2xl font-medium"
-                >
-                  Text
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      addBlock({ type: "file", file });
-                      toggleOpenDialog(null);
-                      // Reset the input so the same file can be selected again
-                      e.target.value = "";
-                    }
-                  }}
-                />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex-1 bg-white hover:bg-mainaccent/80 hover:text-white transition-colors shadow-sm rounded-lg grid place-items-center text-2xl font-medium"
-                >
-                  File
-                </button>
-              </div>
+                    // Reset the input so the same file can be selected again
+                    e.target.value = "";
+                  }
+                }}
+                fileInputRef={fileInputRef}
+              />
             )
           }
           className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full h-[100px]"

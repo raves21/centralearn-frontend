@@ -1,5 +1,5 @@
 import Pagination from "@/components/shared/listRecords/pagination/Pagination";
-import CourseClassCard from "@/components/shared/LMS/CourseClassCard";
+import CourseClassCard from "@/domains/classes/components/CourseClassCard";
 import { Button } from "@/components/ui/button";
 import {
   Command,

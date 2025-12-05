@@ -13,13 +13,15 @@ const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
     extensions: [StarterKit, TextStyleKit],
     content: content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      onChange(html);
     },
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[150px] p-4 border rounded-md",
+          "tiptap-editor focus:outline-none min-h-[150px] p-4 border rounded-md",
       },
+      handleDrop: () => true, // Disable drag and drop into the editor
     },
   });
 

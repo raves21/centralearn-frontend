@@ -3,6 +3,8 @@ import { useCurrentUser } from "../../domains/auth/api/queries";
 import { Navigate, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import Logo from "../shared/Logo";
 import RoleBasedComponent from "../shared/RoleBasedComponent";
+import { cn } from "@/lib/utils";
+import { useGeneralStore } from "@/utils/stores/useGeneralStore";
 
 type Props = {
   type: "admin-panel" | "lms";
@@ -14,10 +16,21 @@ export default function TopPanel({ type }: Props) {
   const matchRoute = useMatchRoute();
   const isAdminPanelRoute = matchRoute({ to: "/admin-panel", fuzzy: true });
 
+  const topPanelPointerEventsNone = useGeneralStore(
+    (state) => state.topPanelPointerEventsNone
+  );
+
   if (!currentUser) return <Navigate to="/login" replace />;
 
   return (
-    <div className="px-3 h-[9dvh] fixed top-0 z-50 left-0 max-h-[90px] bg-main-bg w-full flex items-center justify-between">
+    <div
+      className={cn(
+        "px-3 h-[9dvh] fixed top-0 z-50 left-0 max-h-[90px] bg-main-bg w-full flex items-center justify-between",
+        {
+          "pointer-events-none": topPanelPointerEventsNone,
+        }
+      )}
+    >
       <Logo type={type} />
       <div className="flex items-center h-full gap-6">
         <RoleBasedComponent

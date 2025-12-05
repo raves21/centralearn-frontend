@@ -32,7 +32,6 @@ type Actions = {
   updateBlock: (id: string, content: string | File) => void;
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
-
 }
 
 type ContentStore = Values & Actions
@@ -55,7 +54,6 @@ export const useManageLectureContentStore = create<ContentStore>((set) => ({
           content: '<p></p>',
         };
       } else {
-        // For file blocks, use the provided file or create a placeholder
         newBlock = {
           id,
           type: 'file',
@@ -72,14 +70,11 @@ export const useManageLectureContentStore = create<ContentStore>((set) => ({
       blocks: state.blocks.map((block) => {
         if (block.id !== id) return block;
         
-        // Type-safe update: only update if content type matches block type
         if (block.type === 'file' && content instanceof File) {
           return { ...block, content };
         } else if (block.type === 'text' && typeof content === 'string') {
           return { ...block, content };
         }
-        
-        // If types don't match, return block unchanged
         return block;
       }),
     })),
