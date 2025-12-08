@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import { ContentType } from "@/domains/chapterContents/types";
+import LectureMaterialsList from "@/domains/lectureMaterial/components/LectureMaterialsList";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Edit, Loader, NotebookPen } from "lucide-react";
 
@@ -89,6 +90,9 @@ function RouteComponent() {
             <p>Enter edit mode</p>
           </button>
         </div>
+        {chapterContentInfo.contentType === ContentType.Lecture && (
+          <LectureMaterialsList lectureId={chapterContentInfo.contentId} />
+        )}
       </div>
     );
   }

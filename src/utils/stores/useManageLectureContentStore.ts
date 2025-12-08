@@ -29,6 +29,7 @@ type Values = {
 
 type Actions = {
   addBlock: (args: AddFileBlockArgs | AddTextBlockArgs) => void;
+  addBlockAfter: (blockId: string, args: AddFileBlockArgs | AddTextBlockArgs) => void;
   updateBlock: (id: string, content: string | File) => void;
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
@@ -63,6 +64,41 @@ export const useManageLectureContentStore = create<ContentStore>((set) => ({
       
       return {
         blocks: [...state.blocks, newBlock],
+      };
+    }),
+  addBlockAfter: (blockId, args) =>
+    set((state) => {
+      const id = crypto.randomUUID();
+      let newBlock: ContentBlock;
+      
+      if (args.type === 'text') {
+        newBlock = {
+          id,
+          type: 'text',
+          content: '<p></p>',
+        };
+      } else {
+        newBlock = {
+          id,
+          type: 'file',
+          content: args.file,
+        };
+      }
+      
+      const blockIndex = state.blocks.findIndex((block) => block.id === blockId);
+      
+      if (blockIndex === -1) {
+        // If block not found, add to the end
+        return {
+          blocks: [...state.blocks, newBlock],
+        };
+      }
+      
+      const newBlocks = [...state.blocks];
+      newBlocks.splice(blockIndex + 1, 0, newBlock);
+      
+      return {
+        blocks: newBlocks,
       };
     }),
   updateBlock: (id, content) =>

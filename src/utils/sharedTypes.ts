@@ -74,3 +74,20 @@ export type TInfoSection = {
   header: string;
   details: InfoSectionDetail[];
 };
+
+
+export type TextAttachment = {
+  id: string
+  content: string
+}
+
+export type FileAttachment = {
+  id: string
+  path: string
+  url: string
+  mime: string
+  extension: string
+  type: "image" | "video" | "document"
+  name: string
+  size: number
+}

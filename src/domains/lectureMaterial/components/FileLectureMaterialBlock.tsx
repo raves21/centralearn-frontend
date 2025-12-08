@@ -14,11 +14,11 @@ export default function FileLectureContentBlock({ block }: Props) {
   if (fileType.startsWith("image/") || fileName.match(/\.(jpg|jpeg|png)$/)) {
     const imageUrl = URL.createObjectURL(block.content);
     return (
-      <div className="max-w-[800px] border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+      <div className="max-w-fit border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
         <img
           src={imageUrl}
           alt={block.content.name}
-          className="w-full h-auto object-contain"
+          className="object-contain max-w-full max-h-[600px]"
         />
       </div>
     );
