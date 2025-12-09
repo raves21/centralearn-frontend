@@ -1,5 +1,5 @@
 import { Loader } from "lucide-react";
-import { useLectureAllMaterials } from "../api/queries";
+import { useAllLectureMaterials } from "../api/queries";
 import TextLectureMaterialBlock from "./TextLectureMaterialBlock";
 import FileLectureMaterialBlockDisplay from "./FileLectureMaterialBlockDisplay";
 import type { FileAttachment, TextAttachment } from "@/utils/sharedTypes";
@@ -10,7 +10,7 @@ type Props = {
 
 export default function LectureMaterialsList({ lectureId }: Props) {
   const { data: lectureMaterials, status: lectureMaterialsStatus } =
-    useLectureAllMaterials(lectureId);
+    useAllLectureMaterials({ lectureId });
 
   if ([lectureMaterialsStatus].includes("error")) {
     return (

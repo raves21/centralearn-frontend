@@ -19,14 +19,14 @@ import {
 import { ReactSortable } from "react-sortablejs";
 import { ContentType, type ChapterContent } from "../../chapterContents/types";
 import AddLectureContentBlockDialog from "./AddLectureMaterialBlockDialog";
-import FileLectureContentBlock from "../../chapterContents/components/lecture/FileLectureContentBlock";
+import FileLectureMaterialBlock from "./FileLectureMaterialBlock";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { useManageLectureContentStore } from "@/utils/stores/useManageLectureContentStore";
 import { useShallow } from "zustand/react/shallow";
 import { useGeneralStore } from "@/utils/stores/useGeneralStore";
 import { useRef, useState, useEffect } from "react";
-import { useCreateLectureContent } from "../../chapterContents/api/mutations";
+import { useAllLectureMaterials } from "../api/queries";
 
 type Props = {
   chapterContentInfo: ChapterContent;
@@ -52,12 +52,9 @@ export default function EditLectureMaterials({
       ])
     );
 
-  const {
-    mutateAsync: createLectureContent,
-    status: createLectureContentStatus,
-  } = useCreateLectureContent();
-
-  async function onSaveChanges() {}
+  const { data: lectureMaterials } = useAllLectureMaterials({
+    lectureId: chapterContentInfo.contentId,
+  });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -73,6 +70,29 @@ export default function EditLectureMaterials({
       setTopPanelPointerEventsNone(false);
     }
   }, [isDragging]);
+
+  // Hydrate existing lecture materials into the store
+  useEffect(() => {
+    if (lectureMaterials) {
+      const hydratedBlocks = lectureMaterials.map((material) => {
+        if (material.materialType === "App\\Models\\TextAttachment") {
+          return {
+            id: material.id,
+            type: "text" as const,
+            content: (material.material as { content: string }).content,
+          };
+        } else {
+          return {
+            id: material.id,
+            type: "file" as const,
+            content: (material.material as { url: string }).url,
+          };
+        }
+      });
+
+      setBlocks(hydratedBlocks);
+    }
+  }, [lectureMaterials, setBlocks]);
 
   return (
     <div className="flex flex-col gap-12 w-full pb-12">
@@ -225,7 +245,7 @@ export default function EditLectureMaterials({
                   />
                 )}
                 {block.type === "file" && (
-                  <FileLectureContentBlock block={block} />
+                  <FileLectureMaterialBlock block={block} />
                 )}
               </div>
             </div>
