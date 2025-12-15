@@ -27,6 +27,8 @@ import { useShallow } from "zustand/react/shallow";
 import { useGeneralStore } from "@/utils/stores/useGeneralStore";
 import { useRef, useState, useEffect } from "react";
 import { useAllLectureMaterials } from "../api/queries";
+import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
+import { useProcessBulkLectureMaterials } from "../api/mutations";
 
 type Props = {
   chapterContentInfo: ChapterContent;
@@ -40,17 +42,32 @@ export default function EditLectureMaterials({
   const navigate = useNavigate();
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
-  const [blocks, addBlock, addBlockAfter, updateBlock, setBlocks, removeBlock] =
-    useManageLectureContentStore(
-      useShallow((state) => [
-        state.blocks,
-        state.addBlock,
-        state.addBlockAfter,
-        state.updateBlock,
-        state.setBlocks,
-        state.removeBlock,
-      ])
-    );
+  const [
+    blocks,
+    addBlock,
+    addBlockAfter,
+    updateBlock,
+    setBlocks,
+    removeBlock,
+    updateBlocks,
+    computeChanges,
+  ] = useManageLectureContentStore(
+    useShallow((state) => [
+      state.blocks,
+      state.addBlock,
+      state.addBlockAfter,
+      state.updateBlock,
+      state.setBlocks,
+      state.removeBlock,
+      state.updateBlocks,
+      state.computeChanges,
+    ])
+  );
+
+  const {
+    mutateAsync: processBulkLectureMaterials,
+    status: processBulkLectureMaterialsStatus,
+  } = useProcessBulkLectureMaterials();
 
   const { data: lectureMaterials } = useAllLectureMaterials({
     lectureId: chapterContentInfo.contentId,
@@ -62,6 +79,11 @@ export default function EditLectureMaterials({
   const setTopPanelPointerEventsNone = useGeneralStore(
     (state) => state.setTopPanelPointerEventsNone
   );
+
+  usePendingOverlay({
+    isPending: processBulkLectureMaterialsStatus === "pending",
+    pendingLabel: "Saving",
+  });
 
   useEffect(() => {
     if (isDragging) {
@@ -77,15 +99,19 @@ export default function EditLectureMaterials({
       const hydratedBlocks = lectureMaterials.map((material) => {
         if (material.materialType === "App\\Models\\TextAttachment") {
           return {
-            id: material.id,
+            id: crypto.randomUUID(), // Client-side UUID
+            dbId: material.id, // Database ID
             type: "text" as const,
             content: (material.material as { content: string }).content,
+            isModified: false,
           };
         } else {
           return {
-            id: material.id,
+            id: crypto.randomUUID(), // Client-side UUID
+            dbId: material.id, // Database ID
             type: "file" as const,
             content: (material.material as { url: string }).url,
+            isModified: false,
           };
         }
       });
@@ -145,7 +171,26 @@ export default function EditLectureMaterials({
             <p>Exit edit mode</p>
           </button>
           <button
-            onClick={() => {
+            onClick={async () => {
+              // Compute changes
+              const changes = computeChanges(chapterContentInfo.contentId);
+
+              // Log for debugging
+              console.log("Computed changes:", changes);
+
+              // Check if there are any changes
+              if (
+                (!changes.new || changes.new.length === 0) &&
+                (!changes.updated || changes.updated.length === 0) &&
+                (!changes.deleted || changes.deleted.length === 0)
+              ) {
+                alert(
+                  "No changes detected. Please make some changes before saving."
+                );
+                toggleOpenDialog(null);
+                return;
+              }
+
               toggleOpenDialog(
                 <div className="p-8 flex flex-col justify-center items-center gap-12 bg-white rounded-lg">
                   <p className="text-xl font-semibold">
@@ -159,7 +204,34 @@ export default function EditLectureMaterials({
                       <X className="size-6 stroke-2" />
                       <p>No</p>
                     </button>
-                    <button className="px-5 py-4 font-medium text-lg rounded-lg bg-mainaccent text-white flex items-center gap-3">
+                    <button
+                      onClick={async () => {
+                        try {
+                          const { buildBulkChangesFormData } = await import(
+                            "../utils/buildBulkChangesFormData"
+                          );
+                          const formData = buildBulkChangesFormData(changes);
+
+                          await processBulkLectureMaterials(formData);
+
+                          toggleOpenDialog(null);
+
+                          // Navigate back to view mode
+                          navigate({
+                            to: "/lms/classes/$classId/contents/$chapterContentId",
+                            params: {
+                              chapterContentId: chapterContentInfo.id,
+                              classId,
+                            },
+                          });
+                        } catch (error) {
+                          console.error("Error saving changes:", error);
+                          alert("Failed to save changes. Please try again.");
+                          toggleOpenDialog(null);
+                        }
+                      }}
+                      className="px-5 py-4 font-medium text-lg rounded-lg bg-mainaccent text-white flex items-center gap-3"
+                    >
                       <Check className="size-6 stroke-2" />
                       <p>Yes</p>
                     </button>
@@ -177,7 +249,7 @@ export default function EditLectureMaterials({
       <div className="flex flex-col gap-8">
         <ReactSortable
           list={blocks}
-          setList={setBlocks}
+          setList={updateBlocks}
           handle=".drag-handle"
           animation={150}
           scroll={true}
