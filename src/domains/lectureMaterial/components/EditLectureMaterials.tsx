@@ -29,6 +29,10 @@ import { useRef, useState, useEffect } from "react";
 import { useAllLectureMaterials } from "../api/queries";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useProcessBulkLectureMaterials } from "../api/mutations";
+import { buildBulkChangesFormData } from "../utils/buildBulkChangesFormData";
+import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
+import type { BulkChangesPayload } from "../types";
+import { toast } from "sonner";
 
 type Props = {
   chapterContentInfo: ChapterContent;
@@ -120,6 +124,25 @@ export default function EditLectureMaterials({
     }
   }, [lectureMaterials, setBlocks]);
 
+  async function onSaveChanges(changes: BulkChangesPayload) {
+    try {
+      const formData = buildBulkChangesFormData(changes);
+      await processBulkLectureMaterials(formData);
+      toggleOpenDialog(null);
+
+      // Navigate back to view mode
+      navigate({
+        to: "/lms/classes/$classId/contents/$chapterContentId",
+        params: {
+          chapterContentId: chapterContentInfo.id,
+          classId,
+        },
+      });
+    } catch (error) {
+      toast.error("Failed to save changes. Please try again later.");
+    }
+  }
+
   return (
     <div className="flex flex-col gap-12 w-full pb-12">
       <div className="flex items-center justify-between w-full">
@@ -175,69 +198,28 @@ export default function EditLectureMaterials({
               // Compute changes
               const changes = computeChanges(chapterContentInfo.contentId);
 
-              // Log for debugging
-              console.log("Computed changes:", changes);
-
-              // Check if there are any changes
+              // If no changes made
               if (
                 (!changes.new || changes.new.length === 0) &&
                 (!changes.updated || changes.updated.length === 0) &&
                 (!changes.deleted || changes.deleted.length === 0)
               ) {
-                alert(
-                  "No changes detected. Please make some changes before saving."
-                );
-                toggleOpenDialog(null);
+                navigate({
+                  to: "/lms/classes/$classId/contents/$chapterContentId",
+                  params: {
+                    chapterContentId: chapterContentInfo.id,
+                    classId,
+                  },
+                });
                 return;
+              } else {
+                toggleOpenDialog(
+                  <ConfirmationDialog
+                    onClickYes={() => onSaveChanges(changes)}
+                    confirmationMessage="Are you sure you want to save changes?"
+                  />
+                );
               }
-
-              toggleOpenDialog(
-                <div className="p-8 flex flex-col justify-center items-center gap-12 bg-white rounded-lg">
-                  <p className="text-xl font-semibold">
-                    Are you sure you want to save changes?
-                  </p>
-                  <div className="flex gap-6">
-                    <button
-                      onClick={() => toggleOpenDialog(null)}
-                      className="px-5 py-4 font-medium text-lg rounded-lg bg-red-500 text-white flex items-center gap-3"
-                    >
-                      <X className="size-6 stroke-2" />
-                      <p>No</p>
-                    </button>
-                    <button
-                      onClick={async () => {
-                        try {
-                          const { buildBulkChangesFormData } = await import(
-                            "../utils/buildBulkChangesFormData"
-                          );
-                          const formData = buildBulkChangesFormData(changes);
-
-                          await processBulkLectureMaterials(formData);
-
-                          toggleOpenDialog(null);
-
-                          // Navigate back to view mode
-                          navigate({
-                            to: "/lms/classes/$classId/contents/$chapterContentId",
-                            params: {
-                              chapterContentId: chapterContentInfo.id,
-                              classId,
-                            },
-                          });
-                        } catch (error) {
-                          console.error("Error saving changes:", error);
-                          alert("Failed to save changes. Please try again.");
-                          toggleOpenDialog(null);
-                        }
-                      }}
-                      className="px-5 py-4 font-medium text-lg rounded-lg bg-mainaccent text-white flex items-center gap-3"
-                    >
-                      <Check className="size-6 stroke-2" />
-                      <p>Yes</p>
-                    </button>
-                  </div>
-                </div>
-              );
             }}
             className="px-4 py-2 rounded-full bg-green-500 text-white flex items-center gap-3"
           >
@@ -255,12 +237,12 @@ export default function EditLectureMaterials({
           scroll={true}
           scrollSensitivity={100}
           scrollSpeed={10}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-12"
           onStart={() => setIsDragging(true)}
           onEnd={() => setIsDragging(false)}
         >
           {blocks.map((block) => (
-            <div key={block.id} className="flex items-start gap-3">
+            <div key={block.id} className="flex gap-3">
               <div className="flex flex-col gap-6">
                 <button className="drag-handle relative cursor-grab rounded-full active:cursor-grabbing group p-3">
                   <span className="absolute inset-0 rounded-full bg-gray-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
@@ -309,7 +291,7 @@ export default function EditLectureMaterials({
                   <Plus className="size-5 relative z-10 text-gray-500 group-hover:text-green-500 transition-colors duration-200" />
                 </button>
               </div>
-              <div className="flex-1">
+              <div className="flex-1 item-stretch">
                 {block.type === "text" && (
                   <TiptapEditor
                     content={block.content}

@@ -279,3 +279,10 @@
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
+
+/* Fix for empty paragraphs collapsing */
+.tiptap-editor p:empty::before,
+.prose p:empty::before {
+  content: "\00a0";
+  display: inline-block;
+}

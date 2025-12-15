@@ -43,8 +43,10 @@ export default function FileLectureContentBlock({ block }: Props) {
 
     // Default: show filename for other file types
     return (
-      <div className="w-[800px] h-[100px] border-2 border-gray-300 rounded-lg grid place-items-center bg-gray-50">
-        <p className="text-lg font-medium text-gray-700">{file.name}</p>
+      <div className="h-full flex items-center border-y border-gray-500/70">
+        <div className="w-[800px] h-[100px] border-2 border-gray-300 rounded-lg grid place-items-center bg-gray-50">
+          <p className="text-lg font-medium text-gray-700">{file.name}</p>
+        </div>
       </div>
     );
   }

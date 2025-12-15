@@ -1,6 +1,6 @@
 import { Loader } from "lucide-react";
 import { useAllLectureMaterials } from "../api/queries";
-import TextLectureMaterialBlock from "./TextLectureMaterialBlock";
+import TextLectureMaterialBlockDisplay from "./TextLectureMaterialBlockDisplay";
 import FileLectureMaterialBlockDisplay from "./FileLectureMaterialBlockDisplay";
 import type { FileAttachment, TextAttachment } from "@/utils/sharedTypes";
 
@@ -28,23 +28,23 @@ export default function LectureMaterialsList({ lectureId }: Props) {
 
   if (lectureMaterials) {
     return (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 pb-24">
         {lectureMaterials.map((lectureMaterial) => {
           const isTextMaterial =
             lectureMaterial.materialType === "App\\Models\\TextAttachment";
 
+          if (isTextMaterial)
+            return (
+              <TextLectureMaterialBlockDisplay
+                key={lectureMaterial.id}
+                material={lectureMaterial.material as TextAttachment}
+              />
+            );
           return (
-            <div key={lectureMaterial.id}>
-              {isTextMaterial ? (
-                <TextLectureMaterialBlock
-                  material={lectureMaterial.material as TextAttachment}
-                />
-              ) : (
-                <FileLectureMaterialBlockDisplay
-                  material={lectureMaterial.material as FileAttachment}
-                />
-              )}
-            </div>
+            <FileLectureMaterialBlockDisplay
+              key={lectureMaterial.id}
+              material={lectureMaterial.material as FileAttachment}
+            />
           );
         })}
       </div>

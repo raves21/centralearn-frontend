@@ -4,10 +4,10 @@ type Props = {
   material: TextAttachment;
 };
 
-export default function TextLectureMaterialBlock({ material }: Props) {
+export default function TextLectureMaterialBlockDisplay({ material }: Props) {
   return (
     <div
-      className="prose prose-lg max-w-none"
+      className="prose prose-lg max-w-none tiptap-editor"
       dangerouslySetInnerHTML={{ __html: material.content }}
     />
   );
