@@ -4,7 +4,7 @@ type Props = {
   fileInputRef: React.RefObject<HTMLInputElement | null>;
 };
 
-export default function AddLectureContentBlockDialog({
+export default function AddLectureMaterialBlockDialog({
   onClickText,
   onSelectFile,
   fileInputRef,

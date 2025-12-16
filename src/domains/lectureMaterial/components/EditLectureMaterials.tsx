@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { ContentType, type ChapterContent } from "../../chapterContents/types";
-import AddLectureContentBlockDialog from "./AddLectureMaterialBlockDialog";
+import AddLectureMaterialBlockDialog from "./AddLectureMaterialBlockDialog";
 import FileLectureMaterialBlock from "./FileLectureMaterialBlock";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
@@ -267,7 +267,7 @@ export default function EditLectureMaterials({
                 <button
                   onClick={() =>
                     toggleOpenDialog(
-                      <AddLectureContentBlockDialog
+                      <AddLectureMaterialBlockDialog
                         onClickText={() => {
                           addBlockAfter(block.id, { type: "text" });
                           toggleOpenDialog(null);
@@ -308,7 +308,7 @@ export default function EditLectureMaterials({
         <button
           onClick={() =>
             toggleOpenDialog(
-              <AddLectureContentBlockDialog
+              <AddLectureMaterialBlockDialog
                 onClickText={() => {
                   addBlock({ type: "text" });
                   toggleOpenDialog(null);
