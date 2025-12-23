@@ -1,29 +1,25 @@
-import { Loader } from "lucide-react";
 import { useAllLectureMaterials } from "../api/queries";
 import TextLectureMaterialBlockDisplay from "./TextLectureMaterialBlockDisplay";
 import FileLectureMaterialBlockDisplay from "./FileLectureMaterialBlockDisplay";
 import type { FileAttachment, TextAttachment } from "@/utils/sharedTypes";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 
 type Props = {
   lectureId: string;
 };
+
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export default function LectureMaterialsList({ lectureId }: Props) {
   const { data: lectureMaterials, status: lectureMaterialsStatus } =
     useAllLectureMaterials({ lectureId });
 
   if ([lectureMaterialsStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([lectureMaterialsStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (lectureMaterials) {

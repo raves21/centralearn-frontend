@@ -4,7 +4,7 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { EllipsisVertical, Loader, Pencil, Trash } from "lucide-react";
+import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
 import { useInstructors } from "@/domains/instructors/api/queries";
 import type { Instructor } from "@/domains/instructors/types";
@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -111,11 +112,7 @@ function RouteComponent() {
   }
 
   if (status === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (data) {

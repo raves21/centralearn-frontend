@@ -1,3 +1,5 @@
+import ErrorComponent from "@/components/shared/ErrorComponent";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -9,7 +11,7 @@ import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import { ContentType } from "@/domains/chapterContents/types";
 import LectureMaterialsList from "@/domains/lectureMaterial/components/LectureMaterialsList";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { BookOpen, Edit, Loader, NotebookPen } from "lucide-react";
+import { BookOpen, Edit, NotebookPen } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_protected/lms/classes/$classId_/contents/$chapterContentId/"
@@ -26,17 +28,11 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   if ([chapterContentInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([chapterContentInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (chapterContentInfo) {

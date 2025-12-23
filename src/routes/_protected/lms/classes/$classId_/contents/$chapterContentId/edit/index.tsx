@@ -2,7 +2,8 @@ import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import EditLectureMaterials from "@/domains/lectureMaterial/components/EditLectureMaterials";
 import { ContentType } from "@/domains/chapterContents/types";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader } from "lucide-react";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/"
@@ -17,17 +18,11 @@ function RouteComponent() {
     useChapterContentInfo(chapterContentId);
 
   if ([chapterContentInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([chapterContentInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (chapterContentInfo) {

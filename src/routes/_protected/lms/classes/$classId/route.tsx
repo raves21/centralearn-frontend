@@ -5,9 +5,10 @@ import {
   Outlet,
   useMatchRoute,
 } from "@tanstack/react-router";
-import { Edit, Loader } from "lucide-react";
+import { Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavigationButton } from "@/utils/sharedTypes";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 
 export const Route = createFileRoute("/_protected/lms/classes/$classId")({
   component: RouteComponent,
@@ -60,11 +61,7 @@ function RouteComponent() {
   }
 
   if ([courseClassInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (courseClassInfo) {

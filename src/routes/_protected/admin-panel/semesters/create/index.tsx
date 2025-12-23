@@ -31,9 +31,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Loader } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useCreateSemesterMinMaxTimestamps } from "@/domains/semesters/api/queries";
 import dayjs from "dayjs";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/semesters/create/"
@@ -94,17 +96,11 @@ function RouteComponent() {
   const startDate = form.watch("startDate");
 
   if (minMaxTimestampsStatus === "error") {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if (minMaxTimestampsStatus === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (minMaxTimestamps) {

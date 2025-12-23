@@ -11,7 +11,6 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import { Loader } from "lucide-react";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import { toast } from "sonner";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
@@ -21,6 +20,8 @@ import AssignToDepartmentForm from "@/domains/programs/components/createEditProg
 import InstructorInfoForm from "@/domains/instructors/components/createEditInstructorFormSteps/InstructorInfoForm";
 import { useInstructorInfo } from "@/domains/instructors/api/queries";
 import { useEffect } from "react";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/instructors/$instructorId_/edit/"
@@ -151,17 +152,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if ([getAllDepartmentsStatus, instructorInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([getAllDepartmentsStatus, instructorInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (departments && instructorInfo) {

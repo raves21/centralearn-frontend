@@ -17,12 +17,15 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useDebounceInput } from "@/utils/hooks/useDebounceInput";
-import { Check, ChevronsUpDown, Loader } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import {
   useStudentEnrolledClasses,
   useStudentEnrolledSemesters,
 } from "../../api/queries";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
   studentId: string;
@@ -36,6 +39,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
   const [statusFilter, setStatusFilter] = useState<"open" | "close" | null>(
     null
   );
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [isStatusFilterPopoverOpen, setIsStatusFilterPopoverOpen] =
     useState(false);
@@ -56,19 +60,11 @@ export default function StudentLmsClasses({ studentId }: Props) {
     useStudentEnrolledSemesters(studentId);
 
   if ([enrolledSemestersStatus, enrolledClassesStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <p className="text-xl font-medium">An error occured.</p>
-      </div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([enrolledSemestersStatus, enrolledClassesStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (enrolledClasses && enrolledSemesters) {
@@ -229,7 +225,16 @@ export default function StudentLmsClasses({ studentId }: Props) {
         {enrolledClasses.data.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {enrolledClasses.data.map((courseClass) => (
-              <CourseClassCard courseClass={courseClass} />
+              <CourseClassCard
+                onClick={() =>
+                  navigate({
+                    to: "/lms/classes/$classId",
+                    params: { classId: courseClass.id },
+                  })
+                }
+                key={courseClass.id}
+                courseClass={courseClass}
+              />
             ))}
           </div>
         ) : (

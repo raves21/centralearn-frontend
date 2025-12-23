@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateDepartment } from "@/domains/departments/api/mutations";
 import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/departments/create/"
@@ -76,6 +77,10 @@ function RouteComponent() {
     } catch (error) {
       toast.error("An error occured");
     }
+  }
+
+  if (createDepartmentStatus === "error") {
+    return <ErrorComponent />;
   }
 
   return (

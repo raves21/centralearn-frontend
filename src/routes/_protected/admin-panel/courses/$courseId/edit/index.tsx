@@ -11,7 +11,6 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import { Loader } from "lucide-react";
 import { useAllDepartments } from "@/domains/departments/api/queries";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import { toast } from "sonner";
@@ -23,6 +22,8 @@ import AssignToDepartmentsForm from "@/domains/courses/components/createEditCour
 import { useCourseInfo } from "@/domains/courses/api/queries";
 import { useEffect } from "react";
 import { isArrayEqualRegardlessOfOrder } from "@/utils/sharedFunctions";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/courses/$courseId/edit/"
@@ -160,17 +161,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if ([getAllDepartmentsStatus, courseInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([getAllDepartmentsStatus, courseInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (departments && courseInfoStatus) {

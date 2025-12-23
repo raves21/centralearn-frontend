@@ -23,8 +23,9 @@ import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useEditAdmin } from "@/domains/admins/api/mutations";
 import { useAdminInfo } from "@/domains/admins/api/queries";
-import { Loader } from "lucide-react";
 import { useEffect } from "react";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/admins/$adminId/edit/"
@@ -104,17 +105,11 @@ function RouteComponent() {
   }
 
   if (adminInfoStatus === "error") {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if (adminInfoStatus === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (adminInfo) {

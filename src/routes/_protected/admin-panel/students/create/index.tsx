@@ -11,7 +11,6 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import { Loader } from "lucide-react";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import { toast } from "sonner";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
@@ -19,6 +18,8 @@ import { useAllPrograms } from "@/domains/programs/api/queries";
 import { useCreateStudent } from "@/domains/students/api/mutations";
 import StudentInfoForm from "@/domains/students/components/createEditStudentFormSteps/StudentInfoForm";
 import AssignToProgramForm from "@/domains/students/components/createEditStudentFormSteps/AssignToProgramForm";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/students/create/"
@@ -121,17 +122,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if (getAllProgramsStatus === "error") {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if (getAllProgramsStatus === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (programs) {

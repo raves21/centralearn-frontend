@@ -4,7 +4,7 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
-import { Check, Loader } from "lucide-react";
+import { Check } from "lucide-react";
 import { useStudentEnrollableClasses } from "@/domains/students/api/queries";
 import { cn } from "@/lib/utils";
 import type { Section } from "@/domains/sections/types";
@@ -21,6 +21,8 @@ import {
 import { useEnrollStudentToClass } from "@/domains/students/api/mutations";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { toast } from "sonner";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -153,19 +155,11 @@ function RouteComponent() {
   ];
 
   if (status === "error") {
-    return (
-      <div className="size-full grid place-items-center">
-        <p className="text-xl font-medium">An error occured.</p>
-      </div>
-    );
+    return <ErrorComponent />;
   }
 
   if (status === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (data) {

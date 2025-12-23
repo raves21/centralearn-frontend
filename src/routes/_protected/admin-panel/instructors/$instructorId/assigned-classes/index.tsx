@@ -1,5 +1,7 @@
+import ErrorComponent from "@/components/shared/ErrorComponent";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +18,7 @@ import { useHandleSearchParamsValidationFailure } from "@/utils/hooks/useHandleS
 import type { SearchSchemaValidationStatus } from "@/utils/sharedTypes";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVertical, Loader, Trash } from "lucide-react";
+import { EllipsisVertical, Trash } from "lucide-react";
 import z from "zod";
 
 const searchParamSchema = z.object({
@@ -137,17 +139,11 @@ function RouteComponent() {
   ];
 
   if ([assignedClassesStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([assignedClassesStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (assignedClasses) {

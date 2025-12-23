@@ -12,7 +12,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import ProgramInfoForm from "@/domains/programs/components/createEditProgramFormSteps/ProgramInfoForm";
-import { Loader } from "lucide-react";
 import { useAllDepartments } from "@/domains/departments/api/queries";
 import MultiStepFormContainer from "@/components/shared/form/MultiStepFormContainer";
 import AssignToDepartmentForm from "@/domains/programs/components/createEditProgramFormSteps/AssignToDepartmentForm";
@@ -22,6 +21,8 @@ import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
 import { useEffect } from "react";
 import { useProgramInfo } from "@/domains/programs/api/queries";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/programs/$programId/edit/"
@@ -147,17 +148,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if ([getAllDepartmentsStatus, programInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([getAllDepartmentsStatus, programInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (departments && programInfoStatus) {

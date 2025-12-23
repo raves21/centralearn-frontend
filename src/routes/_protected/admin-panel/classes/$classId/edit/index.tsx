@@ -39,13 +39,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAllCourses } from "@/domains/courses/api/queries";
 import { useAllSemesters } from "@/domains/semesters/api/queries";
-import { Check, ChevronsUpDown, Loader } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useCourseClassInfo } from "@/domains/classes/api/queries";
 import { useAllSections } from "@/domains/sections/api/queries";
 import { AxiosError } from "axios";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/classes/$classId/edit/"
@@ -143,9 +145,7 @@ function RouteComponent() {
       allSectionsStatus,
     ].includes("error")
   ) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if (
@@ -156,11 +156,7 @@ function RouteComponent() {
       allSectionsStatus,
     ].includes("pending")
   ) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (allCourses && allSemesters && courseClassInfoStatus && allSections) {

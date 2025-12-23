@@ -26,8 +26,9 @@ import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useDepartmentInfo } from "@/domains/departments/api/queries";
-import { Loader } from "lucide-react";
 import { useEffect } from "react";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/departments/$departmentId/edit/"
@@ -104,17 +105,11 @@ function RouteComponent() {
   }
 
   if (departmentInfoStatus === "error") {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if (departmentInfoStatus === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (departmentInfo) {

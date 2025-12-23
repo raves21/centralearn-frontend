@@ -20,7 +20,9 @@ import { useAllSemesters } from "@/domains/semesters/api/queries";
 import { cn } from "@/lib/utils";
 import { useLmsClassesPageState } from "@/utils/hooks/useLmsClassesPageState";
 import { useNavigate } from "@tanstack/react-router";
-import { Check, ChevronsUpDown, Loader } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export default function AdminLmsClasses() {
   const {
@@ -57,19 +59,11 @@ export default function AdminLmsClasses() {
   );
 
   if ([allSemestersStatus, courseClassesStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <p className="text-xl font-medium">An error occured.</p>
-      </div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([allSemestersStatus, courseClassesStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (courseClasses && allSemesters) {

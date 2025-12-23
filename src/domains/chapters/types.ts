@@ -1,4 +1,4 @@
-import type { ChapterContent } from "./chapterContents/types";
+import type { ChapterContent } from "../chapterContents/types";
 
 export type Chapter = {
   id: string;

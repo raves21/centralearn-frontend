@@ -1,7 +1,8 @@
+import ErrorComponent from "@/components/shared/ErrorComponent";
 import InfoSection from "@/components/shared/infoPage/InfoSection";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 import { useInstructorInfo } from "@/domains/instructors/api/queries";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/instructors/$instructorId/"
@@ -16,17 +17,11 @@ function RouteComponent() {
     useInstructorInfo(instructorId);
 
   if ([instructorInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([instructorInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (instructorInfo) {

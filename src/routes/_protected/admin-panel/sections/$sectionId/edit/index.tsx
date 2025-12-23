@@ -23,8 +23,9 @@ import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useEditSection } from "@/domains/sections/api/mutations";
 import { useSectionInfo } from "@/domains/sections/api/queries";
-import { Loader } from "lucide-react";
 import { useEffect } from "react";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/sections/$sectionId/edit/"
@@ -77,17 +78,11 @@ function RouteComponent() {
   }
 
   if (sectionInfoStatus === "error") {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if (sectionInfoStatus === "pending") {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (sectionInfoStatus) {

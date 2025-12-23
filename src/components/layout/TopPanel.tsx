@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { useCurrentUser } from "../../domains/auth/api/queries";
-import { Navigate, useMatchRoute, useNavigate } from "@tanstack/react-router";
+import { Link, Navigate, useMatchRoute } from "@tanstack/react-router";
 import Logo from "../shared/Logo";
 import RoleBasedComponent from "../shared/RoleBasedComponent";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,6 @@ type Props = {
 
 export default function TopPanel({ type }: Props) {
   const { data: currentUser } = useCurrentUser();
-  const navigate = useNavigate();
   const matchRoute = useMatchRoute();
   const isAdminPanelRoute = matchRoute({ to: "/admin-panel", fuzzy: true });
 
@@ -35,18 +34,12 @@ export default function TopPanel({ type }: Props) {
       <div className="flex items-center h-full gap-6">
         <RoleBasedComponent
           adminComponent={
-            <button
-              onClick={() => {
-                if (isAdminPanelRoute) {
-                  navigate({ to: "/lms/classes" });
-                } else {
-                  navigate({ to: "/admin-panel/dashboard" });
-                }
-              }}
+            <Link
+              to={isAdminPanelRoute ? "/lms/classes" : "/admin-panel/dashboard"}
               className="rounded-lg px-3 py-2 border-mainaccent border text-black hover:text-white hover:bg-mainaccent transition-colors"
             >
               {isAdminPanelRoute ? "Go to LMS" : "Go to Admin"}
-            </button>
+            </Link>
           }
         />
         <div className="flex items-center gap-3 mr-3 group h-full">

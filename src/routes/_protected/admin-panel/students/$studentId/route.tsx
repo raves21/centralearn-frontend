@@ -1,3 +1,5 @@
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +17,7 @@ import {
   useMatchRoute,
   useNavigate,
 } from "@tanstack/react-router";
-import { Loader, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/students/$studentId"
@@ -50,17 +52,11 @@ function RouteComponent() {
     useStudentInfo(studentId);
 
   if ([studentInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([studentInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (studentInfo) {

@@ -17,13 +17,14 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  useInstructorAssignedClasses,
-  useInstructorAssignedSemesters,
-} from "../../api/queries";
 import { useLmsClassesPageState } from "@/utils/hooks/useLmsClassesPageState";
 import { useNavigate } from "@tanstack/react-router";
 import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
+import {
+  useInstructorAssignedClasses,
+  useInstructorAssignedSemesters,
+} from "@/domains/instructors/api/queries";
 
 type Props = {
   instructorId: string;
@@ -63,11 +64,7 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
     useInstructorAssignedSemesters(instructorId);
 
   if ([assignedSemestersStatus, assignedClassesStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <p className="text-xl font-medium">An error occured.</p>
-      </div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([assignedSemestersStatus, assignedClassesStatus].includes("pending")) {

@@ -1,9 +1,12 @@
 import InfoSection from "@/components/shared/infoPage/InfoSection";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 import { useStudentInfo } from "@/domains/students/api/queries";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader } from "lucide-react";
 
-export const Route = createFileRoute("/_protected/admin-panel/students/$studentId/")({
+export const Route = createFileRoute(
+  "/_protected/admin-panel/students/$studentId/"
+)({
   component: RouteComponent,
 });
 
@@ -14,17 +17,11 @@ function RouteComponent() {
     useStudentInfo(studentId);
 
   if ([studentInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">An error occured.</div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([studentInfoStatus].includes("pending")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <Loader className="size-15 stroke-mainaccent animate-spin" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (studentInfo) {
