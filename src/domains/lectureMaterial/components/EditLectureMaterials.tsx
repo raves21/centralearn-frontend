@@ -128,7 +128,6 @@ export default function EditLectureMaterials({
     try {
       const formData = buildBulkChangesFormData(changes);
       await processBulkLectureMaterials(formData);
-      toggleOpenDialog(null);
 
       // Navigate back to view mode
       navigate({

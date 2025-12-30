@@ -32,7 +32,10 @@ export default function ConfirmationDialog({
           <p>{noLabel ?? "No"}</p>
         </button>
         <button
-          onClick={onClickYes}
+          onClick={() => {
+            onClickYes();
+            toggleOpenDialog(null);
+          }}
           className="px-5 py-4 font-medium text-lg rounded-lg bg-mainaccent text-white flex items-center gap-3"
         >
           <Check className="size-6 stroke-2" />
