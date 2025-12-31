@@ -28,6 +28,7 @@ import {
 import { ReactSortable } from "react-sortablejs";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import CreateChapterContentDialog from "@/domains/chapterContents/components/CreateChapterContentDialog";
+import CreateChapterDialog from "@/domains/chapters/components/CreateChapterDialog";
 import { useDeleteLectureContent } from "@/domains/chapterContents/api/mutations";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
@@ -90,7 +91,7 @@ function RouteComponent() {
                       <GripVertical className="size-5 relative z-10 text-gray-500 group-hover:text-gray-500 transition-colors duration-200" />
                     </button>
                   </div>
-                  <div className="w-full">
+                  <div className="w-full relative">
                     <AccordionTrigger className="flex items-start bg-white gap-4 rounded-lg shadow-sm p-4 hover:border-mainaccent hover:border-[2px] transition-all">
                       <ChevronDown className="stroke-gray-800 transition-transform" />
                       <div className="flex flex-col gap-2">
@@ -99,6 +100,8 @@ function RouteComponent() {
                           {chapter.description}
                         </p>
                       </div>
+                    </AccordionTrigger>
+                    <div className="absolute top-4 right-4 z-10">
                       <DropdownMenu>
                         <DropdownMenuTrigger
                           className="relative group rounded-full p-3 ml-auto"
@@ -122,7 +125,7 @@ function RouteComponent() {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </AccordionTrigger>
+                    </div>
                   </div>
                 </div>
                 <AccordionContent className="flex flex-col gap-2 w-full relative pl-16 pb-0">
@@ -146,13 +149,15 @@ function RouteComponent() {
                           key={content.id}
                         >
                           <button
-                            onClick={(e) => e.stopPropagation}
+                            onClick={(e) => e.stopPropagation()}
                             className="drag-handle relative cursor-grab rounded-full active:cursor-grabbing group p-3"
                           >
                             <span className="absolute inset-0 rounded-full bg-gray-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
                             <GripVertical className="size-5 relative z-10 text-gray-500 group-hover:text-gray-500 transition-colors duration-200" />
                           </button>
-                          <button
+                          <div
+                            role="button"
+                            tabIndex={0}
                             onClick={() =>
                               navigate({
                                 to: "/lms/classes/$classId/contents/$chapterContentId",
@@ -163,7 +168,7 @@ function RouteComponent() {
                               })
                             }
                             key={content.id}
-                            className="flex justify-between w-full p-5 bg-white rounded-lg hover:border-mainaccent hover:border-[2px] transition-all"
+                            className="flex justify-between w-full p-5 bg-white rounded-lg hover:border-mainaccent hover:border-[2px] transition-all cursor-pointer"
                           >
                             <div className="flex gap-4">
                               <div className="mt-1">
@@ -218,6 +223,8 @@ function RouteComponent() {
                                           }
                                         }}
                                         confirmationMessage="Are you sure you want to delete this lecture?"
+                                        yesButtonClassName="bg-red-500 hover:bg-red-600"
+                                        noButtonClassName="border border-gray-400"
                                       />
                                     );
                                   }}
@@ -227,7 +234,7 @@ function RouteComponent() {
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
-                          </button>
+                          </div>
                         </div>
                       ))}
                     </ReactSortable>
@@ -250,7 +257,12 @@ function RouteComponent() {
             ))}
           </ReactSortable>
         </Accordion>
-        <button className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full py-4">
+        <button
+          onClick={() =>
+            toggleOpenDialog(<CreateChapterDialog classId={classId} />)
+          }
+          className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full py-4"
+        >
           <Plus className="size-8 stroke-gray-500" />
           <p className="font-medium text-gray-500 text-lg">Add Chapter</p>
         </button>

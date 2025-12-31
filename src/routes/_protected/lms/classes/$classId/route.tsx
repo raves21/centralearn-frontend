@@ -100,8 +100,9 @@ function RouteComponent() {
         </div>
         <div className="w-full flex flex-col gap-4">
           <div className="flex items-center gap-2 p-1 bg-gray-200 w-min rounded-lg">
-            {tabRoutes.map((tabRoute) => (
+            {tabRoutes.map((tabRoute, i) => (
               <Link
+                key={i}
                 {...tabRoute.linkProps}
                 className={cn("px-3 py-2 rounded-md flex items-center gap-2", {
                   "bg-white": matchRoute({ to: tabRoute.linkProps.to }),

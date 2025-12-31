@@ -1,5 +1,6 @@
 import { Check, X } from "lucide-react";
 import { useGlobalStore } from "./utils/useGlobalStore";
+import { cn } from "@/lib/utils";
 
 type Props = {
   confirmationMessage?: string;
@@ -7,6 +8,8 @@ type Props = {
   yesLabel?: string;
   onClickNo?: () => void;
   onClickYes: () => void;
+  yesButtonClassName?: string;
+  noButtonClassName?: string;
 };
 
 export default function ConfirmationDialog({
@@ -15,6 +18,8 @@ export default function ConfirmationDialog({
   noLabel,
   yesLabel,
   onClickNo,
+  yesButtonClassName,
+  noButtonClassName,
 }: Props) {
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
@@ -26,9 +31,12 @@ export default function ConfirmationDialog({
       <div className="flex gap-6">
         <button
           onClick={onClickNo ? onClickNo : () => toggleOpenDialog(null)}
-          className="px-5 py-4 font-medium text-lg rounded-lg bg-red-500 text-white flex items-center gap-3"
+          className={cn(
+            "px-6 py-3 font-medium text-lg rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-2.5",
+            noButtonClassName
+          )}
         >
-          <X className="size-6 stroke-2" />
+          <X className="size-5 stroke-[3]" />
           <p>{noLabel ?? "No"}</p>
         </button>
         <button
@@ -36,9 +44,12 @@ export default function ConfirmationDialog({
             onClickYes();
             toggleOpenDialog(null);
           }}
-          className="px-5 py-4 font-medium text-lg rounded-lg bg-mainaccent text-white flex items-center gap-3"
+          className={cn(
+            "px-6 py-3 font-medium text-lg rounded-lg bg-mainaccent text-white hover:bg-mainaccent/90 transition-colors flex items-center gap-2.5",
+            yesButtonClassName
+          )}
         >
-          <Check className="size-6 stroke-2" />
+          <Check className="size-5 stroke-[3]" />
           <p>{yesLabel ?? "Yes"}</p>
         </button>
       </div>

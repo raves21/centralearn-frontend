@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { api } from "@/utils/axiosBackend";
 import DateTimePicker from "@/components/shared/form/DateTimePicker";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
+import { getDateTimeFormat } from "@/utils/sharedFunctions";
 
 type Props = {
   chapterId: string;
@@ -90,7 +91,7 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function CreateLectureContentDialog({ chapterId }: Props) {
+export default function CreateLectureDialog({ chapterId }: Props) {
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
   const {
     mutateAsync: createLectureContent,
@@ -126,27 +127,29 @@ export default function CreateLectureContentDialog({ chapterId }: Props) {
       formData.append("name", data.name);
       if (data.description) formData.append("description", data.description);
       formData.append("order", (chapterContentCount + 1).toString());
-      formData.append("is_published", data.is_published ? "1" : "0");
-      formData.append("is_open", data.is_open ? "1" : "0");
 
-      if (!data.is_published && data.publishes_at) {
+      if (data.is_published) {
         formData.append(
           "publishes_at",
-          format(data.publishes_at, "yyyy-MM-dd HH:mm:ss")
+          format(new Date(), getDateTimeFormat())
+        );
+      } else if (data.publishes_at) {
+        formData.append(
+          "publishes_at",
+          format(data.publishes_at, getDateTimeFormat())
         );
       }
 
-      if (!data.is_open && data.opens_at) {
-        formData.append(
-          "opens_at",
-          format(data.opens_at, "yyyy-MM-dd HH:mm:ss")
-        );
+      if (data.is_open) {
+        formData.append("opens_at", format(new Date(), getDateTimeFormat()));
+      } else if (data.opens_at) {
+        formData.append("opens_at", format(data.opens_at, getDateTimeFormat()));
       }
 
       if (data.closes_at) {
         formData.append(
           "closes_at",
-          format(data.closes_at, "yyyy-MM-dd HH:mm:ss")
+          format(data.closes_at, getDateTimeFormat())
         );
       }
       await createLectureContent(formData);
@@ -186,7 +189,11 @@ export default function CreateLectureContentDialog({ chapterId }: Props) {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Description (optional)" {...field} />
+                  <Textarea
+                    placeholder="Description (optional)"
+                    className="resize-none max-h-30"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -204,7 +211,7 @@ export default function CreateLectureContentDialog({ chapterId }: Props) {
                         type="checkbox"
                         checked={field.value}
                         onChange={field.onChange}
-                        className="h-4 w-4 mt-1 cursor-pointer"
+                        className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
@@ -231,7 +238,7 @@ export default function CreateLectureContentDialog({ chapterId }: Props) {
                         type="checkbox"
                         checked={field.value}
                         onChange={field.onChange}
-                        className="h-4 w-4 mt-1 cursor-pointer"
+                        className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
@@ -270,15 +277,21 @@ export default function CreateLectureContentDialog({ chapterId }: Props) {
             )}
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
+          <div className="flex gap-4 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => toggleOpenDialog(null)}
+              className="bg-gray-100 text-black border-gray-400 hover:bg-gray-300 flex-1"
             >
               Cancel
             </Button>
-            <Button type="submit">Create Lecture</Button>
+            <Button
+              type="submit"
+              className="bg-mainaccent hover:bg-indigo-800 flex-1"
+            >
+              Create Lecture
+            </Button>
           </div>
         </form>
       </Form>

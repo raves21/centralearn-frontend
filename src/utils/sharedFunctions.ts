@@ -26,3 +26,7 @@ export function diffToFormData<T extends Record<string, any>>(
 export function isArrayEqualRegardlessOfOrder(arr1: any, arr2: any) {
   return isEqual(sortBy(arr1), sortBy(arr2));
 }
+
+export function getDateTimeFormat() {
+  return "yyyy-MM-dd HH:mm:ss";
+}
