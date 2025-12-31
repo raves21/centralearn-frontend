@@ -12,3 +12,31 @@ export function useCreateChapter() {
     },
   });
 }
+
+export function useEditChapter() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      formData,
+    }: {
+      id: string;
+      formData: FormData;
+    }) => {
+      await api.post(`/chapters/${id}`, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chapters"] });
+    },
+  });
+}
+
+export function useDeleteChapter() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/chapters/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chapters"] });
+    },
+  });
+}

@@ -28,10 +28,11 @@ import {
 import { ReactSortable } from "react-sortablejs";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import CreateChapterContentDialog from "@/domains/chapterContents/components/CreateChapterContentDialog";
-import CreateChapterDialog from "@/domains/chapters/components/CreateChapterDialog";
+import ManageChapterDialog from "@/domains/chapters/components/ManageChapterDialog";
 import { useDeleteLectureContent } from "@/domains/chapterContents/api/mutations";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
+import { useDeleteChapter } from "@/domains/chapters/api/mutations";
 
 export const Route = createFileRoute("/_protected/lms/classes/$classId/")({
   component: RouteComponent,
@@ -48,6 +49,14 @@ function RouteComponent() {
     mutateAsync: deleteLectureContent,
     status: deleteLectureContentStatus,
   } = useDeleteLectureContent();
+
+  const { mutateAsync: deleteChapter, status: deleteChapterStatus } =
+    useDeleteChapter();
+
+  usePendingOverlay({
+    isPending: deleteChapterStatus === "pending",
+    pendingLabel: "Deleting chapter",
+  });
 
   usePendingOverlay({
     isPending: deleteLectureContentStatus === "pending",
@@ -112,13 +121,42 @@ function RouteComponent() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="bottom" align="end">
                           <DropdownMenuItem
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleOpenDialog(
+                                <ManageChapterDialog
+                                  classId={classId}
+                                  type="edit"
+                                  chapterId={chapter.id}
+                                  data={{
+                                    name: chapter.name,
+                                    description: chapter.description,
+                                    order: chapter.order,
+                                    published_at: chapter.published_at
+                                      ? new Date(chapter.published_at)
+                                      : null,
+                                  }}
+                                />
+                              );
+                            }}
                           >
                             Edit
                             <Pencil className="stroke-mainaccent" />
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              toggleOpenDialog(
+                                <ConfirmationDialog
+                                  confirmationMessage="Are you sure you want to delete this chapter?"
+                                  onClickYes={async () => {
+                                    await deleteChapter(chapter.id);
+                                  }}
+                                  noButtonClassName="border border-gray-400"
+                                  yesButtonClassName="bg-red-500 hover:bg-red-600"
+                                />
+                              );
+                            }}
                           >
                             Delete
                             <Trash className="stroke-red-500" />
@@ -259,7 +297,9 @@ function RouteComponent() {
         </Accordion>
         <button
           onClick={() =>
-            toggleOpenDialog(<CreateChapterDialog classId={classId} />)
+            toggleOpenDialog(
+              <ManageChapterDialog classId={classId} type="create" />
+            )
           }
           className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full py-4"
         >

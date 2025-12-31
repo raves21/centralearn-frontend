@@ -15,3 +15,14 @@ export function useCourseClassChapters({ classId }: { classId: string }) {
     },
   });
 }
+
+export function useChapterInfo(id: string | undefined) {
+  return useQuery({
+    queryKey: ["chapter", id],
+    queryFn: async () => {
+      const { data } = await api.get(`/chapters/${id}`);
+      return data.data as Chapter;
+    },
+    enabled: !!id,
+  });
+}

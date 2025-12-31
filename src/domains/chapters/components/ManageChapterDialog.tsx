@@ -1,4 +1,7 @@
-import { useCreateChapter } from "@/domains/chapters/api/mutations";
+import {
+  useCreateChapter,
+  useEditChapter,
+} from "@/domains/chapters/api/mutations";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,39 +23,52 @@ import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { getDateTimeFormat } from "@/utils/sharedFunctions";
 import { api } from "@/utils/axiosBackend";
+import { useEffect } from "react";
+import { useChapterInfo } from "../api/queries";
+
+type EditProps = {
+  chapterId: string;
+  type: "edit";
+  data: {
+    name: string;
+    description: string | null;
+    published_at: Date | null;
+    order: number;
+  };
+};
+
+type CreatProps = {
+  type: "create";
+};
 
 type Props = {
   classId: string;
-};
+} & (EditProps | CreatProps);
 
-const formSchema = z
-  .object({
-    name: z.string().min(1, "Name is required"),
-    description: z.string().optional(),
-    is_published: z.boolean(),
-    published_at: z.date().optional().nullable(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.is_published && data.published_at) {
-      ctx.addIssue({
-        code: "custom",
-        message:
-          "Published at can only be set if the chapter is not yet published.",
-        path: ["published_at"],
-      });
-    }
-  });
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().nullable(),
+  published_at: z.date().nullable(),
+});
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function CreateChapterDialog({ classId }: Props) {
+export default function ManageChapterDialog(props: Props) {
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
   const { mutateAsync: createChapter, status: createChapterStatus } =
     useCreateChapter();
 
+  const { mutateAsync: updateChapter, status: updateChapterStatus } =
+    useEditChapter();
+
   usePendingOverlay({
     isPending: createChapterStatus === "pending",
     pendingLabel: "Creating Chapter",
+  });
+
+  usePendingOverlay({
+    isPending: updateChapterStatus === "pending",
+    pendingLabel: "Updating Chapter",
   });
 
   const form = useForm<FormValues>({
@@ -60,10 +76,26 @@ export default function CreateChapterDialog({ classId }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      is_published: true,
       published_at: null,
     },
   });
+
+  const { classId } = props;
+
+  const editProps = props.type === "edit" ? props : null;
+
+  const { data: chapterInfo } = useChapterInfo(editProps?.chapterId);
+
+  useEffect(() => {
+    if (chapterInfo && editProps) {
+      const { description, name, published_at } = editProps.data;
+      form.reset({
+        name,
+        description,
+        published_at,
+      });
+    }
+  }, [chapterInfo]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -74,21 +106,27 @@ export default function CreateChapterDialog({ classId }: Props) {
       formData.append("course_class_id", classId);
       formData.append("name", data.name);
       if (data.description) formData.append("description", data.description);
-      formData.append("order", courseClassChapterCount + 1);
 
-      if (data.is_published) {
-        formData.append(
-          "published_at",
-          format(new Date(), getDateTimeFormat())
-        );
-      } else if (data.published_at) {
+      if (editProps) {
+        formData.append("order", editProps.data.order.toString());
+      } else {
+        formData.append("order", (courseClassChapterCount + 1).toString());
+      }
+
+      if (data.published_at) {
         formData.append(
           "published_at",
           format(data.published_at, getDateTimeFormat())
         );
+      } else {
+        formData.append("published_at", "");
       }
 
-      await createChapter(formData);
+      if (editProps) {
+        await updateChapter({ id: editProps.chapterId, formData });
+      } else {
+        await createChapter(formData);
+      }
       toggleOpenDialog(null);
     } catch (error) {
       toast.error("An error occurred.");
@@ -97,7 +135,9 @@ export default function CreateChapterDialog({ classId }: Props) {
 
   return (
     <div className="w-[600px] bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto">
-      <h2 className="text-xl font-bold mb-4">Create new Chapter</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {editProps ? "Edit Chapter" : "Create new Chapter"}
+      </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -125,6 +165,7 @@ export default function CreateChapterDialog({ classId }: Props) {
                     placeholder="Description (optional)"
                     className="resize-none max-h-30"
                     {...field}
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />
@@ -134,15 +175,17 @@ export default function CreateChapterDialog({ classId }: Props) {
 
           <FormField
             control={form.control}
-            name="is_published"
+            name="published_at"
             render={({ field }) => (
               <FormItem>
                 <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
                   <FormControl>
                     <input
                       type="checkbox"
-                      checked={field.value}
-                      onChange={field.onChange}
+                      checked={!!field.value}
+                      onChange={(e) =>
+                        field.onChange(e.target.checked ? new Date() : null)
+                      }
                       className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
                     />
                   </FormControl>
@@ -169,7 +212,7 @@ export default function CreateChapterDialog({ classId }: Props) {
               type="submit"
               className="bg-mainaccent hover:bg-indigo-800 flex-1"
             >
-              Create Chapter
+              {editProps ? "Save changes" : "Create Chapter"}
             </Button>
           </div>
         </form>
