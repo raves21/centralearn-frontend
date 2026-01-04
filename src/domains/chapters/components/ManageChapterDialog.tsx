@@ -25,16 +25,13 @@ import { getDateTimeFormat } from "@/utils/sharedFunctions";
 import { api } from "@/utils/axiosBackend";
 import { useEffect } from "react";
 import { useChapterInfo } from "../api/queries";
+import type { Chapter } from "../types";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 type EditProps = {
-  chapterId: string;
   type: "edit";
-  data: {
-    name: string;
-    description: string | null;
-    published_at: Date | null;
-    order: number;
-  };
+  chapter: Chapter;
 };
 
 type CreatProps = {
@@ -53,7 +50,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function ManageChapterDialog(props: Props) {
+export default function ManageChapterDialog({ classId, ...props }: Props) {
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
   const { mutateAsync: createChapter, status: createChapterStatus } =
     useCreateChapter();
@@ -80,19 +77,23 @@ export default function ManageChapterDialog(props: Props) {
     },
   });
 
-  const { classId } = props;
-
   const editProps = props.type === "edit" ? props : null;
 
-  const { data: chapterInfo } = useChapterInfo(editProps?.chapterId);
+  const { data: chapterInfo, status: chapterInfoStatus } = useChapterInfo(
+    editProps?.chapter.id
+  );
 
   useEffect(() => {
     if (chapterInfo && editProps) {
-      const { description, name, published_at } = editProps.data;
+      const {
+        description,
+        name,
+        publishedAt: published_at,
+      } = editProps.chapter;
       form.reset({
         name,
         description,
-        published_at,
+        published_at: published_at ? new Date(published_at) : null,
       });
     }
   }, [chapterInfo]);
@@ -108,7 +109,7 @@ export default function ManageChapterDialog(props: Props) {
       if (data.description) formData.append("description", data.description);
 
       if (editProps) {
-        formData.append("order", editProps.data.order.toString());
+        formData.append("order", editProps.chapter.order.toString());
       } else {
         formData.append("order", (courseClassChapterCount + 1).toString());
       }
@@ -123,7 +124,7 @@ export default function ManageChapterDialog(props: Props) {
       }
 
       if (editProps) {
-        await updateChapter({ id: editProps.chapterId, formData });
+        await updateChapter({ id: editProps.chapter.id, formData });
       } else {
         await createChapter(formData);
       }
@@ -133,90 +134,110 @@ export default function ManageChapterDialog(props: Props) {
     }
   };
 
-  return (
-    <div className="w-[600px] bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto">
-      <h2 className="text-xl font-bold mb-4">
-        {editProps ? "Edit Chapter" : "Create new Chapter"}
-      </h2>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Chapter Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+  if ([chapterInfoStatus].includes("error")) {
+    return (
+      <div className="size-[300px]">
+        <ErrorComponent className="text-xl font-medium text-red-500" />
+      </div>
+    );
+  }
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Description (optional)"
-                    className="resize-none max-h-30"
-                    {...field}
-                    value={field.value ?? ""}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+  if ([chapterInfoStatus].includes("pending")) {
+    return (
+      <div className="size-[300px]">
+        <LoadingComponent />
+      </div>
+    );
+  }
 
-          <FormField
-            control={form.control}
-            name="published_at"
-            render={({ field }) => (
-              <FormItem>
-                <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
+  if (chapterInfo) {
+    return (
+      <div className="w-[600px] bg-white rounded-lg p-6 max-h-[90dvh] overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4">
+          {editProps ? "Update Chapter" : "Create new Chapter"}
+        </h2>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <input
-                      type="checkbox"
-                      checked={!!field.value}
-                      onChange={(e) =>
-                        field.onChange(e.target.checked ? new Date() : null)
-                      }
-                      className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
+                    <Input placeholder="Chapter Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Description (optional)"
+                      className="resize-none max-h-30"
+                      {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="cursor-pointer">Published</FormLabel>
-                    <FormDescription>
-                      Check to make this visible to students immediately.
-                    </FormDescription>
-                  </div>
-                </label>
-              </FormItem>
-            )}
-          />
-          <div className="flex gap-4 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => toggleOpenDialog(null)}
-              className="bg-gray-100 text-black border-gray-400 hover:bg-gray-300 flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="bg-mainaccent hover:bg-indigo-800 flex-1"
-            >
-              {editProps ? "Save changes" : "Create Chapter"}
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
-  );
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="published_at"
+              render={({ field }) => (
+                <FormItem>
+                  <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <FormControl>
+                      <input
+                        type="checkbox"
+                        checked={!!field.value}
+                        onChange={(e) =>
+                          field.onChange(e.target.checked ? new Date() : null)
+                        }
+                        className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="cursor-pointer">
+                        Published
+                      </FormLabel>
+                      <FormDescription>
+                        Check to make this visible to students.
+                      </FormDescription>
+                    </div>
+                  </label>
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-4 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => toggleOpenDialog(null)}
+                className="bg-gray-100 text-black border-gray-400 hover:bg-gray-300 flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="bg-mainaccent hover:bg-indigo-800 flex-1"
+              >
+                {editProps ? "Save changes" : "Create Chapter"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    );
+  }
 }

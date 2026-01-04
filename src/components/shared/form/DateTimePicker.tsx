@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { type Control } from "react-hook-form";
 
@@ -22,9 +22,15 @@ type Props = {
   control: Control<any>;
   name: string;
   label: string;
+  minDateTime?: Date;
 };
 
-export default function DateTimePicker({ control, name, label }: Props) {
+export default function DateTimePicker({
+  control,
+  name,
+  label,
+  minDateTime,
+}: Props) {
   return (
     <FormField
       control={control}
@@ -55,6 +61,14 @@ export default function DateTimePicker({ control, name, label }: Props) {
               <div className="p-2 border-b">
                 <Input
                   type="time"
+                  className="cursor-pointer [&::-webkit-calendar-picker-indicator]:ml-auto"
+                  min={
+                    minDateTime &&
+                    field.value &&
+                    isSameDay(field.value, minDateTime)
+                      ? format(minDateTime, "HH:mm")
+                      : undefined
+                  }
                   value={field.value ? format(field.value, "HH:mm") : ""}
                   onChange={(e) => {
                     const date = field.value || new Date();
@@ -65,6 +79,7 @@ export default function DateTimePicker({ control, name, label }: Props) {
                       field.onChange(newDate);
                     }
                   }}
+                  onClick={(e) => e.currentTarget.showPicker()}
                 />
               </div>
               <Calendar
@@ -82,7 +97,15 @@ export default function DateTimePicker({ control, name, label }: Props) {
                     field.onChange(date);
                   }
                 }}
-                disabled={(date) => date < new Date("1900-01-01")}
+                disabled={(date) => {
+                  if (date < new Date("1900-01-01")) return true;
+                  if (minDateTime) {
+                    const minDateStart = new Date(minDateTime);
+                    minDateStart.setHours(0, 0, 0, 0);
+                    return date < minDateStart;
+                  }
+                  return false;
+                }}
                 initialFocus
               />
             </PopoverContent>

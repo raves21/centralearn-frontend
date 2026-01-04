@@ -12,9 +12,9 @@ export type ChapterContent = {
   isOpen: boolean;
   opensAt: Date | null;
   closesAt: Date | null;
-  chapter: Chapter
-  isPublished: true;
-  publishesAt: null;
+  chapter: Chapter;
+  isPublished: boolean;
+  publishesAt: Date | null;
   order: number;
   contentId: string;
   contentType: ContentType;

@@ -33,6 +33,7 @@ import { useDeleteLectureContent } from "@/domains/chapterContents/api/mutations
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
 import { useDeleteChapter } from "@/domains/chapters/api/mutations";
+import ManageLectureDialog from "@/domains/chapterContents/components/ManageLectureDialog";
 
 export const Route = createFileRoute("/_protected/lms/classes/$classId/")({
   component: RouteComponent,
@@ -127,15 +128,7 @@ function RouteComponent() {
                                 <ManageChapterDialog
                                   classId={classId}
                                   type="edit"
-                                  chapterId={chapter.id}
-                                  data={{
-                                    name: chapter.name,
-                                    description: chapter.description,
-                                    order: chapter.order,
-                                    published_at: chapter.published_at
-                                      ? new Date(chapter.published_at)
-                                      : null,
-                                  }}
+                                  chapter={chapter}
                                 />
                               );
                             }}
@@ -240,7 +233,21 @@ function RouteComponent() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent side="bottom" align="end">
                                 <DropdownMenuItem
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (
+                                      content.contentType ===
+                                      ContentType.Lecture
+                                    ) {
+                                      toggleOpenDialog(
+                                        <ManageLectureDialog
+                                          chapterId={chapter.id}
+                                          type="edit"
+                                          chapterContent={content}
+                                        />
+                                      );
+                                    }
+                                  }}
                                 >
                                   Edit
                                   <Pencil className="stroke-mainaccent" />

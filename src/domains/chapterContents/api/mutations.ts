@@ -13,6 +13,23 @@ export function useCreateLectureContent() {
   });
 }
 
+export function useEditChapterContent() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      formData,
+    }: {
+      id: string;
+      formData: FormData;
+    }) => {
+      await api.put(`/contents/${id}`, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chapters"] });
+    },
+  });
+}
+
 export function useDeleteLectureContent() {
   return useMutation({
     mutationFn: async (id: string) => {

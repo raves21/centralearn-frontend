@@ -1,5 +1,13 @@
-export default function ErrorComponent() {
+import { cn } from "@/lib/utils";
+
+type Props = {
+  className?: string;
+};
+
+export default function ErrorComponent({ className }: Props) {
   return (
-    <div className="size-full grid place-items-center">An error occured.</div>
+    <div className={cn("size-full grid place-items-center", className)}>
+      An error occured.
+    </div>
   );
 }

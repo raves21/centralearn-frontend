@@ -1,4 +1,5 @@
 import { forOwn, isObject, isEqual, sortBy } from "lodash";
+import { formatInTimeZone } from "date-fns-tz";
 
 export function diffToFormData<T extends Record<string, any>>(
   obj1: T,
@@ -29,4 +30,20 @@ export function isArrayEqualRegardlessOfOrder(arr1: any, arr2: any) {
 
 export function getDateTimeFormat() {
   return "yyyy-MM-dd HH:mm:ss";
+}
+
+export function getDateTimeFormatWithoutSeconds() {
+  return "yyyy-MM-dd HH:mm";
+}
+
+export function formatToUTC(date: Date) {
+  return formatInTimeZone(date, "UTC", getDateTimeFormat());
+}
+
+export function formatToLocal(date: Date) {
+  return formatInTimeZone(
+    date,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    getDateTimeFormat()
+  );
 }
