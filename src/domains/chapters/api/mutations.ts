@@ -40,3 +40,19 @@ export function useDeleteChapter() {
     },
   });
 }
+
+export function useReorderChapterBulk() {
+  return useMutation({
+    mutationFn: async (
+      chapters: {
+        id: string;
+        new_order: number;
+      }[]
+    ) => {
+      await api.post("/chapters/reorder-bulk", { chapters });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chapters"] });
+    },
+  });
+}

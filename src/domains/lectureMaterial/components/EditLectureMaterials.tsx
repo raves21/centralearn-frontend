@@ -22,7 +22,7 @@ import AddLectureMaterialBlockDialog from "./AddLectureMaterialBlockDialog";
 import FileLectureMaterialBlock from "./FileLectureMaterialBlock";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
-import { useManageLectureContentStore } from "@/utils/stores/useManageLectureContentStore";
+import { useManageLectureContentStore } from "@/domains/lectureMaterial/stores/useManageLectureContentStore";
 import { useShallow } from "zustand/react/shallow";
 import { useGeneralStore } from "@/utils/stores/useGeneralStore";
 import { useRef, useState, useEffect } from "react";
