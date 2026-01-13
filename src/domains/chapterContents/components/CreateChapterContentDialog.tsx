@@ -1,5 +1,6 @@
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import ManageLectureDialog from "./ManageLectureDialog";
+import ManageAssessmentDialog from "./ManageAssessmentDialog";
 
 type Props = {
   chapterId: string;
@@ -24,7 +25,14 @@ export default function CreateChapterContentDialog({ chapterId }: Props) {
         Lecture
       </button>
       <button
-        onClick={() => toggleOpenDialog(null)}
+        onClick={() => {
+          toggleOpenDialog(null);
+          setTimeout(() => {
+            toggleOpenDialog(
+              <ManageAssessmentDialog type="create" chapterId={chapterId} />
+            );
+          }, 200);
+        }}
         className="flex-1 bg-white hover:bg-mainaccent/80 hover:text-white transition-colors shadow-sm rounded-lg grid place-items-center text-2xl font-medium"
       >
         Assessment

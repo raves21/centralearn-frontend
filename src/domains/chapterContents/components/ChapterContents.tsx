@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import {
-  useDeleteLectureContent,
+  useDeleteChapterContent,
   useReorderChapterContentBulk,
 } from "../api/mutations";
 import { toast } from "sonner";
@@ -30,6 +30,7 @@ import { useSetTopPanelPointerEventsWhenDragging } from "@/utils/hooks/useSetTop
 import { useChapterContentReorderStore } from "../stores/useChapterContentReorderStore";
 import { useShallow } from "zustand/react/shallow";
 import { useEffect } from "react";
+import ManageAssessmentDialog from "./ManageAssessmentDialog";
 
 type Props = {
   chapterContents: ChapterContent[];
@@ -62,13 +63,13 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
   }, [chapterContents]);
 
   const {
-    mutateAsync: deleteLectureContent,
-    status: deleteLectureContentStatus,
-  } = useDeleteLectureContent();
+    mutateAsync: deleteChapterContent,
+    status: deleteChapterContentStatus,
+  } = useDeleteChapterContent();
 
   usePendingOverlay({
-    isPending: deleteLectureContentStatus === "pending",
-    pendingLabel: "Deleting lecture",
+    isPending: deleteChapterContentStatus === "pending",
+    pendingLabel: "Deleting chapter content",
   });
 
   usePendingOverlay({
@@ -105,7 +106,6 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
               new_order: content.new_order,
             }));
 
-          console.log(updates);
           if (updates.length > 0) {
             try {
               await reorderChapterContentBulk(updates);
@@ -179,6 +179,14 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
                             chapterContent={content}
                           />
                         );
+                      } else {
+                        toggleOpenDialog(
+                          <ManageAssessmentDialog
+                            chapterId={chapterId}
+                            type="edit"
+                            chapterContent={content}
+                          />
+                        );
                       }
                     }}
                   >
@@ -191,11 +199,9 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
                       toggleOpenDialog(
                         <ConfirmationDialog
                           onClickYes={async () => {
-                            if (content.contentType === ContentType.Lecture) {
-                              await deleteLectureContent(content.id);
-                            }
+                            await deleteChapterContent(content.id);
                           }}
-                          confirmationMessage="Are you sure you want to delete this lecture?"
+                          confirmationMessage={`Are you sure you want to delete this ${content.contentType === ContentType.Lecture ? "lecture" : "assessment"}?`}
                           yesButtonClassName="bg-red-500 hover:bg-red-600"
                           noButtonClassName="border border-gray-400"
                         />

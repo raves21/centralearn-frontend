@@ -18,7 +18,18 @@ export type ChapterContent = {
   order: number;
   contentId: string;
   contentType: ContentType;
-  content: {
-    id: string;
-  };
+  content: Assessment | { id: string };
+};
+
+export type Assessment = {
+  id: string;
+  timeLimit: number | null;
+  maxAchievableScore: number;
+  isAnswersViewableAfterSubmit: boolean;
+  isScoreViewableAfterSubmit: boolean;
+  isMultiAttempts: boolean;
+  maxAttempts: number | null;
+  multiAttemptGradingType: "avg_score" | "highest_score" | null;
+  createdAt: Date;
+  updatedAt: Date;
 };

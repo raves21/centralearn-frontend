@@ -1,6 +1,6 @@
 import {
-  useCreateLecture,
-  useEditLecture,
+  useCreateAssessment,
+  useEditAssessment,
 } from "@/domains/chapterContents/api/mutations";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { toast } from "sonner";
@@ -23,11 +23,21 @@ import { api } from "@/utils/axiosBackend";
 import DateTimePicker from "@/components/shared/form/DateTimePicker";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { formatToLocal, formatToUTC } from "@/utils/sharedFunctions";
-import type { ChapterContent } from "@/domains/chapterContents/types";
+import type {
+  Assessment,
+  ChapterContent,
+} from "@/domains/chapterContents/types";
 import { useEffect } from "react";
 import { useChapterContentInfo } from "../api/queries";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type EditProps = {
   type: "edit";
@@ -51,6 +61,20 @@ const formSchema = z
     is_open: z.boolean(),
     opens_at: z.date().optional().nullable(),
     closes_at: z.date().optional().nullable(),
+
+    // Assessment specific
+    time_limit: z.coerce
+      .number()
+      .int()
+      .min(1, "Time limit must be at least 1 minute"),
+    is_answers_viewable_after_submit: z.boolean(),
+    is_score_viewable_after_submit: z.boolean(),
+    is_multi_attempts: z.boolean(),
+    max_attempts: z.coerce.number().optional().nullable(),
+    multi_attempt_grading_type: z
+      .enum(["avg_score", "highest_score"])
+      .optional()
+      .nullable(),
   })
   .superRefine((data, ctx) => {
     // closes_at must only be set if opens_at has value.
@@ -70,30 +94,47 @@ const formSchema = z
         path: ["closes_at"],
       });
     }
+
+    // Multi-attempts validation
+    if (data.is_multi_attempts) {
+      if (!data.max_attempts || data.max_attempts < 2) {
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "Max attempts must be at least 2 when multi-attempts is enabled.",
+          path: ["max_attempts"],
+        });
+      }
+      if (!data.multi_attempt_grading_type) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Grading type is required when multi-attempts is enabled.",
+          path: ["multi_attempt_grading_type"],
+        });
+      }
+    }
   });
 
-export default function ManageLectureDialog({ chapterId, ...props }: Props) {
+export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
-  const {
-    mutateAsync: createLectureContent,
-    status: createLectureContentStatus,
-  } = useCreateLecture();
+  const { mutateAsync: createAssessment, status: createAssessmentStatus } =
+    useCreateAssessment();
 
-  const { mutateAsync: editLectureContent, status: editLectureContentStatus } =
-    useEditLecture();
+  const { mutateAsync: editAssessment, status: editAssessmentStatus } =
+    useEditAssessment();
 
   usePendingOverlay({
-    isPending: editLectureContentStatus === "pending",
-    pendingLabel: "Editing Lecture",
+    isPending: editAssessmentStatus === "pending",
+    pendingLabel: "Editing Assessment",
   });
 
   usePendingOverlay({
-    isPending: createLectureContentStatus === "pending",
-    pendingLabel: "Creating Lecture",
+    isPending: createAssessmentStatus === "pending",
+    pendingLabel: "Creating Assessment",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as Resolver<z.infer<typeof formSchema>>,
     defaultValues: {
       name: "",
       description: "",
@@ -102,6 +143,12 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
       is_open: true,
       opens_at: null,
       closes_at: null,
+      time_limit: 60,
+      is_answers_viewable_after_submit: true,
+      is_score_viewable_after_submit: true,
+      is_multi_attempts: false,
+      max_attempts: 2,
+      multi_attempt_grading_type: "highest_score",
     },
   });
 
@@ -110,9 +157,12 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
   const { data: chapterContentInfo, status: chapterContentInfoStatus } =
     useChapterContentInfo(editProps?.chapterContent.id);
 
-  //this only runs if user wants to edit instead of create
+  // Load data for edit
   useEffect(() => {
     if (chapterContentInfo) {
+      // Type assertion/check for assessment content
+      const assessmentContent = chapterContentInfo.content as Assessment;
+
       form.reset({
         name: chapterContentInfo.name,
         description: chapterContentInfo.description ?? "",
@@ -127,6 +177,16 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
         closes_at: chapterContentInfo.closesAt
           ? new Date(formatToLocal(chapterContentInfo.closesAt))
           : null,
+
+        // Assessment specific
+        time_limit: assessmentContent.timeLimit ?? 0,
+        is_answers_viewable_after_submit:
+          assessmentContent.isAnswersViewableAfterSubmit,
+        is_score_viewable_after_submit:
+          assessmentContent.isScoreViewableAfterSubmit,
+        is_multi_attempts: assessmentContent.isMultiAttempts,
+        max_attempts: assessmentContent.maxAttempts,
+        multi_attempt_grading_type: assessmentContent.multiAttemptGradingType,
       });
     }
   }, [chapterContentInfo]);
@@ -135,7 +195,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
     try {
       const formData = new FormData();
       formData.append("chapter_id", chapterId);
-      formData.append("content_type", "lecture");
+      formData.append("content_type", "assessment");
       formData.append("name", data.name);
       if (data.description) formData.append("description", data.description);
 
@@ -164,16 +224,50 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
         formData.append("closes_at", formatToUTC(data.closes_at));
       }
 
+      // Assessment specific form data
+      // Using bracket notation for 'content' array as per PHP usually expecting this for nested creation/validation
+      formData.append("content[time_limit]", data.time_limit.toString());
+      formData.append(
+        "content[is_answers_viewable_after_submit]",
+        data.is_answers_viewable_after_submit ? "1" : "0"
+      );
+      formData.append(
+        "content[is_score_viewable_after_submit]",
+        data.is_score_viewable_after_submit ? "1" : "0"
+      );
+      formData.append(
+        "content[is_multi_attempts]",
+        data.is_multi_attempts ? "1" : "0"
+      );
+
+      if (data.is_multi_attempts) {
+        if (data.max_attempts)
+          formData.append(
+            "content[max_attempts]",
+            data.max_attempts.toString()
+          );
+        if (data.multi_attempt_grading_type)
+          formData.append(
+            "content[multi_attempt_grading_type]",
+            data.multi_attempt_grading_type
+          );
+      } else {
+        // Technically nullable if not multi-attempts, but let's ensure they are null or not sent?
+        // Validation rules say "required_if:content.is_multi_attempts,true", implying optional otherwise.
+        // We can skip appending them if they are not relevant.
+      }
+
       if (editProps) {
-        await editLectureContent({
+        await editAssessment({
           id: editProps.chapterContent.id,
           formData,
         });
       } else {
-        await createLectureContent(formData);
+        await createAssessment(formData);
       }
       toggleOpenDialog(null);
     } catch (error) {
+      //   console.error(error);
       toast.error("An error occured.");
     }
   };
@@ -181,6 +275,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
   const isPublished = form.watch("is_published");
   const isOpen = form.watch("is_open");
   const opensAt = form.watch("opens_at");
+  const isMultiAttempts = form.watch("is_multi_attempts");
 
   if ([chapterContentInfoStatus].includes("error") && editProps) {
     return (
@@ -201,7 +296,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
   return (
     <div className="w-[600px] bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto">
       <h2 className="text-xl font-bold mb-4">
-        {editProps ? "Update Lecture" : "Create new Lecture"}
+        {editProps ? "Update Assessment" : "Create new Assessment"}
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -212,7 +307,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Lecture Name" {...field} />
+                  <Input placeholder="Assessment Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -236,8 +331,142 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
               </FormItem>
             )}
           />
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="time_limit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time Limit (minutes)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={1} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 p-4 border rounded-md">
+            <h3 className="font-semibold text-sm mb-2">Students can:</h3>
+            <FormField
+              control={form.control}
+              name="is_answers_viewable_after_submit"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <input
+                      type="checkbox"
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>View Answers After Submit</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="is_score_viewable_after_submit"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <input
+                      type="checkbox"
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>View Score After Submit</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 p-4 border rounded-md">
+            <h3 className="font-semibold text-sm">Attempt Settings</h3>
+            <FormField
+              control={form.control}
+              name="is_multi_attempts"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <input
+                      type="checkbox"
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Enable Multiple Attempts</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            {isMultiAttempts && (
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <FormField
+                  control={form.control}
+                  name="max_attempts"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Max Attempts</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={2}
+                          value={field.value ?? ""}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="multi_attempt_grading_type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Grading Type</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value ?? undefined}
+                        value={field.value ?? undefined}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select grading type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="z-[200] font-poppins">
+                          <SelectItem value="avg_score">
+                            Average Score
+                          </SelectItem>
+                          <SelectItem value="highest_score">
+                            Highest Score
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+          </div>
+
           <div className="flex gap-4">
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 flex-1">
               <FormField
                 control={form.control}
                 name="is_published"
@@ -280,7 +509,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 flex-1">
               <FormField
                 control={form.control}
                 name="is_open"
@@ -344,7 +573,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
               type="submit"
               className="bg-mainaccent hover:bg-indigo-800 flex-1"
             >
-              {editProps ? "Update Lecture" : "Create Lecture"}
+              {editProps ? "Update Assessment" : "Create Assessment"}
             </Button>
           </div>
         </form>
