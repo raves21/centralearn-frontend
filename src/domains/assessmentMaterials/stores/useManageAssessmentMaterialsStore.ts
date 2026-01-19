@@ -17,11 +17,13 @@ type MaterialQuestion = {
 
 type OptionBasedItemOption = {
   label: string;
+
   isCorrect: boolean;
 } & (FileAttachment | TextAttachment)[];
 
 type OptionBasedItemBlock = {
   type: "optionBasedItem";
+
   options: OptionBasedItemOption[];
 };
 
