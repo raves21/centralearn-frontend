@@ -23,7 +23,6 @@ type OptionBasedItemOption = {
 
 type OptionBasedItemBlock = {
   type: "optionBasedItem";
-
   options: OptionBasedItemOption[];
 };
 
@@ -47,33 +46,6 @@ type ContentBlock = {
   materialQuestion: MaterialQuestion;
   materialType: "optionBasedItem" | "essayItem" | "identificationItem";
   material: OptionBasedItemBlock | EssayItemBlock | IdentificationItemBlock;
-};
-
-type NewMaterial = {
-  assessmentId: string;
-  pointWorth: number;
-  assessmentMaterialQuestion: MaterialQuestion;
-  materialType: "optionBasedItem" | "essayItem" | "identificationItem";
-  order: number;
-  materialContent: {
-    optionBasedItem: OptionBasedItemBlock | null;
-    essayItem: EssayItemBlock | null;
-    identificationItem: IdentificationItemBlock | null;
-  };
-};
-
-type UpdatedMaterial = {
-  id: string;
-  assessmentMaterialQuestion: MaterialQuestion;
-  isAssessmentMaterialQuestionUpdated: boolean;
-  materialContent: {
-    optionBasedItem: {
-      item: OptionBasedItemBlock | null;
-      isOptionsUpdated: boolean;
-    };
-    essayItem: EssayItemBlock | null;
-    identificationItem: IdentificationItemBlock | null;
-  };
 };
 
 // export const useManageAssessmentMaterialsStore =

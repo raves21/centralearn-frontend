@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
-type FileContentBlock = {
+type FileBlock = {
   type: "file";
   content: File | string; // File for new uploads, string URL for existing files
 };
 
 import type { BulkChangesPayload, SyncMaterialItem } from "../types";
 
-type TextContentBlock = {
+type TextBlock = {
   type: "text";
   content: string;
 };
@@ -16,7 +16,7 @@ type ContentBlock = {
   id: string; // Client-side UUID
   dbId?: string; // Database ID (only for existing materials)
   isModified?: boolean; // Track if content changed
-} & (FileContentBlock | TextContentBlock);
+} & (FileBlock | TextBlock);
 
 type AddFileBlockArgs = {
   type: "file";

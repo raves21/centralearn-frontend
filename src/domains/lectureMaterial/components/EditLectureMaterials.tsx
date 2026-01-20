@@ -32,6 +32,7 @@ import { useProcessBulkLectureMaterials } from "../api/mutations";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
 import type { BulkChangesPayload } from "../types";
 import { toast } from "sonner";
+import { isEqual } from "lodash";
 
 type Props = {
   chapterContentInfo: ChapterContent;
@@ -227,6 +228,21 @@ export default function EditLectureMaterials({
           </button>
           <button
             onClick={async () => {
+              const noChanges = isEqual(
+                useManageLectureContentStore.getState().blocks,
+                useManageLectureContentStore.getState().originalBlocks,
+              );
+              if (noChanges) {
+                navigate({
+                  to: "/lms/classes/$classId/contents/$chapterContentId",
+                  params: {
+                    chapterContentId: chapterContentInfo.id,
+                    classId,
+                  },
+                });
+                return;
+              }
+
               // Compute changes
               const changes = computeChanges(chapterContentInfo.contentId);
 

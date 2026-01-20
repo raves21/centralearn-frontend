@@ -3,8 +3,8 @@ import type { PaginationProps } from "@/utils/sharedTypes";
 export type OptionBasedItemOption = {
   id: string;
   optionBasedItemId: string;
-  optionableId: string;
-  optionableType: "App\\Models\\FileAttachment" | "App\\Models\\TextAttachment";
+  optionText: string | null;
+  optionFile: string | null;
   isCorrect: boolean;
 };
 
@@ -15,6 +15,10 @@ export type OptionBasedItem = {
 
 export type EssayItem = {
   id: string;
+  minCharacterCount: number | null;
+  maxCharacterCount: number | null;
+  minWordCount: number | null;
+  maxWordCount: number | null;
 };
 
 export type IdentificationItem = {
