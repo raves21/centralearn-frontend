@@ -5,6 +5,8 @@ type FileContentBlock = {
   content: File | string; // File for new uploads, string URL for existing files
 };
 
+import type { BulkChangesPayload, SyncMaterialItem } from "../types";
+
 type TextContentBlock = {
   type: "text";
   content: string;
@@ -30,42 +32,17 @@ type Values = {
   originalBlocks: ContentBlock[]; // Snapshot of initial state from DB
 };
 
-type NewMaterial = {
-  lecture_id: string;
-  material_type: "text" | "file";
-  order: number;
-  material_content?: string;
-  material_file?: File;
-};
-
-type UpdatedMaterial = {
-  id: string;
-  material_type: "text" | "file";
-  order: number;
-  is_material_updated: boolean;
-  material?: {
-    content?: string;
-    file?: File;
-  };
-};
-
-type ComputedChanges = {
-  new: NewMaterial[];
-  updated: UpdatedMaterial[];
-  deleted: string[];
-};
-
 type Actions = {
   addBlock: (args: AddFileBlockArgs | AddTextBlockArgs) => void;
   addBlockAfter: (
     blockId: string,
-    args: AddFileBlockArgs | AddTextBlockArgs
+    args: AddFileBlockArgs | AddTextBlockArgs,
   ) => void;
   updateBlock: (id: string, content: string | File) => void;
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void; // Update blocks without resetting originalBlocks
-  computeChanges: (lectureId: string) => ComputedChanges;
+  computeChanges: (lectureId: string) => BulkChangesPayload;
 };
 
 type ContentStore = Values & Actions;
@@ -120,7 +97,7 @@ export const useManageLectureContentStore = create<ContentStore>((set) => ({
       }
 
       const blockIndex = state.blocks.findIndex(
-        (block) => block.id === blockId
+        (block) => block.id === blockId,
       );
 
       if (blockIndex === -1) {
@@ -162,105 +139,34 @@ export const useManageLectureContentStore = create<ContentStore>((set) => ({
     set({ blocks, originalBlocks: JSON.parse(JSON.stringify(blocks)) }),
   computeChanges: (lectureId) => {
     const state = useManageLectureContentStore.getState();
-    const { blocks, originalBlocks } = state;
+    const { blocks } = state;
 
-    const newMaterials: NewMaterial[] = [];
-    const updatedMaterials: UpdatedMaterial[] = [];
-    const deletedMaterialIds: string[] = [];
+    const materials: SyncMaterialItem[] = [];
 
-    // Find new and updated materials
     blocks.forEach((block, index) => {
       const order = index + 1; // 1-indexed order
 
-      if (!block.dbId) {
-        // New material (no database ID)
-        if (block.type === "text") {
-          newMaterials.push({
-            lecture_id: lectureId,
-            material_type: "text",
-            order,
-            material_content: block.content,
-          });
-        } else {
-          // File type
-          if (block.content instanceof File) {
-            newMaterials.push({
-              lecture_id: lectureId,
-              material_type: "file",
-              order,
-              material_file: block.content,
-            });
-          }
-        }
-      } else {
-        // Existing material - check if updated
-        const originalBlock = originalBlocks.find(
-          (ob) => ob.dbId === block.dbId
-        );
+      const item: SyncMaterialItem = {
+        id: block.dbId ?? null,
+        material_type: block.type,
+        order,
+      };
 
-        if (originalBlock) {
-          const originalIndex = originalBlocks.findIndex(
-            (ob) => ob.dbId === block.dbId
-          );
-          const originalOrder = originalIndex + 1;
-          const orderChanged = order !== originalOrder;
-
-          // Check if content changed
-          let contentChanged = false;
-          if (block.type === "text" && originalBlock.type === "text") {
-            contentChanged = block.content !== originalBlock.content;
-          } else if (block.type === "file" && originalBlock.type === "file") {
-            // If content is a File object, it means user uploaded a new file
-            contentChanged = block.content instanceof File;
-          }
-
-          // If either order or content changed, add to updated
-          if (orderChanged || contentChanged) {
-            const updatedMaterial: UpdatedMaterial = {
-              id: block.dbId,
-              material_type: block.type,
-              order,
-              is_material_updated: contentChanged,
-            };
-
-            // Only include material field if content was actually updated
-            if (contentChanged) {
-              if (block.type === "text") {
-                updatedMaterial.material = {
-                  content: block.content,
-                };
-              } else if (
-                block.type === "file" &&
-                block.content instanceof File
-              ) {
-                updatedMaterial.material = {
-                  file: block.content,
-                };
-              }
-            }
-
-            updatedMaterials.push(updatedMaterial);
-          }
+      if (block.type === "text") {
+        item.material_content = block.content as string;
+      } else if (block.type === "file") {
+        // Only include file if it's a new File object
+        if (block.content instanceof File) {
+          item.material_file = block.content;
         }
       }
-    });
 
-    // Find deleted materials
-    originalBlocks.forEach((originalBlock) => {
-      if (originalBlock.dbId) {
-        const stillExists = blocks.some(
-          (block) => block.dbId === originalBlock.dbId
-        );
-        if (!stillExists) {
-          deletedMaterialIds.push(originalBlock.dbId);
-        }
-      }
+      materials.push(item);
     });
 
     return {
-      new: newMaterials,
-      updated: updatedMaterials,
-      deleted: deletedMaterialIds,
+      lecture_id: lectureId,
+      materials,
     };
   },
 }));

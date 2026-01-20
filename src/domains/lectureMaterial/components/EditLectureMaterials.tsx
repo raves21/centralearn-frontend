@@ -29,7 +29,6 @@ import { useRef, useState, useEffect } from "react";
 import { useAllLectureMaterials } from "../api/queries";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useProcessBulkLectureMaterials } from "../api/mutations";
-import { buildBulkChangesFormData } from "../utils/buildBulkChangesFormData";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
 import type { BulkChangesPayload } from "../types";
 import { toast } from "sonner";
@@ -65,7 +64,7 @@ export default function EditLectureMaterials({
       state.removeBlock,
       state.updateBlocks,
       state.computeChanges,
-    ])
+    ]),
   );
 
   const {
@@ -81,7 +80,7 @@ export default function EditLectureMaterials({
   const [isDragging, setIsDragging] = useState(false);
 
   const setTopPanelPointerEventsNone = useGeneralStore(
-    (state) => state.setTopPanelPointerEventsNone
+    (state) => state.setTopPanelPointerEventsNone,
   );
 
   usePendingOverlay({
@@ -126,7 +125,41 @@ export default function EditLectureMaterials({
 
   async function onSaveChanges(changes: BulkChangesPayload) {
     try {
-      const formData = buildBulkChangesFormData(changes);
+      const formData = new FormData();
+
+      formData.append("lecture_id", changes.lecture_id);
+
+      changes.materials.forEach((material, index) => {
+        if (material.id) {
+          formData.append(`materials[${index}][id]`, material.id);
+        }
+        formData.append(
+          `materials[${index}][material_type]`,
+          material.material_type,
+        );
+        formData.append(
+          `materials[${index}][order]`,
+          material.order.toString(),
+        );
+
+        if (
+          material.material_type === "text" &&
+          typeof material.material_content === "string"
+        ) {
+          formData.append(
+            `materials[${index}][material_content]`,
+            material.material_content,
+          );
+        } else if (
+          material.material_type === "file" &&
+          material.material_file
+        ) {
+          formData.append(
+            `materials[${index}][material_file]`,
+            material.material_file,
+          );
+        }
+      });
       await processBulkLectureMaterials(formData);
 
       // Navigate back to view mode
@@ -197,28 +230,12 @@ export default function EditLectureMaterials({
               // Compute changes
               const changes = computeChanges(chapterContentInfo.contentId);
 
-              // If no changes made
-              if (
-                (!changes.new || changes.new.length === 0) &&
-                (!changes.updated || changes.updated.length === 0) &&
-                (!changes.deleted || changes.deleted.length === 0)
-              ) {
-                navigate({
-                  to: "/lms/classes/$classId/contents/$chapterContentId",
-                  params: {
-                    chapterContentId: chapterContentInfo.id,
-                    classId,
-                  },
-                });
-                return;
-              } else {
-                toggleOpenDialog(
-                  <ConfirmationDialog
-                    onClickYes={() => onSaveChanges(changes)}
-                    confirmationMessage="Are you sure you want to save changes?"
-                  />
-                );
-              }
+              toggleOpenDialog(
+                <ConfirmationDialog
+                  onClickYes={() => onSaveChanges(changes)}
+                  confirmationMessage="Are you sure you want to save changes?"
+                />,
+              );
             }}
             className="px-4 py-2 rounded-full bg-green-500 text-white flex items-center gap-3"
           >
@@ -281,7 +298,7 @@ export default function EditLectureMaterials({
                           }
                         }}
                         fileInputRef={fileInputRef}
-                      />
+                      />,
                     )
                   }
                   className="rounded-full relative group p-3"
@@ -322,7 +339,7 @@ export default function EditLectureMaterials({
                   }
                 }}
                 fileInputRef={fileInputRef}
-              />
+              />,
             )
           }
           className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full h-[100px]"
