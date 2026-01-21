@@ -31,9 +31,9 @@ export type AssessmentMaterial = {
   order: number;
   materialId: string;
   materialType:
-    | "App\\Models\\OptionBasedQuestion"
-    | "App\\Models\\EssayQuestion"
-    | "App\\Models\\IdentificationQuestion";
+    | "App\\Models\\OptionBasedItem"
+    | "App\\Models\\EssayItem"
+    | "App\\Models\\IdentificationItem";
   material: OptionBasedItem | EssayItem | IdentificationItem;
   question: AssessmentMaterialQuestion;
 };
@@ -48,3 +48,8 @@ export type AssessmentMaterialQuestion = {
 export type AssessmentMaterialsPaginated = PaginationProps & {
   data: AssessmentMaterial[];
 };
+
+// export type BulkChangesPayload = {
+//   assessment_id: string
+//   materials:
+// }

@@ -24,8 +24,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { useManageLectureContentStore } from "@/domains/lectureMaterial/stores/useManageLectureContentStore";
 import { useShallow } from "zustand/react/shallow";
-import { useGeneralStore } from "@/utils/stores/useGeneralStore";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useAllLectureMaterials } from "../api/queries";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useProcessBulkLectureMaterials } from "../api/mutations";
@@ -33,6 +32,7 @@ import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
 import type { BulkChangesPayload } from "../types";
 import { toast } from "sonner";
 import { isEqual } from "lodash";
+import { useSetTopPanelPointerEventsWhenDragging } from "@/utils/hooks/useSetTopPanelPointerEventsWhenDragging";
 
 type Props = {
   chapterContentInfo: ChapterContent;
@@ -78,24 +78,13 @@ export default function EditLectureMaterials({
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
-  const setTopPanelPointerEventsNone = useGeneralStore(
-    (state) => state.setTopPanelPointerEventsNone,
-  );
+  const { setIsDragging } = useSetTopPanelPointerEventsWhenDragging();
 
   usePendingOverlay({
     isPending: processBulkLectureMaterialsStatus === "pending",
     pendingLabel: "Saving",
   });
-
-  useEffect(() => {
-    if (isDragging) {
-      setTopPanelPointerEventsNone(true);
-    } else {
-      setTopPanelPointerEventsNone(false);
-    }
-  }, [isDragging]);
 
   // Hydrate existing lecture materials into the store
   useEffect(() => {

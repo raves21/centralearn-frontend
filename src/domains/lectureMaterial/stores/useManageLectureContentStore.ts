@@ -15,12 +15,11 @@ type TextBlock = {
 type ContentBlock = {
   id: string; // Client-side UUID
   dbId?: string; // Database ID (only for existing materials)
-  isModified?: boolean; // Track if content changed
 } & (FileBlock | TextBlock);
 
 type AddFileBlockArgs = {
   type: "file";
-  file: File | string; // Support both File and URL string
+  file: File;
 };
 
 type AddTextBlockArgs = {
@@ -45,14 +44,14 @@ type Actions = {
   computeChanges: (lectureId: string) => BulkChangesPayload;
 };
 
-type ContentStore = Values & Actions;
+type Store = Values & Actions;
 
 const initialState: Values = {
   blocks: [],
   originalBlocks: [],
 };
 
-export const useManageLectureContentStore = create<ContentStore>((set) => ({
+export const useManageLectureContentStore = create<Store>((set) => ({
   ...initialState,
   addBlock: (args) =>
     set((state) => {
