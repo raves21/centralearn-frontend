@@ -12,7 +12,7 @@ type TextBlock = {
   content: string;
 };
 
-type ContentBlock = {
+export type ContentBlock = {
   id: string; // Client-side UUID
   dbId?: string; // Database ID (only for existing materials)
 } & (FileBlock | TextBlock);

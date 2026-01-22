@@ -1,4 +1,4 @@
-import { useAllLectureMaterials } from "../api/queries";
+import { useAllLectureMaterials } from "../../api/queries";
 import TextLectureMaterialBlockDisplay from "./TextLectureMaterialBlockDisplay";
 import FileLectureMaterialBlockDisplay from "./FileLectureMaterialBlockDisplay";
 import type { FileAttachment, TextAttachment } from "@/utils/sharedTypes";
@@ -10,7 +10,7 @@ type Props = {
 
 import ErrorComponent from "@/components/shared/ErrorComponent";
 
-export default function LectureMaterialsList({ lectureId }: Props) {
+export default function LectureMaterialsListDisplay({ lectureId }: Props) {
   const { data: lectureMaterials, status: lectureMaterialsStatus } =
     useAllLectureMaterials({ lectureId });
 

@@ -7,14 +7,15 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import AssessmentMaterialsListDisplay from "@/domains/assessmentMaterials/components/display/AssessmentMaterialsListDisplay";
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import { ContentType } from "@/domains/chapterContents/types";
-import LectureMaterialsList from "@/domains/lectureMaterial/components/LectureMaterialsList";
+import LectureMaterialsListDisplay from "@/domains/lectureMaterial/components/displayLectureMaterials/LectureMaterialsListDisplay";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Edit, NotebookPen } from "lucide-react";
 
 export const Route = createFileRoute(
-  "/_protected/lms/classes/$classId_/contents/$chapterContentId/"
+  "/_protected/lms/classes/$classId_/contents/$chapterContentId/",
 )({
   component: RouteComponent,
 });
@@ -87,7 +88,14 @@ function RouteComponent() {
           </button>
         </div>
         {chapterContentInfo.contentType === ContentType.Lecture && (
-          <LectureMaterialsList lectureId={chapterContentInfo.contentId} />
+          <LectureMaterialsListDisplay
+            lectureId={chapterContentInfo.contentId}
+          />
+        )}
+        {chapterContentInfo.contentType === ContentType.Assessment && (
+          <AssessmentMaterialsListDisplay
+            assessmentId={chapterContentInfo.contentId}
+          />
         )}
       </div>
     );

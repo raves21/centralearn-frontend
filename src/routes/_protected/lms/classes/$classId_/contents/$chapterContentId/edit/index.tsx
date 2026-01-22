@@ -1,12 +1,13 @@
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
-import EditLectureMaterials from "@/domains/lectureMaterial/components/EditLectureMaterials";
+import EditLectureMaterials from "@/domains/lectureMaterial/components/editLectureMaterials/EditLectureMaterials";
 import { ContentType } from "@/domains/chapterContents/types";
 import { createFileRoute } from "@tanstack/react-router";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
+import EditAssessmentMaterials from "@/domains/assessmentMaterials/components/edit/EditAssessmentMaterials";
 
 export const Route = createFileRoute(
-  "/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/"
+  "/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/",
 )({
   component: RouteComponent,
 });
@@ -34,7 +35,11 @@ function RouteComponent() {
         />
       );
     }
-    //todo: return assessment edit component
-    return null;
+    return (
+      <EditAssessmentMaterials
+        chapterContentInfo={chapterContentInfo}
+        classId={classId}
+      />
+    );
   }
 }

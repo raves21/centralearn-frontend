@@ -6,7 +6,7 @@ type Props = {
   };
 };
 
-export default function FileLectureContentBlock({ block }: Props) {
+export default function EditFileBlock({ block }: Props) {
   const isFile = block.content instanceof File;
 
   // For File objects (new uploads)

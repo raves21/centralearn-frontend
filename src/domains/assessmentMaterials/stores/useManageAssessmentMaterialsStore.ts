@@ -8,7 +8,6 @@ type MaterialQuestion = {
 
 type OptionBasedItemOption = {
   id?: string;
-  label: string;
   isCorrect: boolean;
   optionText: string | null;
   optionFile: File | string | null;
@@ -19,8 +18,8 @@ type OptionBasedItemBlock = {
 };
 
 type EssayItemBlock = {
-  maxCharCount: number | null;
-  minCharCount: number | null;
+  maxCharacterCount: number | null;
+  minCharacterCount: number | null;
   maxWordCount: number | null;
   minWordCount: number | null;
 };
@@ -29,7 +28,7 @@ type IdentificationItemBlock = {
   acceptedAnswers: string[];
 };
 
-type ContentBlock = {
+export type ContentBlock = {
   id: string; // Client-side UUID
   dbId?: string; // Database ID (only for existing materials)
   materialQuestion: MaterialQuestion | null;
@@ -61,7 +60,6 @@ type Actions = {
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void;
-  // computeChanges: (assessmentId: string) => BulkChangesPayload;
 };
 
 type Store = Values & Actions;
@@ -93,8 +91,8 @@ const emptyEssayItemBlock: ContentBlock = {
   pointWorth: 1,
   materialType: "essayItem",
   material: {
-    maxCharCount: null,
-    minCharCount: null,
+    maxCharacterCount: null,
+    minCharacterCount: null,
     maxWordCount: null,
     minWordCount: null,
   } as EssayItemBlock,
@@ -202,5 +200,3 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
   setBlocks: (blocks) =>
     set({ blocks, originalBlocks: JSON.parse(JSON.stringify(blocks)) }),
 }));
-
-// export const useManageAssessmentMaterialsStore =

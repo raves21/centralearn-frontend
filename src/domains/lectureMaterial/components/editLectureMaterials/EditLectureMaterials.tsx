@@ -1,4 +1,3 @@
-import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,33 +5,27 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  BookOpen,
-  NotebookPen,
-  X,
-  GripVertical,
-  Edit,
-  Trash,
-  Plus,
-  Check,
-} from "lucide-react";
+import { BookOpen, NotebookPen, X, Plus, Check } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
-import { ContentType, type ChapterContent } from "../../chapterContents/types";
-import AddLectureMaterialBlockDialog from "./AddLectureMaterialBlockDialog";
-import FileLectureMaterialBlock from "./FileLectureMaterialBlock";
+import {
+  ContentType,
+  type ChapterContent,
+} from "../../../chapterContents/types";
 import { Link, useNavigate } from "@tanstack/react-router";
+import AddLectureMaterialBlockDialog from "./AddLectureMaterialBlockDialog";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { useManageLectureContentStore } from "@/domains/lectureMaterial/stores/useManageLectureContentStore";
 import { useShallow } from "zustand/react/shallow";
 import { useRef, useEffect } from "react";
-import { useAllLectureMaterials } from "../api/queries";
+import { useAllLectureMaterials } from "../../api/queries";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import { useProcessBulkLectureMaterials } from "../api/mutations";
+import { useProcessBulkLectureMaterials } from "../../api/mutations";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
-import type { BulkChangesPayload } from "../types";
+import type { BulkChangesPayload } from "../../types";
 import { toast } from "sonner";
 import { isEqual } from "lodash";
 import { useSetTopPanelPointerEventsWhenDragging } from "@/utils/hooks/useSetTopPanelPointerEventsWhenDragging";
+import EditLectureMaterialBlock from "./EditLectureMaterialBlock";
 
 type Props = {
   chapterContentInfo: ChapterContent;
@@ -46,27 +39,16 @@ export default function EditLectureMaterials({
   const navigate = useNavigate();
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
-  const [
-    blocks,
-    addBlock,
-    addBlockAfter,
-    updateBlock,
-    setBlocks,
-    removeBlock,
-    updateBlocks,
-    computeChanges,
-  ] = useManageLectureContentStore(
-    useShallow((state) => [
-      state.blocks,
-      state.addBlock,
-      state.addBlockAfter,
-      state.updateBlock,
-      state.setBlocks,
-      state.removeBlock,
-      state.updateBlocks,
-      state.computeChanges,
-    ]),
-  );
+  const [blocks, addBlock, setBlocks, updateBlocks, computeChanges] =
+    useManageLectureContentStore(
+      useShallow((state) => [
+        state.blocks,
+        state.addBlock,
+        state.setBlocks,
+        state.updateBlocks,
+        state.computeChanges,
+      ]),
+    );
 
   const {
     mutateAsync: processBulkLectureMaterials,
@@ -96,7 +78,6 @@ export default function EditLectureMaterials({
             dbId: material.id, // Database ID
             type: "text" as const,
             content: (material.material as { content: string }).content,
-            isModified: false,
           };
         } else {
           return {
@@ -104,7 +85,6 @@ export default function EditLectureMaterials({
             dbId: material.id, // Database ID
             type: "file" as const,
             content: (material.material as { url: string }).url,
-            isModified: false,
           };
         }
       });
@@ -263,67 +243,10 @@ export default function EditLectureMaterials({
           onEnd={() => setIsDragging(false)}
         >
           {blocks.map((block) => (
-            <div key={block.id} className="flex gap-3">
-              <div className="flex flex-col gap-6">
-                <button className="drag-handle relative cursor-grab rounded-full active:cursor-grabbing group p-3">
-                  <span className="absolute inset-0 rounded-full bg-gray-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
-                  <GripVertical className="size-5 relative z-10 text-gray-500 group-hover:text-gray-500 transition-colors duration-200" />
-                </button>
-                {block.type === "file" && (
-                  <button
-                    // onClick={() => removeBlock(block.id)}
-                    className="rounded-full relative group p-3"
-                  >
-                    <span className="absolute inset-0 rounded-full bg-blue-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
-                    <Edit className="size-5 relative z-10 text-gray-500 group-hover:text-blue-500 transition-colors duration-200" />
-                  </button>
-                )}
-                <button
-                  onClick={() => removeBlock(block.id)}
-                  className="rounded-full relative group p-3"
-                >
-                  <span className="absolute inset-0 rounded-full bg-red-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
-                  <Trash className="size-5 relative z-10 text-gray-500 group-hover:text-red-500 transition-colors duration-200" />
-                </button>
-                <button
-                  onClick={() =>
-                    toggleOpenDialog(
-                      <AddLectureMaterialBlockDialog
-                        onClickText={() => {
-                          addBlockAfter(block.id, { type: "text" });
-                          toggleOpenDialog(null);
-                        }}
-                        onSelectFile={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            addBlockAfter(block.id, { type: "file", file });
-                            toggleOpenDialog(null);
-                            // Reset the input so the same file can be selected again
-                            e.target.value = "";
-                          }
-                        }}
-                        fileInputRef={fileInputRef}
-                      />,
-                    )
-                  }
-                  className="rounded-full relative group p-3"
-                >
-                  <span className="absolute inset-0 rounded-full bg-green-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
-                  <Plus className="size-5 relative z-10 text-gray-500 group-hover:text-green-500 transition-colors duration-200" />
-                </button>
-              </div>
-              <div className="flex-1 item-stretch">
-                {block.type === "text" && (
-                  <TiptapEditor
-                    content={block.content}
-                    onChange={(content) => updateBlock(block.id, content)}
-                  />
-                )}
-                {block.type === "file" && (
-                  <FileLectureMaterialBlock block={block} />
-                )}
-              </div>
-            </div>
+            <EditLectureMaterialBlock
+              block={block}
+              fileBlockInputRef={fileInputRef}
+            />
           ))}
         </ReactSortable>
         <button

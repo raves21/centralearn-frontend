@@ -1,6 +1,4 @@
-import { useAllAssessmentMaterials } from "../api/queries";
-// import TextLectureMaterialBlockDisplay from "./TextLectureMaterialBlockDisplay";
-// import FileLectureMaterialBlockDisplay from "./FileLectureMaterialBlockDisplay";
+import { useAllAssessmentMaterials } from "../../api/queries";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 
 type Props = {
@@ -12,7 +10,9 @@ import OptionBasedBlockDisplay from "./OptionBasedBlockDisplay";
 import EssayBlockDisplay from "./EssayBlockDisplay";
 import IdentificationBlockDisplay from "./IdentificationBlockDisplay";
 
-export default function AssessmentMaterialsList({ assessmentId }: Props) {
+export default function AssessmentMaterialsListDisplay({
+  assessmentId,
+}: Props) {
   const { data: assessmentMaterials, status: assessmentMaterialsStatus } =
     useAllAssessmentMaterials({ assessmentId });
 

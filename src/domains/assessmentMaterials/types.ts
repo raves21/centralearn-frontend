@@ -30,6 +30,7 @@ export type AssessmentMaterial = {
   assessmentId: string;
   order: number;
   materialId: string;
+  pointWorth: number;
   materialType:
     | "App\\Models\\OptionBasedItem"
     | "App\\Models\\EssayItem"

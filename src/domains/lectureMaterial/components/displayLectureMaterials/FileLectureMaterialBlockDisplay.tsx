@@ -4,7 +4,7 @@ type Props = {
   material: FileAttachment;
 };
 
-export default function FileLectureMaterialBlock({ material }: Props) {
+export default function FileLectureMaterialBlockDisplay({ material }: Props) {
   // Check if it's an image
   if (material.type === "image") {
     return (
