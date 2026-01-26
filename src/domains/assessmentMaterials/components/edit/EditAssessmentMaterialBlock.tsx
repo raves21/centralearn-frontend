@@ -4,12 +4,24 @@ import { useShallow } from "zustand/react/shallow";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { useManageAssessmentMaterialsStore } from "../../stores/useManageAssessmentMaterialsStore";
 import AddAssessmentMaterialBlockDialog from "./AddAssessmentMaterialBlockDialog";
+import EditEssayItemBlock from "./EditEssayItemBlock";
+import type {
+  EssayItem,
+  IdentificationItem,
+  OptionBasedItem,
+} from "../../types";
+import EditIdentificationItemBlock from "./EditIdentificationItemBlock";
+import EditOptionBasedItemBlock from "./EditOptionBasedItemBlock";
 
 type Props = {
   block: ContentBlock;
+  itemNumber: number;
 };
 
-export default function EditAssessmentMaterialBlock({ block }: Props) {
+export default function EditAssessmentMaterialBlock({
+  block,
+  itemNumber,
+}: Props) {
   const [removeBlock, addBlockAfter] = useManageAssessmentMaterialsStore(
     useShallow((state) => [state.removeBlock, state.addBlockAfter]),
   );
@@ -56,10 +68,21 @@ export default function EditAssessmentMaterialBlock({ block }: Props) {
         </button>
       </div>
       <div className="flex-1 item-stretch">
-        {/* {block.type === "essayItem" && (
-          place it here
-        )} */}
-        {/* {block.type === "identificationItem" && <FileLectureMaterialBlock block={block} />} */}
+        {block.materialType === "essayItem" && (
+          <EditEssayItemBlock
+            block={block as ContentBlock & { material: EssayItem }}
+          />
+        )}
+        {block.materialType === "identificationItem" && (
+          <EditIdentificationItemBlock
+            block={block as ContentBlock & { material: IdentificationItem }}
+          />
+        )}
+        {block.materialType === "optionBasedItem" && (
+          <EditOptionBasedItemBlock
+            block={block as ContentBlock & { material: OptionBasedItem }}
+          />
+        )}
       </div>
     </div>
   );

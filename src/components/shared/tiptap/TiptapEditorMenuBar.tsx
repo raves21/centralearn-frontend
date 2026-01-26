@@ -1,4 +1,25 @@
 import { Editor, useEditorState } from "@tiptap/react";
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  Eraser,
+  RemoveFormatting,
+  Pilcrow,
+  Heading1,
+  Heading2,
+  Heading3,
+  Heading4,
+  Heading5,
+  Heading6,
+  List,
+  ListOrdered,
+  FileCode,
+  Quote,
+  Undo,
+  Redo,
+} from "lucide-react";
 
 type Props = {
   editor: Editor;
@@ -42,112 +63,112 @@ export default function TiptapEditorMenuBar({ editor }: Props) {
         disabled={!editorState.canBold}
         className={`p-1 rounded-md p-2 ${editorState.isBold ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Bold
+        <Bold size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editorState.canItalic}
         className={`p-1 rounded-md p-2 ${editorState.isItalic ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Italic
+        <Italic size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={!editorState.canStrike}
         className={`p-1 rounded-md p-2 ${editorState.isStrike ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Strike
+        <Strikethrough size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleCode().run()}
         disabled={!editorState.canCode}
         className={`p-1 rounded-md p-2 ${editorState.isCode ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Code
+        <Code size={18} />
       </button>
       <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
-        Clear marks
+        <Eraser size={18} />
       </button>
       <button onClick={() => editor.chain().focus().clearNodes().run()}>
-        Clear nodes
+        <RemoveFormatting size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().setParagraph().run()}
         className={`p-1 rounded-md p-2 ${editorState.isParagraph ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Paragraph
+        <Pilcrow size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={`p-1 rounded-md p-2 ${editorState.isHeading1 ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        H1
+        <Heading1 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`p-1 rounded-md p-2 ${editorState.isHeading2 ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        H2
+        <Heading2 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={`p-1 rounded-md p-2 ${editorState.isHeading3 ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        H3
+        <Heading3 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
         className={`p-1 rounded-md p-2 ${editorState.isHeading4 ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        H4
+        <Heading4 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
         className={`p-1 rounded-md p-2 ${editorState.isHeading5 ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        H5
+        <Heading5 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
         className={`p-1 rounded-md p-2 ${editorState.isHeading6 ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        H6
+        <Heading6 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`p-1 rounded-md p-2 ${editorState.isBulletList ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Bullet list
+        <List size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`p-1 rounded-md p-2 ${editorState.isOrderedList ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Ordered list
+        <ListOrdered size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         className={`p-1 rounded-md p-2 ${editorState.isCodeBlock ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Code block
+        <FileCode size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         className={`p-1 rounded-md p-2 ${editorState.isBlockquote ? "bg-mainaccent text-white" : "hover:bg-gray-100"}`}
       >
-        Blockquote
+        <Quote size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editorState.canUndo}
       >
-        Undo
+        <Undo size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editorState.canRedo}
       >
-        Redo
+        <Redo size={18} />
       </button>
     </div>
   );

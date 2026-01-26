@@ -1,22 +1,21 @@
-import { Input } from "@/components/ui/input";
-import {
-  useManageAssessmentMaterialsStore,
-  type ContentBlock,
-} from "../../stores/useManageAssessmentMaterialsStore";
-import { useShallow } from "zustand/react/shallow";
 import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
-import type { EssayItem } from "../../types";
+import { useShallow } from "zustand/react/shallow";
+import {
+  type ContentBlock,
+  useManageAssessmentMaterialsStore,
+} from "../../stores/useManageAssessmentMaterialsStore";
+import type { IdentificationItem } from "../../types";
 import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 type Props = {
-  block: ContentBlock & { material: EssayItem };
+  block: ContentBlock & { material: IdentificationItem };
 };
 
-export default function EditEssayItemBlock({ block }: Props) {
+export default function EditIdentificationItemBlock({ block }: Props) {
   const [blocks, updateBlock] = useManageAssessmentMaterialsStore(
     useShallow((state) => [state.blocks, state.updateBlock]),
   );
-
   const [itemNumber, setItemNumber] = useState(0);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export default function EditEssayItemBlock({ block }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-lg font-semibold text-gray-400">Essay</p>
+      <p className="text-lg font-semibold text-gray-400">Identification</p>
       <div className="flex flex-col rounded-lg border border-gray-200 p-4 gap-5">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-lg">Question {itemNumber}</p>

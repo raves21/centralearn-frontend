@@ -194,8 +194,12 @@ export default function EditAssessmentMaterials({
         onStart={() => setIsDragging(true)}
         onEnd={() => setIsDragging(false)}
       >
-        {blocks.map((block) => (
-          <EditAssessmentMaterialBlock block={block} key={block.id} />
+        {blocks.map((block, index) => (
+          <EditAssessmentMaterialBlock
+            block={block}
+            key={block.id}
+            itemNumber={index + 1}
+          />
         ))}
       </ReactSortable>
       <button
@@ -220,7 +224,7 @@ export default function EditAssessmentMaterials({
         className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full h-[100px]"
       >
         <Plus className="size-8 stroke-gray-500" />
-        <p className="font-medium text-gray-500 text-lg">Add content</p>
+        <p className="font-medium text-gray-500 text-lg">Add Item</p>
       </button>
     </div>
   );

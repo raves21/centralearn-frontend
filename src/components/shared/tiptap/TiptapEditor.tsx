@@ -2,15 +2,27 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import TiptapEditorMenuBar from "./TiptapEditorMenuBar";
+import Placeholder from "@tiptap/extension-placeholder";
 
 interface TiptapEditorProps {
   content: string;
   onChange: (content: string) => void;
+  placeholder?: string;
 }
 
-const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
+const TiptapEditor = ({
+  content,
+  onChange,
+  placeholder,
+}: TiptapEditorProps) => {
   const editor = useEditor({
-    extensions: [StarterKit, TextStyleKit],
+    extensions: [
+      StarterKit,
+      TextStyleKit,
+      Placeholder.configure({
+        placeholder,
+      }),
+    ],
     content: content,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();

@@ -31,7 +31,7 @@ type IdentificationItemBlock = {
 export type ContentBlock = {
   id: string; // Client-side UUID
   dbId?: string; // Database ID (only for existing materials)
-  materialQuestion: MaterialQuestion | null;
+  materialQuestion: MaterialQuestion;
   pointWorth: number;
   materialType: "optionBasedItem" | "essayItem" | "identificationItem";
   material: OptionBasedItemBlock | EssayItemBlock | IdentificationItemBlock;
@@ -50,13 +50,7 @@ type Actions = {
     blockId: string,
     type: "optionBasedItem" | "essayItem" | "identificationItem",
   ) => void;
-  updateBlock: (
-    blockId: string,
-    blockMaterial:
-      | OptionBasedItemBlock
-      | EssayItemBlock
-      | IdentificationItemBlock,
-  ) => void;
+  updateBlock: (blockId: string, blockUpdateData: ContentBlock) => void;
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void;
@@ -165,31 +159,16 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
         blocks: newBlocks,
       };
     }),
-  updateBlock: (blockId, blockMaterial) =>
+  updateBlock: (blockId, blockUpdateData) =>
     set((state) => ({
       blocks: state.blocks.map((block) => {
-        if (block.id !== blockId) return block;
-
-        switch (block.materialType) {
-          case "essayItem":
-            return {
-              ...block,
-              material: blockMaterial as EssayItemBlock,
-              isModified: true,
-            };
-          case "identificationItem":
-            return {
-              ...block,
-              material: blockMaterial as IdentificationItemBlock,
-              isModified: true,
-            };
-          case "optionBasedItem":
-            return {
-              ...block,
-              material: blockMaterial as OptionBasedItemBlock,
-              isModified: true,
-            };
+        if (block.id === blockId) {
+          return {
+            ...block,
+            ...blockUpdateData,
+          };
         }
+        return block;
       }),
     })),
   removeBlock: (id) =>
