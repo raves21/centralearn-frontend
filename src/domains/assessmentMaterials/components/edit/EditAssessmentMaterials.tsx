@@ -194,12 +194,8 @@ export default function EditAssessmentMaterials({
         onStart={() => setIsDragging(true)}
         onEnd={() => setIsDragging(false)}
       >
-        {blocks.map((block, index) => (
-          <EditAssessmentMaterialBlock
-            block={block}
-            key={block.id}
-            itemNumber={index + 1}
-          />
+        {blocks.map((block) => (
+          <EditAssessmentMaterialBlock block={block} key={block.id} />
         ))}
       </ReactSortable>
       <button

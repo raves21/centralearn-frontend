@@ -15,13 +15,9 @@ import EditOptionBasedItemBlock from "./EditOptionBasedItemBlock";
 
 type Props = {
   block: ContentBlock;
-  itemNumber: number;
 };
 
-export default function EditAssessmentMaterialBlock({
-  block,
-  itemNumber,
-}: Props) {
+export default function EditAssessmentMaterialBlock({ block }: Props) {
   const [removeBlock, addBlockAfter] = useManageAssessmentMaterialsStore(
     useShallow((state) => [state.removeBlock, state.addBlockAfter]),
   );
