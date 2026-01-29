@@ -168,14 +168,14 @@ export default function EditAssessmentMaterials({
                 },
               })
             }
-            className="px-4 py-2 rounded-full bg-red-500 text-white flex items-center gap-3"
+            className="px-4 py-2 rounded-md border border-mainaccent text-mainaccent hover:bg-mainaccent/10 transition-colors flex items-center gap-3"
           >
             <X className="size-4" />
             <p>Exit edit mode</p>
           </button>
           <button
             onClick={async () => {}}
-            className="px-4 py-2 rounded-full bg-green-500 text-white flex items-center gap-3"
+            className="px-4 py-2 rounded-md bg-mainaccent text-white flex items-center gap-3"
           >
             <Check className="size-4" />
             <p>Save changes</p>

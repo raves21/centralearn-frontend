@@ -190,7 +190,7 @@ export default function EditLectureMaterials({
                 },
               })
             }
-            className="px-4 py-2 rounded-full bg-red-500 text-white flex items-center gap-3"
+            className="px-4 py-2 rounded-md border border-mainaccent hover:bg-mainaccent/10 transition-colors text-mainaccent flex items-center gap-3"
           >
             <X className="size-4" />
             <p>Exit edit mode</p>
@@ -222,7 +222,7 @@ export default function EditLectureMaterials({
                 />,
               );
             }}
-            className="px-4 py-2 rounded-full bg-green-500 text-white flex items-center gap-3"
+            className="px-4 py-2 rounded-md bg-mainaccent hover:bg-indigo-800 transition-colors text-white flex items-center gap-3"
           >
             <Check className="size-4" />
             <p>Save changes</p>
@@ -244,6 +244,7 @@ export default function EditLectureMaterials({
         >
           {blocks.map((block) => (
             <EditLectureMaterialBlock
+              key={block.id}
               block={block}
               fileBlockInputRef={fileInputRef}
             />

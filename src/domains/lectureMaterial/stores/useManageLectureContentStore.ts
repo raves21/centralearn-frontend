@@ -51,25 +51,31 @@ const initialState: Values = {
   originalBlocks: [],
 };
 
+const addEmptyTextBlock = (): ContentBlock => ({
+  id: crypto.randomUUID(),
+  type: "text",
+  content: "<p></p>",
+});
+
+const addEmptyFileBlock = (file: File): ContentBlock => ({
+  id: crypto.randomUUID(),
+  type: "file",
+  content: file,
+});
+
 export const useManageLectureContentStore = create<Store>((set) => ({
   ...initialState,
   addBlock: (args) =>
     set((state) => {
-      const id = crypto.randomUUID();
       let newBlock: ContentBlock;
 
-      if (args.type === "text") {
-        newBlock = {
-          id,
-          type: "text",
-          content: "<p></p>",
-        };
-      } else {
-        newBlock = {
-          id,
-          type: "file",
-          content: args.file,
-        };
+      switch (args.type) {
+        case "text":
+          newBlock = addEmptyTextBlock();
+          break;
+        case "file":
+          newBlock = addEmptyFileBlock(args.file);
+          break;
       }
 
       return {
@@ -78,21 +84,15 @@ export const useManageLectureContentStore = create<Store>((set) => ({
     }),
   addBlockAfter: (blockId, args) =>
     set((state) => {
-      const id = crypto.randomUUID();
       let newBlock: ContentBlock;
 
-      if (args.type === "text") {
-        newBlock = {
-          id,
-          type: "text",
-          content: "<p></p>",
-        };
-      } else {
-        newBlock = {
-          id,
-          type: "file",
-          content: args.file,
-        };
+      switch (args.type) {
+        case "text":
+          newBlock = addEmptyTextBlock();
+          break;
+        case "file":
+          newBlock = addEmptyFileBlock(args.file);
+          break;
       }
 
       const blockIndex = state.blocks.findIndex(

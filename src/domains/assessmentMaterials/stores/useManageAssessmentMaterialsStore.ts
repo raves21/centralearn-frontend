@@ -63,7 +63,7 @@ const initialState: Values = {
   originalBlocks: [],
 };
 
-const emptyIdentificationItemBlock: ContentBlock = {
+const addEmptyIdentificationItemBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   materialQuestion: {
     questionFiles: [],
@@ -74,9 +74,9 @@ const emptyIdentificationItemBlock: ContentBlock = {
   material: {
     acceptedAnswers: [],
   } as IdentificationItemBlock,
-};
+});
 
-const emptyEssayItemBlock: ContentBlock = {
+const addEmptyEssayItemBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   materialQuestion: {
     questionFiles: [],
@@ -90,9 +90,9 @@ const emptyEssayItemBlock: ContentBlock = {
     maxWordCount: null,
     minWordCount: null,
   } as EssayItemBlock,
-};
+});
 
-const emptyOptionBasedItemBlock: ContentBlock = {
+const addEmptyOptionBasedItemBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   materialQuestion: {
     questionFiles: [],
@@ -103,7 +103,7 @@ const emptyOptionBasedItemBlock: ContentBlock = {
   material: {
     options: [],
   } as OptionBasedItemBlock,
-};
+});
 
 export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
   ...initialState,
@@ -113,13 +113,13 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
 
       switch (type) {
         case "optionBasedItem":
-          newBlock = emptyOptionBasedItemBlock;
+          newBlock = addEmptyOptionBasedItemBlock();
           break;
         case "essayItem":
-          newBlock = emptyEssayItemBlock;
+          newBlock = addEmptyEssayItemBlock();
           break;
         case "identificationItem":
-          newBlock = emptyIdentificationItemBlock;
+          newBlock = addEmptyIdentificationItemBlock();
           break;
       }
       return {
@@ -132,13 +132,13 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
 
       switch (type) {
         case "optionBasedItem":
-          newBlock = emptyOptionBasedItemBlock;
+          newBlock = addEmptyOptionBasedItemBlock();
           break;
         case "essayItem":
-          newBlock = emptyEssayItemBlock;
+          newBlock = addEmptyEssayItemBlock();
           break;
         case "identificationItem":
-          newBlock = emptyIdentificationItemBlock;
+          newBlock = addEmptyIdentificationItemBlock();
           break;
       }
       const blockIndex = state.blocks.findIndex(
