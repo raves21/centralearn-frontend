@@ -73,7 +73,7 @@ const getEmptyIdentificationItemBlock = (): ContentBlock => ({
   pointWorth: 1,
   materialType: "identificationItem",
   material: {
-    acceptedAnswers: [],
+    acceptedAnswers: [""],
   } as IdentificationItemBlock,
 });
 

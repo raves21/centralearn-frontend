@@ -100,7 +100,7 @@ export default function EditAssessmentMaterialQuestion({
             Attach files <Plus className="size-4 ml-2" />
           </button>
         ) : (
-          <div className="flex flex-row flex-wrap gap-3 items-center">
+          <div className="flex flex-row flex-wrap gap-4 items-center">
             {block.materialQuestion.questionFiles.map((file, idx) => (
               <div
                 // independent of file type (File object or FileAttachment), 'name' is present
@@ -111,9 +111,9 @@ export default function EditAssessmentMaterialQuestion({
                 <button
                   type="button"
                   onClick={() => handleRemoveFile(idx)}
-                  className="hover:text-red-500 transition-colors"
+                  className="hover:text-red-500 transition-colors p-1"
                 >
-                  <X className="size-4" />
+                  <X className="size-5" />
                 </button>
               </div>
             ))}
