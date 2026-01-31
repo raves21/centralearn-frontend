@@ -1,10 +1,10 @@
-import type { PaginationProps } from "@/utils/sharedTypes";
+import type { FileAttachment, PaginationProps } from "@/utils/sharedTypes";
 
 export type OptionBasedItemOption = {
   id: string;
   optionBasedItemId: string;
   optionText: string | null;
-  optionFile: string | null;
+  optionFile: FileAttachment | null;
   isCorrect: boolean;
 };
 
@@ -43,7 +43,7 @@ export type AssessmentMaterialQuestion = {
   id: string;
   assessmentMaterialId: string;
   questionText: string;
-  questionFiles: string[];
+  questionFiles: FileAttachment[];
 };
 
 export type AssessmentMaterialsPaginated = PaginationProps & {

@@ -51,13 +51,13 @@ const initialState: Values = {
   originalBlocks: [],
 };
 
-const addEmptyTextBlock = (): ContentBlock => ({
+const getEmptyTextBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   type: "text",
   content: "<p></p>",
 });
 
-const addEmptyFileBlock = (file: File): ContentBlock => ({
+const getEmptyFileBlock = (file: File): ContentBlock => ({
   id: crypto.randomUUID(),
   type: "file",
   content: file,
@@ -69,13 +69,10 @@ export const useManageLectureContentStore = create<Store>((set) => ({
     set((state) => {
       let newBlock: ContentBlock;
 
-      switch (args.type) {
-        case "text":
-          newBlock = addEmptyTextBlock();
-          break;
-        case "file":
-          newBlock = addEmptyFileBlock(args.file);
-          break;
+      if (args.type === "text") {
+        newBlock = getEmptyTextBlock();
+      } else {
+        newBlock = getEmptyFileBlock(args.file);
       }
 
       return {
@@ -86,13 +83,10 @@ export const useManageLectureContentStore = create<Store>((set) => ({
     set((state) => {
       let newBlock: ContentBlock;
 
-      switch (args.type) {
-        case "text":
-          newBlock = addEmptyTextBlock();
-          break;
-        case "file":
-          newBlock = addEmptyFileBlock(args.file);
-          break;
+      if (args.type === "text") {
+        newBlock = getEmptyTextBlock();
+      } else {
+        newBlock = getEmptyFileBlock(args.file);
       }
 
       const blockIndex = state.blocks.findIndex(
@@ -118,13 +112,10 @@ export const useManageLectureContentStore = create<Store>((set) => ({
       blocks: state.blocks.map((block) => {
         if (block.id !== id) return block;
 
-        if (
-          block.type === "file" &&
-          (content instanceof File || typeof content === "string")
-        ) {
-          return { ...block, content, isModified: true };
-        } else if (block.type === "text" && typeof content === "string") {
-          return { ...block, content, isModified: true };
+        if (block.type === "file") {
+          return { ...block, content: content as File };
+        } else if (block.type === "text") {
+          return { ...block, content: content as string };
         }
         return block;
       }),

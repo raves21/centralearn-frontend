@@ -1,16 +1,17 @@
+import type { FileAttachment } from "@/utils/sharedTypes";
 import { create } from "zustand";
 
 type MaterialQuestion = {
   id?: string;
   questionText: string;
-  questionFiles: (File | string)[];
+  questionFiles: (File | FileAttachment)[];
 };
 
 type OptionBasedItemOption = {
   id?: string;
   isCorrect: boolean;
   optionText: string | null;
-  optionFile: File | string | null;
+  optionFile: File | FileAttachment | null;
 };
 
 type OptionBasedItemBlock = {
@@ -63,7 +64,7 @@ const initialState: Values = {
   originalBlocks: [],
 };
 
-const addEmptyIdentificationItemBlock = (): ContentBlock => ({
+const getEmptyIdentificationItemBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   materialQuestion: {
     questionFiles: [],
@@ -76,7 +77,7 @@ const addEmptyIdentificationItemBlock = (): ContentBlock => ({
   } as IdentificationItemBlock,
 });
 
-const addEmptyEssayItemBlock = (): ContentBlock => ({
+const getEmptyEssayItemBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   materialQuestion: {
     questionFiles: [],
@@ -92,7 +93,7 @@ const addEmptyEssayItemBlock = (): ContentBlock => ({
   } as EssayItemBlock,
 });
 
-const addEmptyOptionBasedItemBlock = (): ContentBlock => ({
+const getEmptyOptionBasedItemBlock = (): ContentBlock => ({
   id: crypto.randomUUID(),
   materialQuestion: {
     questionFiles: [],
@@ -113,13 +114,13 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
 
       switch (type) {
         case "optionBasedItem":
-          newBlock = addEmptyOptionBasedItemBlock();
+          newBlock = getEmptyOptionBasedItemBlock();
           break;
         case "essayItem":
-          newBlock = addEmptyEssayItemBlock();
+          newBlock = getEmptyEssayItemBlock();
           break;
         case "identificationItem":
-          newBlock = addEmptyIdentificationItemBlock();
+          newBlock = getEmptyIdentificationItemBlock();
           break;
       }
       return {
@@ -132,13 +133,13 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
 
       switch (type) {
         case "optionBasedItem":
-          newBlock = addEmptyOptionBasedItemBlock();
+          newBlock = getEmptyOptionBasedItemBlock();
           break;
         case "essayItem":
-          newBlock = addEmptyEssayItemBlock();
+          newBlock = getEmptyEssayItemBlock();
           break;
         case "identificationItem":
-          newBlock = addEmptyIdentificationItemBlock();
+          newBlock = getEmptyIdentificationItemBlock();
           break;
       }
       const blockIndex = state.blocks.findIndex(
