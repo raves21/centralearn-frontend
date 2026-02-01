@@ -3,17 +3,20 @@ import StarterKit from "@tiptap/starter-kit";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import TiptapEditorMenuBar from "./TiptapEditorMenuBar";
 import Placeholder from "@tiptap/extension-placeholder";
+import { cn } from "@/lib/utils";
 
 interface TiptapEditorProps {
   content: string;
   onChange: (content: string) => void;
   placeholder?: string;
+  className?: string;
 }
 
 const TiptapEditor = ({
   content,
   onChange,
   placeholder,
+  className,
 }: TiptapEditorProps) => {
   const editor = useEditor({
     extensions: [
@@ -55,7 +58,12 @@ const TiptapEditor = ({
   // }
 
   return (
-    <div className="w-full bg-white rounded-lg border border-gray-200 shadow-sm">
+    <div
+      className={cn(
+        "w-full bg-white rounded-lg border border-gray-200 shadow-sm",
+        className,
+      )}
+    >
       <TiptapEditorMenuBar editor={editor} />
       <EditorContent editor={editor} />
     </div>

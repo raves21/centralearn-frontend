@@ -6,14 +6,18 @@ import {
 import type { OptionBasedItem } from "../../types";
 import { useEffect, useState } from "react";
 import EditAssessmentMaterialQuestion from "./EditAssessmentMaterialQuestion";
+import { Plus } from "lucide-react";
+import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
+import AddOptionDialog from "./AddOptionDialog";
+import EditOption from "./EditOption";
 
 type Props = {
   block: ContentBlock & { material: OptionBasedItem };
 };
 
 export default function EditOptionBasedItemBlock({ block }: Props) {
-  const [blocks] = useManageAssessmentMaterialsStore(
-    useShallow((state) => [state.blocks]),
+  const [blocks, updateBlock] = useManageAssessmentMaterialsStore(
+    useShallow((state) => [state.blocks, state.updateBlock]),
   );
   const [itemNumber, setItemNumber] = useState(0);
 
@@ -22,11 +26,61 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
     setItemNumber(index + 1);
   }, [blocks]);
 
+  const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
+
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-lg font-semibold text-gray-400">Option-Based</p>
-      <div className="flex flex-col rounded-lg border border-gray-200 p-4 gap-5">
-        <EditAssessmentMaterialQuestion block={block} itemNumber={itemNumber} />
+    <div className="flex flex-col gap-8 rounded-lg border-2 border-gray-300 p-8 hover:border-mainaccent transition-colors">
+      <div className="flex flex-col gap-4">
+        <p className="text-lg font-semibold text-gray-400">Option Based</p>
+        <div className="flex flex-col gap-5">
+          <EditAssessmentMaterialQuestion
+            block={block}
+            itemNumber={itemNumber}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-6">
+        <p className="font-medium text-lg">Options</p>
+        <div className="flex flex-col gap-6">
+          {block.material.options.map((option, index) => (
+            <EditOption
+              key={index}
+              block={block}
+              optionId={option.id}
+              type={option.optionText !== null ? "text" : "image"}
+            />
+          ))}
+          <button
+            onClick={() =>
+              toggleOpenDialog(
+                <AddOptionDialog
+                  onClickText={() => {
+                    updateBlock(block.id, {
+                      material: {
+                        ...block.material,
+                        options: [
+                          ...block.material.options,
+                          {
+                            id: crypto.randomUUID(),
+                            isCorrect: false,
+                            optionText: "",
+                            optionFile: null,
+                          },
+                        ],
+                      },
+                    });
+                    toggleOpenDialog(null);
+                  }}
+                  onClickImage={() => {}}
+                />,
+              )
+            }
+            className="flex justify-center items-center gap-4 border hover:bg-gray-200 transition-colors rounded-md border-mainaccent w-[600px] py-4"
+          >
+            <Plus className="size-4 stroke-mainaccent" />
+            <p className="font-medium text-mainaccent">Add Option</p>
+          </button>
+        </div>
       </div>
     </div>
   );

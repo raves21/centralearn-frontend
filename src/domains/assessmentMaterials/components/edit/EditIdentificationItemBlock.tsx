@@ -29,7 +29,7 @@ export default function EditIdentificationItemBlock({ block }: Props) {
   const [isCaseSensitive, setIsCaseSensitive] = useState(false);
 
   return (
-    <div className="flex flex-col gap-8 rounded-lg border border-gray-300 p-6">
+    <div className="flex flex-col gap-8 rounded-lg border-2 border-gray-300 p-8 hover:border-mainaccent transition-colors">
       <div className="flex flex-col gap-4">
         <p className="text-lg font-semibold text-gray-400">Identification</p>
         <div className="flex flex-col gap-5">

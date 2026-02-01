@@ -24,7 +24,7 @@ export default function EditEssayItemBlock({ block }: Props) {
   }, [blocks]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 rounded-lg border-2 border-gray-300 p-8 hover:border-mainaccent transition-colors">
       <p className="text-lg font-semibold text-gray-400">Essay</p>
       <div className="flex flex-col rounded-lg border border-gray-200 p-4 gap-5">
         <EditAssessmentMaterialQuestion block={block} itemNumber={itemNumber} />

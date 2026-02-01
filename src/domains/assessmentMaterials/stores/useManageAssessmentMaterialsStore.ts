@@ -51,7 +51,10 @@ type Actions = {
     blockId: string,
     type: "optionBasedItem" | "essayItem" | "identificationItem",
   ) => void;
-  updateBlock: (blockId: string, blockUpdateData: ContentBlock) => void;
+  updateBlock: (
+    blockId: string,
+    blockUpdateData: Partial<ContentBlock>,
+  ) => void;
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void;
