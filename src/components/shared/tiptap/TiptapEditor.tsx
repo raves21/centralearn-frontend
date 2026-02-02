@@ -1,3 +1,4 @@
+import type { TiptapSelector } from "@/utils/sharedTypes";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TextStyleKit } from "@tiptap/extension-text-style";
@@ -10,6 +11,7 @@ interface TiptapEditorProps {
   onChange: (content: string) => void;
   placeholder?: string;
   className?: string;
+  excludeSelectors?: TiptapSelector[];
 }
 
 const TiptapEditor = ({
@@ -17,6 +19,7 @@ const TiptapEditor = ({
   onChange,
   placeholder,
   className,
+  excludeSelectors,
 }: TiptapEditorProps) => {
   const editor = useEditor({
     extensions: [
@@ -53,9 +56,9 @@ const TiptapEditor = ({
   //   }
   // }, [content, editor]);
 
-  // if (!editor) {
-  //   return null;
-  // }
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div
@@ -64,7 +67,10 @@ const TiptapEditor = ({
         className,
       )}
     >
-      <TiptapEditorMenuBar editor={editor} />
+      <TiptapEditorMenuBar
+        editor={editor}
+        excludeSelectors={excludeSelectors}
+      />
       <EditorContent editor={editor} />
     </div>
   );

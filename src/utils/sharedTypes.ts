@@ -75,19 +75,39 @@ export type TInfoSection = {
   details: InfoSectionDetail[];
 };
 
-
 export type TextAttachment = {
-  id: string
-  content: string
-}
+  id: string;
+  content: string;
+};
 
 export type FileAttachment = {
-  id: string
-  path: string
-  url: string
-  mime: string
-  extension: string
-  type: "image" | "video" | "document"
-  name: string
-  size: number
-}
+  id: string;
+  path: string;
+  url: string;
+  mime: string;
+  extension: string;
+  type: "image" | "video" | "document";
+  name: string;
+  size: number;
+};
+
+export type TiptapSelector =
+  | "bold"
+  | "italic"
+  | "strike"
+  | "code"
+  | "paragraph"
+  | "heading1"
+  | "heading2"
+  | "heading3"
+  | "heading4"
+  | "heading5"
+  | "heading6"
+  | "bulletList"
+  | "orderedList"
+  | "codeBlock"
+  | "blockquote"
+  | "undo"
+  | "redo"
+  | "eraser"
+  | "removeFormatting";

@@ -16,6 +16,7 @@ type OptionBasedItemOption = {
 
 type OptionBasedItemBlock = {
   options: OptionBasedItemOption[];
+  isAlphabeticalOrder: boolean;
 };
 
 type EssayItemBlock = {
@@ -106,6 +107,7 @@ const getEmptyOptionBasedItemBlock = (): ContentBlock => ({
   materialType: "optionBasedItem",
   material: {
     options: [],
+    isAlphabeticalOrder: true,
   } as OptionBasedItemBlock,
 });
 

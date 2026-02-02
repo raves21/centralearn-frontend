@@ -4,7 +4,6 @@ import {
   type ContentBlock,
 } from "../../stores/useManageAssessmentMaterialsStore";
 import type { OptionBasedItem } from "../../types";
-import { Input } from "@/components/ui/input";
 import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 
 type Props = {
@@ -30,6 +29,13 @@ export default function EditOption({ block, optionId, type }: Props) {
     });
   }
 
+  const optionText = block.material.options.find(
+    (option) => option.id === optionId,
+  )?.optionText;
+  const optionFileImage = block.material.options.find(
+    (option) => option.id === optionId,
+  )?.optionFile;
+
   return (
     <div className="flex gap-3 rounded-md border border-gray-300 px-5 py-8 w-fit">
       <div className="flex flex-col gap-6">
@@ -45,14 +51,24 @@ export default function EditOption({ block, optionId, type }: Props) {
           <Trash className="size-5 relative z-10 text-gray-500 group-hover:text-red-500 transition-colors duration-200" />
         </button>
       </div>
-      {type === "text" ? (
+      {type === "text" && optionText !== null && optionText !== undefined && (
         <TiptapEditor
-          content={
-            block.material.options.find((option) => option.id === optionId)
-              ?.optionText!
-          }
+          excludeSelectors={[
+            "blockquote",
+            "orderedList",
+            "bulletList",
+            "heading1",
+            "heading2",
+            "heading3",
+            "heading4",
+            "heading5",
+            "heading6",
+            "removeFormatting",
+            "eraser",
+          ]}
+          content={optionText}
           placeholder="Start typing option text here..."
-          className="max-w-[1000px]"
+          className="w-[900px]"
           onChange={(value) => {
             updateBlock(block.id, {
               ...block,
@@ -71,8 +87,19 @@ export default function EditOption({ block, optionId, type }: Props) {
             });
           }}
         />
-      ) : (
-        <div>file</div>
+      )}
+      {type === "image" && optionFileImage && (
+        <div className="max-w-fit border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+          <img
+            src={
+              optionFileImage instanceof File
+                ? URL.createObjectURL(optionFileImage)
+                : optionFileImage.url
+            }
+            alt={optionFileImage.name}
+            className="object-contain max-w-full max-h-[300px]"
+          />
+        </div>
       )}
     </div>
   );
