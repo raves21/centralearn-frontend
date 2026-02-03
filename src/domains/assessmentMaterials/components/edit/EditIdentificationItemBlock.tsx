@@ -1,16 +1,16 @@
 import { useShallow } from "zustand/react/shallow";
 import {
   type ContentBlock,
+  type IdentificationItemBlock,
   useManageAssessmentMaterialsStore,
 } from "../../stores/useManageAssessmentMaterialsStore";
-import type { IdentificationItem } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import EditAssessmentMaterialQuestion from "./EditAssessmentMaterialQuestion";
 import IdentificationAcceptedAnswer from "./IdentificationAcceptedAnswers";
 import { Plus } from "lucide-react";
 
 type Props = {
-  block: ContentBlock & { material: IdentificationItem };
+  block: ContentBlock & { material: IdentificationItemBlock };
 };
 
 export default function EditIdentificationItemBlock({ block }: Props) {
@@ -25,8 +25,6 @@ export default function EditIdentificationItemBlock({ block }: Props) {
   }, [blocks]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const [isCaseSensitive, setIsCaseSensitive] = useState(false);
 
   return (
     <div className="flex flex-col gap-8 rounded-lg border-2 border-gray-300 p-8 hover:border-mainaccent transition-colors">
@@ -44,7 +42,13 @@ export default function EditIdentificationItemBlock({ block }: Props) {
         <div
           onClick={() => {
             if (inputRef.current) {
-              setIsCaseSensitive(!inputRef.current.checked);
+              updateBlock(block.id, {
+                ...block,
+                material: {
+                  ...block.material,
+                  isCaseSensitive: !block.material.isCaseSensitive,
+                },
+              });
             }
           }}
           className="flex items-center gap-2 hover:cursor-pointer select-none w-min"
@@ -53,7 +57,7 @@ export default function EditIdentificationItemBlock({ block }: Props) {
             ref={inputRef}
             type="checkbox"
             className="size-4 cursor-pointer accent-mainaccent"
-            checked={isCaseSensitive}
+            checked={block.material.isCaseSensitive}
           />
           <p className="whitespace-nowrap">Case Sensitive</p>
         </div>
@@ -71,6 +75,7 @@ export default function EditIdentificationItemBlock({ block }: Props) {
               updateBlock(block.id, {
                 ...block,
                 material: {
+                  ...block.material,
                   acceptedAnswers: [...block.material.acceptedAnswers, ""],
                 },
               })

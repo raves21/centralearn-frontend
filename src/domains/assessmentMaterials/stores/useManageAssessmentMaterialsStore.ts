@@ -1,7 +1,7 @@
 import type { FileAttachment } from "@/utils/sharedTypes";
 import { create } from "zustand";
 
-type MaterialQuestion = {
+export type MaterialQuestion = {
   id?: string;
   questionText: string;
   questionFiles: (File | FileAttachment)[];
@@ -14,20 +14,21 @@ export type OptionBasedItemOptionBlock = {
   optionFile: File | FileAttachment | null;
 };
 
-type OptionBasedItemBlock = {
+export type OptionBasedItemBlock = {
   options: OptionBasedItemOptionBlock[];
   isAlphabeticalOrder: boolean;
 };
 
-type EssayItemBlock = {
+export type EssayItemBlock = {
   maxCharacterCount: number | null;
   minCharacterCount: number | null;
   maxWordCount: number | null;
   minWordCount: number | null;
 };
 
-type IdentificationItemBlock = {
+export type IdentificationItemBlock = {
   acceptedAnswers: string[];
+  isCaseSensitive: boolean;
 };
 
 export type ContentBlock = {
@@ -75,6 +76,7 @@ const getEmptyIdentificationItemBlock = (): ContentBlock => ({
   materialType: "identificationItem",
   material: {
     acceptedAnswers: [""],
+    isCaseSensitive: false,
   } as IdentificationItemBlock,
 });
 

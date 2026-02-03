@@ -24,6 +24,7 @@ export type EssayItem = {
 
 export type IdentificationItem = {
   acceptedAnswers: string[];
+  isCaseSensitive: boolean;
 };
 
 export type AssessmentMaterial = {
