@@ -68,7 +68,7 @@ export default function EditOption({ block, optionId, type }: Props) {
           ]}
           content={optionText}
           placeholder="Start typing option text here..."
-          className="w-[900px]"
+          className="w-[900px] [&_.tiptap-editor]:max-h-[150px]"
           onChange={(value) => {
             updateBlock(block.id, {
               ...block,

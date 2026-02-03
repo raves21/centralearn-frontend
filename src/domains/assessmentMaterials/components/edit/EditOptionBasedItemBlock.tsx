@@ -1,9 +1,10 @@
 import { useShallow } from "zustand/react/shallow";
+import { ReactSortable } from "react-sortablejs";
 import {
   type ContentBlock,
   useManageAssessmentMaterialsStore,
 } from "../../stores/useManageAssessmentMaterialsStore";
-import type { OptionBasedItem } from "../../types";
+import type { OptionBasedItem, OptionBasedItemOption } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import EditAssessmentMaterialQuestion from "./EditAssessmentMaterialQuestion";
 import { Plus } from "lucide-react";
@@ -66,14 +67,30 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
           <p className="whitespace-nowrap">Alphabetical Order</p>
         </div>
         <div className="flex flex-col gap-6">
-          {block.material.options.map((option, index) => (
-            <EditOption
-              key={index}
-              block={block}
-              optionId={option.id}
-              type={option.optionText !== null ? "text" : "image"}
-            />
-          ))}
+          <ReactSortable
+            list={block.material.options}
+            setList={(options: OptionBasedItemOption[]) => {
+              updateBlock(block.id, {
+                ...block,
+                material: {
+                  ...block.material,
+                  options,
+                },
+              });
+            }}
+            className="flex flex-col gap-6"
+            handle=".drag-handle"
+            animation={200}
+          >
+            {block.material.options.map((option) => (
+              <EditOption
+                key={option.id}
+                block={block}
+                optionId={option.id}
+                type={option.optionText !== null ? "text" : "image"}
+              />
+            ))}
+          </ReactSortable>
           <button
             onClick={() =>
               toggleOpenDialog(

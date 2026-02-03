@@ -82,6 +82,7 @@ export default function EditAssessmentMaterials({
               assessmentMaterial.material as OptionBasedItem;
             material = {
               options: optionBasedItem.options,
+              isAlphabeticalOrder: true
             };
             break;
           case "App\\Models\\EssayItem":

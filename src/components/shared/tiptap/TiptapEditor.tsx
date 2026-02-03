@@ -37,7 +37,7 @@ const TiptapEditor = ({
     editorProps: {
       attributes: {
         class:
-          "tiptap-editor focus:outline-none min-h-[150px] p-4 border rounded-md",
+          "tiptap-editor focus:outline-none max-h-[300px] min-h-[150px] overflow-y-auto p-4 border rounded-md",
       },
       handleDrop: () => true, // Disable drag and drop into the editor
     },
