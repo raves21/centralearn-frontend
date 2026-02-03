@@ -7,7 +7,7 @@ type MaterialQuestion = {
   questionFiles: (File | FileAttachment)[];
 };
 
-type OptionBasedItemOption = {
+export type OptionBasedItemOptionBlock = {
   id?: string;
   isCorrect: boolean;
   optionText: string | null;
@@ -15,7 +15,7 @@ type OptionBasedItemOption = {
 };
 
 type OptionBasedItemBlock = {
-  options: OptionBasedItemOption[];
+  options: OptionBasedItemOptionBlock[];
   isAlphabeticalOrder: boolean;
 };
 
@@ -52,10 +52,7 @@ type Actions = {
     blockId: string,
     type: "optionBasedItem" | "essayItem" | "identificationItem",
   ) => void;
-  updateBlock: (
-    blockId: string,
-    blockUpdateData: Partial<ContentBlock>,
-  ) => void;
+  updateBlock: (blockId: string, blockUpdateData: ContentBlock) => void;
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void;

@@ -11,13 +11,9 @@ import EditTextBlock from "./EditTextBlock";
 
 type Props = {
   block: ContentBlock;
-  fileBlockInputRef: React.RefObject<HTMLInputElement | null>;
 };
 
-export default function EditLectureMaterialBlock({
-  block,
-  fileBlockInputRef,
-}: Props) {
+export default function EditLectureMaterialBlock({ block }: Props) {
   const [removeBlock, addBlockAfter] = useManageLectureContentStore(
     useShallow((state) => [state.removeBlock, state.addBlockAfter]),
   );
@@ -64,7 +60,6 @@ export default function EditLectureMaterialBlock({
                     e.target.value = "";
                   }
                 }}
-                fileInputRef={fileBlockInputRef}
               />,
             )
           }

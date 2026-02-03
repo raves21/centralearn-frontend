@@ -5,8 +5,6 @@ type FileBlock = {
   content: File | string; // File for new uploads, string URL for existing files
 };
 
-import type { BulkChangesPayload, SyncMaterialItem } from "../types";
-
 type TextBlock = {
   type: "text";
   content: string;
@@ -41,7 +39,6 @@ type Actions = {
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void; // Update blocks without resetting originalBlocks
-  computeChanges: (lectureId: string) => BulkChangesPayload;
 };
 
 type Store = Values & Actions;
@@ -127,36 +124,4 @@ export const useManageLectureContentStore = create<Store>((set) => ({
   updateBlocks: (blocks) => set({ blocks }), // Only update blocks, keep originalBlocks intact
   setBlocks: (blocks) =>
     set({ blocks, originalBlocks: JSON.parse(JSON.stringify(blocks)) }),
-  computeChanges: (lectureId) => {
-    const state = useManageLectureContentStore.getState();
-    const { blocks } = state;
-
-    const materials: SyncMaterialItem[] = [];
-
-    blocks.forEach((block, index) => {
-      const order = index + 1; // 1-indexed order
-
-      const item: SyncMaterialItem = {
-        id: block.dbId ?? null,
-        material_type: block.type,
-        order,
-      };
-
-      if (block.type === "text") {
-        item.material_content = block.content as string;
-      } else if (block.type === "file") {
-        // Only include file if it's a new File object
-        if (block.content instanceof File) {
-          item.material_file = block.content;
-        }
-      }
-
-      materials.push(item);
-    });
-
-    return {
-      lecture_id: lectureId,
-      materials,
-    };
-  },
 }));

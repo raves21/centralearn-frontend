@@ -2,7 +2,7 @@ import type { FileAttachment, PaginationProps } from "@/utils/sharedTypes";
 
 export type OptionBasedItemOption = {
   id: string;
-  optionBasedItemId: string;
+  // optionBasedItemId: string;
   optionText: string | null;
   optionFile: FileAttachment | null;
   isCorrect: boolean;

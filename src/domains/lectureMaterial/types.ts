@@ -16,16 +16,3 @@ export type LectureMaterial = {
 export type LectureMaterialsPaginated = PaginationProps & {
   data: LectureMaterial[];
 };
-
-export type SyncMaterialItem = {
-  id?: string | null;
-  material_type: "text" | "file";
-  order: number;
-  material_content?: string;
-  material_file?: File;
-};
-
-export type BulkChangesPayload = {
-  lecture_id: string;
-  materials: SyncMaterialItem[];
-};

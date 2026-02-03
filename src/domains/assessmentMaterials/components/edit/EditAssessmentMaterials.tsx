@@ -82,7 +82,7 @@ export default function EditAssessmentMaterials({
               assessmentMaterial.material as OptionBasedItem;
             material = {
               options: optionBasedItem.options,
-              isAlphabeticalOrder: true
+              isAlphabeticalOrder: true,
             };
             break;
           case "App\\Models\\EssayItem":
@@ -123,6 +123,8 @@ export default function EditAssessmentMaterials({
   }, [assessmentMaterials]);
 
   const { setIsDragging } = useSetTopPanelPointerEventsWhenDragging();
+
+  async function onSaveChanges() {}
 
   return (
     <div className="flex flex-col gap-12 w-full pb-12">

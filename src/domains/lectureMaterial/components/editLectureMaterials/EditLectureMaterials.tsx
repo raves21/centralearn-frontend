@@ -16,12 +16,11 @@ import AddLectureMaterialBlockDialog from "./AddLectureMaterialBlockDialog";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { useManageLectureContentStore } from "@/domains/lectureMaterial/stores/useManageLectureContentStore";
 import { useShallow } from "zustand/react/shallow";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useAllLectureMaterials } from "../../api/queries";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useProcessBulkLectureMaterials } from "../../api/mutations";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
-import type { BulkChangesPayload } from "../../types";
 import { toast } from "sonner";
 import { isEqual } from "lodash";
 import { useSetTopPanelPointerEventsWhenDragging } from "@/utils/hooks/useSetTopPanelPointerEventsWhenDragging";
@@ -39,14 +38,13 @@ export default function EditLectureMaterials({
   const navigate = useNavigate();
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
-  const [blocks, addBlock, setBlocks, updateBlocks, computeChanges] =
+  const [blocks, addBlock, setBlocks, updateBlocks] =
     useManageLectureContentStore(
       useShallow((state) => [
         state.blocks,
         state.addBlock,
         state.setBlocks,
         state.updateBlocks,
-        state.computeChanges,
       ]),
     );
 
@@ -58,8 +56,6 @@ export default function EditLectureMaterials({
   const { data: lectureMaterials } = useAllLectureMaterials({
     lectureId: chapterContentInfo.contentId,
   });
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { setIsDragging } = useSetTopPanelPointerEventsWhenDragging();
 
@@ -93,41 +89,36 @@ export default function EditLectureMaterials({
     }
   }, [lectureMaterials, setBlocks]);
 
-  async function onSaveChanges(changes: BulkChangesPayload) {
+  async function onSaveChanges() {
     try {
+      const blocks = useManageLectureContentStore.getState().blocks;
       const formData = new FormData();
+      formData.append("lecture_id", chapterContentInfo.contentId);
 
-      formData.append("lecture_id", changes.lecture_id);
-
-      changes.materials.forEach((material, index) => {
-        if (material.id) {
-          formData.append(`materials[${index}][id]`, material.id);
+      blocks.forEach((block, index) => {
+        if (block.dbId) {
+          formData.append(`materials[${index}][id]`, block.dbId);
         }
-        formData.append(
-          `materials[${index}][material_type]`,
-          material.material_type,
-        );
-        formData.append(
-          `materials[${index}][order]`,
-          material.order.toString(),
-        );
+        formData.append(`materials[${index}][material_type]`, block.type);
+        formData.append(`materials[${index}][order]`, (index + 1).toString());
 
-        if (
-          material.material_type === "text" &&
-          typeof material.material_content === "string"
-        ) {
+        if (block.type === "text") {
           formData.append(
             `materials[${index}][material_content]`,
-            material.material_content,
+            block.content,
           );
-        } else if (
-          material.material_type === "file" &&
-          material.material_file
-        ) {
-          formData.append(
-            `materials[${index}][material_file]`,
-            material.material_file,
-          );
+        } else if (block.type === "file") {
+          if (block.content instanceof File) {
+            formData.append(
+              `materials[${index}][material_file][new_file]`,
+              block.content,
+            );
+          } else {
+            formData.append(
+              `materials[${index}][material_file][kept_file]`,
+              block.content,
+            );
+          }
         }
       });
       await processBulkLectureMaterials(formData);
@@ -212,12 +203,9 @@ export default function EditLectureMaterials({
                 return;
               }
 
-              // Compute changes
-              const changes = computeChanges(chapterContentInfo.contentId);
-
               toggleOpenDialog(
                 <ConfirmationDialog
-                  onClickYes={() => onSaveChanges(changes)}
+                  onClickYes={() => onSaveChanges()}
                   confirmationMessage="Are you sure you want to save changes?"
                 />,
               );
@@ -243,11 +231,7 @@ export default function EditLectureMaterials({
           onEnd={() => setIsDragging(false)}
         >
           {blocks.map((block) => (
-            <EditLectureMaterialBlock
-              key={block.id}
-              block={block}
-              fileBlockInputRef={fileInputRef}
-            />
+            <EditLectureMaterialBlock key={block.id} block={block} />
           ))}
         </ReactSortable>
         <button
@@ -267,7 +251,6 @@ export default function EditLectureMaterials({
                     e.target.value = "";
                   }
                 }}
-                fileInputRef={fileInputRef}
               />,
             )
           }

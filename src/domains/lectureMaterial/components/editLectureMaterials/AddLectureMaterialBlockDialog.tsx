@@ -1,14 +1,16 @@
+import { useRef } from "react";
+
 type Props = {
   onClickText: () => void;
   onSelectFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
 };
 
 export default function AddLectureMaterialBlockDialog({
   onClickText,
   onSelectFile,
-  fileInputRef,
 }: Props) {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   return (
     <div className="w-[600px] h-[300px] flex rounded-lg overflow-hidden p-2 bg-gray-bg gap-3">
       <button
