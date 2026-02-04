@@ -44,8 +44,8 @@ export type AssessmentMaterial = {
 export type AssessmentMaterialQuestion = {
   id: string;
   assessmentMaterialId: string;
-  questionText: string;
-  questionFiles: FileAttachment[];
+  questionText: string | null;
+  questionFiles: FileAttachment[] | null;
 };
 
 export type AssessmentMaterialsPaginated = PaginationProps & {

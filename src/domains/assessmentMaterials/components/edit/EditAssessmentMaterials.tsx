@@ -18,6 +18,7 @@ import { useSetTopPanelPointerEventsWhenDragging } from "@/utils/hooks/useSetTop
 import { useAllAssessmentMaterials } from "../../api/queries";
 import {
   useManageAssessmentMaterialsStore,
+  type ContentBlock,
   type EssayItemBlock,
   type IdentificationItemBlock,
   type OptionBasedItemBlock,
@@ -82,7 +83,7 @@ export default function EditAssessmentMaterials({
           | "essayItem"
           | "identificationItem";
 
-        let material;
+        let material: ContentBlock["material"];
         switch (assessmentMaterial.materialType) {
           case "App\\Models\\OptionBasedItem":
             materialType = "optionBasedItem";
@@ -119,13 +120,13 @@ export default function EditAssessmentMaterials({
           dbId: assessmentMaterial.id,
           materialQuestion: {
             id: assessmentMaterial.question.id,
-            questionText: assessmentMaterial.question.questionText,
-            questionFiles: assessmentMaterial.question.questionFiles,
+            questionText: assessmentMaterial.question.questionText ?? "",
+            questionFiles: assessmentMaterial.question.questionFiles ?? [],
           },
           pointWorth: assessmentMaterial.pointWorth,
           materialType,
           material,
-        };
+        } as ContentBlock;
       });
       setBlocks(hydratedBlocks);
     }
@@ -184,10 +185,12 @@ export default function EditAssessmentMaterials({
                   questionFile,
                 );
               } else {
-                formData.append(
-                  `materials[${blockIndex}][question][new_question_files][${index}]`,
-                  JSON.stringify(questionFile),
-                );
+                Object.entries(questionFile).forEach(([key, value]) => {
+                  formData.append(
+                    `materials[${blockIndex}][question][kept_question_files][${index}][${key}]`,
+                    value.toString(),
+                  );
+                });
               }
             },
           );
@@ -197,6 +200,7 @@ export default function EditAssessmentMaterials({
         switch (block.materialType) {
           case "essayItem":
             const essayMaterial = block.material as EssayItemBlock;
+
             if (essayMaterial.minCharacterCount)
               formData.append(
                 `materials[${blockIndex}][essay_item][min_character_count]`,
@@ -224,9 +228,13 @@ export default function EditAssessmentMaterials({
               block.material as IdentificationItemBlock;
 
             if (identificationMaterial.acceptedAnswers.length !== 0) {
-              formData.append(
-                `materials[${blockIndex}][identification_item][accepted_answers]`,
-                JSON.stringify(identificationMaterial.acceptedAnswers),
+              identificationMaterial.acceptedAnswers.forEach(
+                (answer, index) => {
+                  formData.append(
+                    `materials[${blockIndex}][identication_item][accepted_answers][${index}]`,
+                    answer,
+                  );
+                },
               );
             }
             formData.append(
@@ -274,9 +282,13 @@ export default function EditAssessmentMaterials({
                       option.optionFile,
                     );
                   } else {
-                    formData.append(
-                      `materials[${blockIndex}][option_based_item][options][${index}][kept_option_file]`,
-                      JSON.stringify(option.optionFile),
+                    Object.entries(option.optionFile).forEach(
+                      ([key, value]) => {
+                        formData.append(
+                          `materials[${blockIndex}][option_based_item][options][${index}][kept_option_file][${key}]`,
+                          value.toString(),
+                        );
+                      },
                     );
                   }
                 }
