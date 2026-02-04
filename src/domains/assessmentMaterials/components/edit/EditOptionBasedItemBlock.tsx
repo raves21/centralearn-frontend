@@ -97,6 +97,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
                 <AddOptionDialog
                   onClickText={() => {
                     updateBlock(block.id, {
+                      ...block,
                       material: {
                         ...block.material,
                         options: [

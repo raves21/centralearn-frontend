@@ -8,6 +8,7 @@ import type { OptionBasedItem } from "../../types";
 import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import AddOptionDialog from "./AddOptionDialog";
+import { useRef } from "react";
 
 type Props = {
   block: ContentBlock & { material: OptionBasedItem };
@@ -19,6 +20,8 @@ export default function EditOption({ block, optionId, type }: Props) {
   const updateBlock = useManageAssessmentMaterialsStore(
     (state) => state.updateBlock,
   );
+
+  const isCorrectCheckboxRef = useRef<HTMLInputElement | null>(null);
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
@@ -122,6 +125,27 @@ export default function EditOption({ block, optionId, type }: Props) {
     toggleOpenDialog(null);
   }
 
+  function setCorrectOption() {
+    updateBlock(block.id, {
+      ...block,
+      material: {
+        ...block.material,
+        options: block.material.options.map((option) => {
+          if (option.id === optionId) {
+            return {
+              ...option,
+              isCorrect: true,
+            };
+          }
+          return {
+            ...option,
+            isCorrect: false,
+          };
+        }),
+      },
+    });
+  }
+
   return (
     <div className="flex gap-3 rounded-md border border-gray-300 px-5 py-8 w-fit">
       <div className="flex flex-col gap-6">
@@ -151,56 +175,73 @@ export default function EditOption({ block, optionId, type }: Props) {
           <Plus className="size-5 relative z-10 text-gray-500 group-hover:text-green-500 transition-colors duration-200" />
         </button>
       </div>
-      {type === "text" && optionText !== null && optionText !== undefined && (
-        <TiptapEditor
-          excludeSelectors={[
-            "blockquote",
-            "orderedList",
-            "bulletList",
-            "heading1",
-            "heading2",
-            "heading3",
-            "heading4",
-            "heading5",
-            "heading6",
-            "removeFormatting",
-            "eraser",
-          ]}
-          content={optionText}
-          placeholder="Start typing option text here..."
-          className="w-[900px] [&_.tiptap-editor]:max-h-[150px]"
-          onChange={(value) => {
-            updateBlock(block.id, {
-              ...block,
-              material: {
-                ...block.material,
-                options: block.material.options.map((option) => {
-                  if (option.id === optionId) {
-                    return {
-                      ...option,
-                      optionText: value,
-                    };
-                  }
-                  return option;
-                }),
-              },
-            });
-          }}
-        />
-      )}
-      {type === "image" && optionFileImage && (
-        <div className="max-w-fit border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
-          <img
-            src={
-              optionFileImage instanceof File
-                ? URL.createObjectURL(optionFileImage)
-                : optionFileImage.url
+      <div className="flex flex-col gap-4 items-end">
+        <div
+          onClick={() => setCorrectOption()}
+          className="flex items-center gap-2 hover:cursor-pointer select-none w-min"
+        >
+          <input
+            ref={isCorrectCheckboxRef}
+            type="checkbox"
+            className="size-4 cursor-pointer accent-mainaccent"
+            checked={
+              block.material.options.find((option) => option.id === optionId)
+                ?.isCorrect
             }
-            alt={optionFileImage.name}
-            className="object-contain max-w-full max-h-[300px]"
           />
+          <p className="whitespace-nowrap font-medium">Correct</p>
         </div>
-      )}
+        {type === "text" && optionText !== null && optionText !== undefined && (
+          <TiptapEditor
+            excludeSelectors={[
+              "blockquote",
+              "orderedList",
+              "bulletList",
+              "heading1",
+              "heading2",
+              "heading3",
+              "heading4",
+              "heading5",
+              "heading6",
+              "removeFormatting",
+              "eraser",
+            ]}
+            content={optionText}
+            placeholder="Start typing option text here..."
+            className="w-[900px] [&_.tiptap-editor]:max-h-[150px]"
+            onChange={(value) => {
+              updateBlock(block.id, {
+                ...block,
+                material: {
+                  ...block.material,
+                  options: block.material.options.map((option) => {
+                    if (option.id === optionId) {
+                      return {
+                        ...option,
+                        optionText: value,
+                      };
+                    }
+                    return option;
+                  }),
+                },
+              });
+            }}
+          />
+        )}
+        {type === "image" && optionFileImage && (
+          <div className="max-w-fit border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+            <img
+              src={
+                optionFileImage instanceof File
+                  ? URL.createObjectURL(optionFileImage)
+                  : optionFileImage.url
+              }
+              alt={optionFileImage.name}
+              className="object-contain max-w-full max-h-[300px]"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
