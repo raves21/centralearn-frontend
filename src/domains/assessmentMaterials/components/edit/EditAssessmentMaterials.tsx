@@ -231,7 +231,7 @@ export default function EditAssessmentMaterials({
               identificationMaterial.acceptedAnswers.forEach(
                 (answer, index) => {
                   formData.append(
-                    `materials[${blockIndex}][identication_item][accepted_answers][${index}]`,
+                    `materials[${blockIndex}][identification_item][accepted_answers][${index}]`,
                     answer,
                   );
                 },
@@ -239,7 +239,7 @@ export default function EditAssessmentMaterials({
             }
             formData.append(
               `materials[${blockIndex}][identification_item][is_case_sensitive]`,
-              identificationMaterial.isCaseSensitive.toString(),
+              Number(identificationMaterial.isCaseSensitive).toString(),
             );
             break;
 
@@ -248,15 +248,18 @@ export default function EditAssessmentMaterials({
 
             formData.append(
               `materials[${blockIndex}][option_based_item][is_options_alphabetical]`,
-              optionBasedItem.isAlphabeticalOrder.toString(),
+              Number(optionBasedItem.isAlphabeticalOrder).toString(),
             );
             if (optionBasedItem.options.length !== 0) {
               optionBasedItem.options.forEach((option, index) => {
-                if (option.id)
+                //options with id  starting with new- are new options
+                //options without new- are from the database
+                if (option.id && !option.id.startsWith("new-")) {
                   formData.append(
                     `materials[${blockIndex}][option_based_item][options][${index}][id]`,
                     option.id,
                   );
+                }
 
                 formData.append(
                   `materials[${blockIndex}][option_based_item][options][${index}][order]`,
@@ -265,7 +268,7 @@ export default function EditAssessmentMaterials({
 
                 formData.append(
                   `materials[${blockIndex}][option_based_item][options][${index}][is_correct]`,
-                  option.isCorrect.toString(),
+                  Number(option.isCorrect).toString(),
                 );
 
                 if (option.optionText) {

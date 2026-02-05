@@ -55,9 +55,10 @@ export default function EditIdentificationItemBlock({ block }: Props) {
         >
           <input
             ref={inputRef}
+            readOnly={true}
             type="checkbox"
             className="size-4 cursor-pointer accent-mainaccent"
-            checked={block.material.isCaseSensitive}
+            checked={!!block.material.isCaseSensitive}
           />
           <p className="whitespace-nowrap">Case Sensitive</p>
         </div>

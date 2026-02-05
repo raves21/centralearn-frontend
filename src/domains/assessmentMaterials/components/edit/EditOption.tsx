@@ -185,7 +185,7 @@ export default function EditOption({ block, optionId, type }: Props) {
             type="checkbox"
             className="size-4 cursor-pointer accent-mainaccent"
             checked={
-              block.material.options.find((option) => option.id === optionId)
+              !!block.material.options.find((option) => option.id === optionId)
                 ?.isCorrect
             }
           />

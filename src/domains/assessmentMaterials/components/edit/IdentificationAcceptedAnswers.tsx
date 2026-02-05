@@ -24,6 +24,7 @@ export default function IdentificationAcceptedAnswer({
     updateBlock(block.id, {
       ...block,
       material: {
+        ...block.material,
         acceptedAnswers: block.material.acceptedAnswers.filter(
           (_, i) => i !== index,
         ),
@@ -35,6 +36,7 @@ export default function IdentificationAcceptedAnswer({
     updateBlock(block.id, {
       ...block,
       material: {
+        ...block.material,
         acceptedAnswers: block.material.acceptedAnswers.map((ans, ansIndex) => {
           if (ansIndex === index) {
             return answer;

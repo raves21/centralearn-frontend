@@ -62,7 +62,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
             ref={checkboxRef}
             type="checkbox"
             className="size-4 cursor-pointer accent-mainaccent"
-            checked={block.material.isAlphabeticalOrder}
+            checked={!!block.material.isAlphabeticalOrder}
           />
           <p className="whitespace-nowrap">Alphabetical Order</p>
         </div>
@@ -103,7 +103,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
                         options: [
                           ...block.material.options,
                           {
-                            id: crypto.randomUUID(),
+                            id: `new-${crypto.randomUUID()}`,
                             isCorrect: false,
                             optionText: "",
                             optionFile: null,
@@ -123,7 +123,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
                           options: [
                             ...block.material.options,
                             {
-                              id: crypto.randomUUID(),
+                              id: `new-${crypto.randomUUID()}`,
                               isCorrect: false,
                               optionText: null,
                               optionFile: file,
