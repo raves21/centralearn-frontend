@@ -61,6 +61,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
           <input
             ref={checkboxRef}
             type="checkbox"
+            readOnly={true}
             className="size-4 cursor-pointer accent-mainaccent"
             checked={!!block.material.isAlphabeticalOrder}
           />

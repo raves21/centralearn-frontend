@@ -9,6 +9,12 @@ import ErrorComponent from "@/components/shared/ErrorComponent";
 import OptionBasedBlockDisplay from "./OptionBasedBlockDisplay";
 import EssayBlockDisplay from "./EssayBlockDisplay";
 import IdentificationBlockDisplay from "./IdentificationBlockDisplay";
+import type {
+  AssessmentMaterial,
+  EssayItem,
+  IdentificationItem,
+  OptionBasedItem,
+} from "../../types";
 
 export default function AssessmentMaterialsListDisplay({
   assessmentId,
@@ -26,15 +32,42 @@ export default function AssessmentMaterialsListDisplay({
 
   if (assessmentMaterials) {
     return (
-      <div className="flex flex-col gap-8 pb-24">
+      <div className="flex flex-col gap-8 pb-24 pl-5">
         {assessmentMaterials.map((assessmentMaterial) => {
           switch (assessmentMaterial.materialType) {
             case "App\\Models\\OptionBasedItem":
-              return <OptionBasedBlockDisplay key={assessmentMaterial.id} />;
+              return (
+                <OptionBasedBlockDisplay
+                  key={assessmentMaterial.id}
+                  assessmentMaterial={
+                    assessmentMaterial as AssessmentMaterial & {
+                      material: OptionBasedItem;
+                    }
+                  }
+                />
+              );
             case "App\\Models\\EssayItem":
-              return <EssayBlockDisplay key={assessmentMaterial.id} />;
+              return (
+                <EssayBlockDisplay
+                  key={assessmentMaterial.id}
+                  assessmentMaterial={
+                    assessmentMaterial as AssessmentMaterial & {
+                      material: EssayItem;
+                    }
+                  }
+                />
+              );
             case "App\\Models\\IdentificationItem":
-              return <IdentificationBlockDisplay key={assessmentMaterial.id} />;
+              return (
+                <IdentificationBlockDisplay
+                  key={assessmentMaterial.id}
+                  assessmentMaterial={
+                    assessmentMaterial as AssessmentMaterial & {
+                      material: IdentificationItem;
+                    }
+                  }
+                />
+              );
           }
         })}
       </div>

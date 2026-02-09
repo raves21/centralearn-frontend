@@ -182,6 +182,7 @@ export default function EditOption({ block, optionId, type }: Props) {
         >
           <input
             ref={isCorrectCheckboxRef}
+            readOnly={true}
             type="checkbox"
             className="size-4 cursor-pointer accent-mainaccent"
             checked={

@@ -301,6 +301,13 @@ export default function EditAssessmentMaterials({
       });
 
       await processBulkAssessmentMaterials(formData);
+      navigate({
+        to: "/lms/classes/$classId/contents/$chapterContentId",
+        params: {
+          classId,
+          chapterContentId: chapterContentInfo.id,
+        },
+      });
     } catch (error) {
       toast.error("An error occured. Please try again later.");
     }
