@@ -63,7 +63,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
             type="checkbox"
             readOnly={true}
             className="size-4 cursor-pointer accent-mainaccent"
-            checked={!!block.material.isAlphabeticalOrder}
+            checked={!!block.material.isOptionsAlphabetical}
           />
           <p className="whitespace-nowrap">Alphabetical Order</p>
         </div>

@@ -1,5 +1,6 @@
 import type { AssessmentMaterial, OptionBasedItem } from "../../types";
 import MaterialQuestionDisplay from "./MaterialQuestionDisplay";
+import OptionBasedItemOptionDisplay from "./OptionBasedItemOptionDisplay";
 
 type Props = {
   assessmentMaterial: AssessmentMaterial & { material: OptionBasedItem };
@@ -7,11 +8,27 @@ type Props = {
 
 export default function OptionBasedBlockDisplay({ assessmentMaterial }: Props) {
   return (
-    <div className="flex flex-col gap-4 p-6 rounded-md border border-gray-300">
+    <div className="flex flex-col gap-6 p-6 rounded-md border border-gray-300">
+      <p className="text-lg font-semibold text-gray-400">Option Based</p>
       <MaterialQuestionDisplay
         question={assessmentMaterial.question}
         questionNumber={assessmentMaterial.order}
       />
+      <div className="flex flex-col gap-6">
+        <p className="text-[15px] font-medium">Options:</p>
+        <div className="flex flex-col gap-4">
+          {assessmentMaterial.material.options.map((option, index) => (
+            <OptionBasedItemOptionDisplay
+              key={index}
+              option={option}
+              index={index}
+              isOptionsAlphabetical={
+                assessmentMaterial.material.isOptionsAlphabetical
+              }
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ export type OptionBasedItemOption = {
 export type OptionBasedItem = {
   id: string;
   options: OptionBasedItemOption[];
-  isAlphabeticalOrder: boolean;
+  isOptionsAlphabetical: boolean;
 };
 
 export type EssayItem = {
