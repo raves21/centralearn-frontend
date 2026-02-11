@@ -19,8 +19,8 @@ export default function EssayBlockDisplay({ assessmentMaterial }: Props) {
         question={assessmentMaterial.question}
         questionNumber={assessmentMaterial.order}
       />
-      <div className="grid grid-cols-2 gap-6 w-fit">
-        <div className="flex items-center gap-4">
+      <div className="grid grid-cols-2 gap-6 w-fit rounded-md p-5 border border-gray-300">
+        <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Minimum Words:</p>
           {assessmentMaterial.material.minWordCount ? (
             <p className="text-mainaccent">
@@ -30,7 +30,7 @@ export default function EssayBlockDisplay({ assessmentMaterial }: Props) {
             <p className="text-gray-400">None</p>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Maximum Words:</p>
           {assessmentMaterial.material.maxWordCount ? (
             <p className="text-mainaccent">
@@ -40,7 +40,7 @@ export default function EssayBlockDisplay({ assessmentMaterial }: Props) {
             <p className="text-gray-400">None</p>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Minimum Characters:</p>
           {assessmentMaterial.material.minCharacterCount ? (
             <p className="text-mainaccent">
@@ -50,7 +50,7 @@ export default function EssayBlockDisplay({ assessmentMaterial }: Props) {
             <p className="text-gray-400">None</p>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Maximum Characters:</p>
           {assessmentMaterial.material.maxCharacterCount ? (
             <p className="text-mainaccent">
