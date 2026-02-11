@@ -22,7 +22,7 @@ export default function IdentificationBlockDisplay({
         question={assessmentMaterial.question}
         questionNumber={assessmentMaterial.order}
       />
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 p-6 rounded-md border border-gray-300 w-fit">
         <p className="text-[15px] font-medium">Accepted Answers:</p>
         <div className="flex items-center gap-2">
           <p>Case Sensitive</p>

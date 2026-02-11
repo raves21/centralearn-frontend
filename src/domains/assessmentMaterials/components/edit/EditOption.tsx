@@ -58,7 +58,7 @@ export default function EditOption({ block, optionId, type }: Props) {
               isCorrect: false,
               optionFile: null,
               optionText: "",
-              id: crypto.randomUUID(),
+              id: `new-${crypto.randomUUID()}`,
             },
           ],
         },
@@ -69,7 +69,7 @@ export default function EditOption({ block, optionId, type }: Props) {
       ...block.material.options,
     ];
     newOptions.splice(optionIndex + 1, 0, {
-      id: crypto.randomUUID(),
+      id: `new-${crypto.randomUUID()}`,
       isCorrect: false,
       optionFile: null,
       optionText: "",
@@ -98,7 +98,7 @@ export default function EditOption({ block, optionId, type }: Props) {
               isCorrect: false,
               optionFile: file,
               optionText: null,
-              id: crypto.randomUUID(),
+              id: `new-${crypto.randomUUID()}`,
             },
           ],
         },
@@ -109,7 +109,7 @@ export default function EditOption({ block, optionId, type }: Props) {
       ...block.material.options,
     ];
     newOptions.splice(optionIndex + 1, 0, {
-      id: crypto.randomUUID(),
+      id: `new-${crypto.randomUUID()}`,
       isCorrect: false,
       optionFile: file,
       optionText: null,

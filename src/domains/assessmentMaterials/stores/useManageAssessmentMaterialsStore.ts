@@ -67,7 +67,7 @@ const initialState: Values = {
 };
 
 const getEmptyIdentificationItemBlock = (): ContentBlock => ({
-  id: crypto.randomUUID(),
+  id: `new-${crypto.randomUUID()}`,
   materialQuestion: {
     questionFiles: [],
     questionText: "<p></p>",
@@ -81,7 +81,7 @@ const getEmptyIdentificationItemBlock = (): ContentBlock => ({
 });
 
 const getEmptyEssayItemBlock = (): ContentBlock => ({
-  id: crypto.randomUUID(),
+  id: `new-${crypto.randomUUID()}`,
   materialQuestion: {
     questionFiles: [],
     questionText: "<p></p>",
@@ -97,7 +97,7 @@ const getEmptyEssayItemBlock = (): ContentBlock => ({
 });
 
 const getEmptyOptionBasedItemBlock = (): ContentBlock => ({
-  id: crypto.randomUUID(),
+  id: `new-${crypto.randomUUID()}`,
   materialQuestion: {
     questionFiles: [],
     questionText: "<p></p>",
