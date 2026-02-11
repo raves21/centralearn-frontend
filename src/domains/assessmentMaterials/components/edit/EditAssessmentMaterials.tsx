@@ -314,7 +314,7 @@ export default function EditAssessmentMaterials({
   }
 
   return (
-    <div className="flex flex-col gap-12 w-full pb-12">
+    <div className="flex flex-col gap-12 w-full pb-24">
       <div className="flex items-center justify-between w-full">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-8">
@@ -364,7 +364,7 @@ export default function EditAssessmentMaterials({
             <p>Exit edit mode</p>
           </button>
           <button
-            onClick={async () => {
+            onClick={() => {
               const noChanges = isEqual(
                 useManageAssessmentMaterialsStore.getState().blocks,
                 useManageAssessmentMaterialsStore.getState().originalBlocks,
