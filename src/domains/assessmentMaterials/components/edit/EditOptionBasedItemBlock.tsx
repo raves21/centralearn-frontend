@@ -51,7 +51,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
                 ...block,
                 material: {
                   ...block.material,
-                  isAlphabeticalOrder: !checkboxRef.current.checked,
+                  isOptionsAlphabetical: !checkboxRef.current.checked,
                 },
               });
             }

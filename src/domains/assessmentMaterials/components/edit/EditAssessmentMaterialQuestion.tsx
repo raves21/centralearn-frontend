@@ -4,7 +4,7 @@ import {
   type ContentBlock,
 } from "../../stores/useManageAssessmentMaterialsStore";
 import { Input } from "@/components/ui/input";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 
 type Props = {
@@ -20,6 +20,14 @@ export default function EditAssessmentMaterialQuestion({
     (state) => state.updateBlock,
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [pointWorthInputValue, setPointWorthInputValue] = useState<string>(
+    block.pointWorth?.toString() || "",
+  );
+
+  useEffect(() => {
+    setPointWorthInputValue(block.pointWorth?.toString() || "");
+  }, [block.pointWorth]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -59,12 +67,16 @@ export default function EditAssessmentMaterialQuestion({
             <Input
               className="w-20 text-lg"
               type="number"
-              value={block.pointWorth || 1}
+              value={pointWorthInputValue}
               onChange={(e) => {
-                const val = Number(e.currentTarget.value);
+                setPointWorthInputValue(e.currentTarget.value);
+              }}
+              onBlur={(e) => {
+                const value = e.currentTarget.value;
+                const numValue = value === "" ? 0 : Number(value);
                 updateBlock(block.id, {
                   ...block,
-                  pointWorth: val || 1,
+                  pointWorth: numValue,
                 });
               }}
             />

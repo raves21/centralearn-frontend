@@ -68,6 +68,10 @@ export default function EditAssessmentMaterials({
       ]),
     );
 
+  useEffect(() => {
+    console.log(blocks);
+  }, [blocks]);
+
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
   const { data: assessmentMaterials } = useAllAssessmentMaterials({
@@ -91,7 +95,7 @@ export default function EditAssessmentMaterials({
               assessmentMaterial.material as OptionBasedItem;
             material = {
               options: optionBasedItem.options,
-              isAlphabeticalOrder: true,
+              isOptionsAlphabetical: true,
             };
             break;
           case "App\\Models\\EssayItem":
@@ -248,7 +252,7 @@ export default function EditAssessmentMaterials({
 
             formData.append(
               `materials[${blockIndex}][option_based_item][is_options_alphabetical]`,
-              Number(optionBasedItem.isAlphabeticalOrder).toString(),
+              Number(optionBasedItem.isOptionsAlphabetical).toString(),
             );
             if (optionBasedItem.options.length !== 0) {
               optionBasedItem.options.forEach((option, index) => {
@@ -394,6 +398,7 @@ export default function EditAssessmentMaterials({
           </button>
         </div>
       </div>
+      <div>djkasbjkdas</div>
       <ReactSortable
         list={blocks}
         setList={updateBlocks}

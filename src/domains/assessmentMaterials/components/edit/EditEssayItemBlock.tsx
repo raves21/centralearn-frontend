@@ -36,7 +36,7 @@ export default function EditEssayItemBlock({ block }: Props) {
           <Input
             className="w-20 text-lg ml-auto"
             type="number"
-            value={block.material.minWordCount || undefined}
+            value={block.material.minWordCount || ""}
             onChange={(e) => {
               updateBlock(block.id, {
                 ...block,
@@ -53,7 +53,7 @@ export default function EditEssayItemBlock({ block }: Props) {
           <Input
             className="w-20 text-lg ml-auto"
             type="number"
-            value={block.material.maxWordCount || undefined}
+            value={block.material.maxWordCount || ""}
             onChange={(e) => {
               updateBlock(block.id, {
                 ...block,
@@ -70,7 +70,7 @@ export default function EditEssayItemBlock({ block }: Props) {
           <Input
             className="w-20 text-lg ml-auto"
             type="number"
-            value={block.material.minCharacterCount || undefined}
+            value={block.material.minCharacterCount || ""}
             onChange={(e) => {
               updateBlock(block.id, {
                 ...block,
@@ -87,7 +87,7 @@ export default function EditEssayItemBlock({ block }: Props) {
           <Input
             className="w-20 text-lg ml-auto"
             type="number"
-            value={block.material.maxCharacterCount || undefined}
+            value={block.material.maxCharacterCount || ""}
             onChange={(e) => {
               updateBlock(block.id, {
                 ...block,
