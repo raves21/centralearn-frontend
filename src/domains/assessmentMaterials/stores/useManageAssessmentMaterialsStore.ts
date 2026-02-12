@@ -43,6 +43,7 @@ export type ContentBlock = {
 type Values = {
   blocks: ContentBlock[];
   originalBlocks: ContentBlock[];
+  totalPoints: number
 };
 
 type Actions = {
@@ -57,6 +58,8 @@ type Actions = {
   removeBlock: (id: string) => void;
   setBlocks: (blocks: ContentBlock[]) => void;
   updateBlocks: (blocks: ContentBlock[]) => void;
+  setTotalPoints: (totalPoints: number) => void
+  recalculateAssessmentTotalPoints: () => void
 };
 
 type Store = Values & Actions;
@@ -64,6 +67,7 @@ type Store = Values & Actions;
 const initialState: Values = {
   blocks: [],
   originalBlocks: [],
+  totalPoints: 0
 };
 
 const getEmptyIdentificationItemBlock = (): ContentBlock => ({
@@ -183,4 +187,15 @@ export const useManageAssessmentMaterialsStore = create<Store>((set) => ({
   updateBlocks: (blocks) => set({ blocks }), // Only update blocks, keep originalBlocks intact
   setBlocks: (blocks) =>
     set({ blocks, originalBlocks: JSON.parse(JSON.stringify(blocks)) }),
+  setTotalPoints: (totalPoints: number) => set({totalPoints}),
+  recalculateAssessmentTotalPoints: () => set((state) => {
+    let total = 0;
+    state.blocks.forEach((block) => {
+      total += block.pointWorth
+    })
+    return {
+      ...state,
+      totalPoints: total
+    }
+  })
 }));

@@ -1,6 +1,6 @@
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import EditLectureMaterials from "@/domains/lectureMaterial/components/editLectureMaterials/EditLectureMaterials";
-import { ContentType } from "@/domains/chapterContents/types";
+import { ContentType, type Assessment } from "@/domains/chapterContents/types";
 import { createFileRoute } from "@tanstack/react-router";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
@@ -39,6 +39,9 @@ function RouteComponent() {
       <EditAssessmentMaterials
         chapterContentInfo={chapterContentInfo}
         classId={classId}
+        initialTotalPoints={
+          (chapterContentInfo.content as Assessment).maxAchievableScore
+        }
       />
     );
   }

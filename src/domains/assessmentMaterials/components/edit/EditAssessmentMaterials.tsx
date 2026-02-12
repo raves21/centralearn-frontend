@@ -40,11 +40,13 @@ import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
 type Props = {
   chapterContentInfo: ChapterContent;
   classId: string;
+  initialTotalPoints: number;
 };
 
 export default function EditAssessmentMaterials({
   chapterContentInfo,
   classId,
+  initialTotalPoints,
 }: Props) {
   const navigate = useNavigate();
 
@@ -58,19 +60,23 @@ export default function EditAssessmentMaterials({
     pendingLabel: "Saving",
   });
 
-  const [blocks, setBlocks, updateBlocks, addBlock] =
-    useManageAssessmentMaterialsStore(
-      useShallow((state) => [
-        state.blocks,
-        state.setBlocks,
-        state.updateBlocks,
-        state.addBlock,
-      ]),
-    );
-
-  useEffect(() => {
-    console.log(blocks);
-  }, [blocks]);
+  const [
+    blocks,
+    setBlocks,
+    updateBlocks,
+    addBlock,
+    setTotalPoints,
+    totalPoints,
+  ] = useManageAssessmentMaterialsStore(
+    useShallow((state) => [
+      state.blocks,
+      state.setBlocks,
+      state.updateBlocks,
+      state.addBlock,
+      state.setTotalPoints,
+      state.totalPoints,
+    ]),
+  );
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
@@ -80,6 +86,7 @@ export default function EditAssessmentMaterials({
 
   useEffect(() => {
     if (assessmentMaterials) {
+      setTotalPoints(initialTotalPoints);
       const hydratedBlocks = assessmentMaterials.map((assessmentMaterial) => {
         // Map Laravel model type to simple type name
         let materialType:
@@ -349,6 +356,12 @@ export default function EditAssessmentMaterials({
               <NotebookPen className="size-8" />
             )}
             <p className="text-2xl font-bold">{chapterContentInfo.name}</p>
+            {chapterContentInfo.contentType === ContentType.Assessment &&
+            totalPoints ? (
+              <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">
+                {totalPoints} {totalPoints === 1 ? "point" : "points"}
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="flex gap-8">
@@ -398,7 +411,6 @@ export default function EditAssessmentMaterials({
           </button>
         </div>
       </div>
-      <div>djkasbjkdas</div>
       <ReactSortable
         list={blocks}
         setList={updateBlocks}

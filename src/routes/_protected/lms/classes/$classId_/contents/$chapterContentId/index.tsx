@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import AssessmentMaterialsListDisplay from "@/domains/assessmentMaterials/components/display/AssessmentMaterialsListDisplay";
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
-import { ContentType } from "@/domains/chapterContents/types";
+import { ContentType, type Assessment } from "@/domains/chapterContents/types";
 import LectureMaterialsListDisplay from "@/domains/lectureMaterial/components/displayLectureMaterials/LectureMaterialsListDisplay";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Edit, NotebookPen } from "lucide-react";
@@ -69,6 +69,20 @@ function RouteComponent() {
                 <NotebookPen className="size-8" />
               )}
               <p className="text-2xl font-bold">{chapterContentInfo.name}</p>
+              {chapterContentInfo.contentType === ContentType.Assessment &&
+                (chapterContentInfo.content as Assessment)
+                  .maxAchievableScore && (
+                  <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">
+                    {
+                      (chapterContentInfo.content as Assessment)
+                        .maxAchievableScore
+                    }{" "}
+                    {(chapterContentInfo.content as Assessment)
+                      .maxAchievableScore === 1
+                      ? "point"
+                      : "points"}
+                  </div>
+                )}
             </div>
           </div>
           <button

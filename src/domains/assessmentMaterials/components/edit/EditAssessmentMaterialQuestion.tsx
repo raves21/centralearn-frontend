@@ -6,6 +6,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 type Props = {
   itemNumber: number;
@@ -16,9 +17,13 @@ export default function EditAssessmentMaterialQuestion({
   itemNumber,
   block,
 }: Props) {
-  const updateBlock = useManageAssessmentMaterialsStore(
-    (state) => state.updateBlock,
-  );
+  const [updateBlock, recalculateAssessmentTotalPoints] =
+    useManageAssessmentMaterialsStore(
+      useShallow((state) => [
+        state.updateBlock,
+        state.recalculateAssessmentTotalPoints,
+      ]),
+    );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [pointWorthInputValue, setPointWorthInputValue] = useState<string>(
@@ -78,6 +83,7 @@ export default function EditAssessmentMaterialQuestion({
                   ...block,
                   pointWorth: numValue,
                 });
+                recalculateAssessmentTotalPoints();
               }}
             />
           </div>

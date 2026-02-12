@@ -1,6 +1,7 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
 import type { AssessmentMaterial } from "../types";
+import { neverRefetchSettings } from "@/utils/queryClient";
 
 export function useAllAssessmentMaterials({
   assessmentId,
@@ -13,8 +14,8 @@ export function useAllAssessmentMaterials({
       const { data } = await api.get("/assessment-materials", {
         params: { assessment_id: assessmentId, paginate: false },
       });
-
       return data.data as AssessmentMaterial[];
     },
+    ...neverRefetchSettings
   });
 }
