@@ -44,6 +44,7 @@
     "lucide-react": "^0.542.0",
     "next-themes": "^0.4.6",
     "radash": "^12.1.1",
+    "radix-ui": "^1.4.3",
     "react": "^19.1.1",
     "react-day-picker": "^9.9.0",
     "react-dom": "^19.1.1",
@@ -53,6 +54,7 @@
     "sortablejs": "^1.15.6",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12",
+    "vaul": "^1.1.2",
     "zod": "^4.1.8",
     "zustand": "^5.0.8"
   },

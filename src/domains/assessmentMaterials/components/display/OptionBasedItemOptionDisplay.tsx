@@ -1,6 +1,7 @@
 import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
 import type { OptionBasedItemOption } from "../../types";
 import { Check, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type Props = {
   option: OptionBasedItemOption;
@@ -21,7 +22,14 @@ export default function OptionBasedItemOptionDisplay({
       ) : (
         <X className="size-4 stroke-[6px] stroke-mainaccent" />
       )}
-      <div className="flex items-center gap-5 bg-white rounded-md p-4 w-full">
+      <div
+        className={cn(
+          "flex items-center gap-5 bg-white rounded-md p-4 w-full",
+          {
+            "bg-green-100": option.isCorrect,
+          },
+        )}
+      >
         {isOptionsAlphabetical && (
           <p className="font-medium">{alphabetLabel}.</p>
         )}

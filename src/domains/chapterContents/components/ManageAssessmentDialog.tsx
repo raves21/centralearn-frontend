@@ -203,7 +203,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         formData.append("order", editProps.chapterContent.order.toString());
       } else {
         const { data: chapterContentCount } = await api.get(
-          `/chapters/${chapterId}/content-count`
+          `/chapters/${chapterId}/content-count`,
         );
         formData.append("order", (chapterContentCount + 1).toString());
       }
@@ -229,27 +229,27 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
       formData.append("content[time_limit]", data.time_limit.toString());
       formData.append(
         "content[is_answers_viewable_after_submit]",
-        data.is_answers_viewable_after_submit ? "1" : "0"
+        data.is_answers_viewable_after_submit ? "1" : "0",
       );
       formData.append(
         "content[is_score_viewable_after_submit]",
-        data.is_score_viewable_after_submit ? "1" : "0"
+        data.is_score_viewable_after_submit ? "1" : "0",
       );
       formData.append(
         "content[is_multi_attempts]",
-        data.is_multi_attempts ? "1" : "0"
+        data.is_multi_attempts ? "1" : "0",
       );
 
       if (data.is_multi_attempts) {
         if (data.max_attempts)
           formData.append(
             "content[max_attempts]",
-            data.max_attempts.toString()
+            data.max_attempts.toString(),
           );
         if (data.multi_attempt_grading_type)
           formData.append(
             "content[multi_attempt_grading_type]",
-            data.multi_attempt_grading_type
+            data.multi_attempt_grading_type,
           );
       } else {
         // Technically nullable if not multi-attempts, but let's ensure they are null or not sent?
@@ -412,7 +412,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
               )}
             />
 
-            {isMultiAttempts && (
+            {isMultiAttempts ? (
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <FormField
                   control={form.control}
@@ -462,7 +462,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
                   )}
                 />
               </div>
-            )}
+            ) : null}
           </div>
 
           <div className="flex gap-4">

@@ -10,8 +10,8 @@ export type ChapterContent = {
   name: string;
   description: string | null;
   isOpen: boolean;
-  opensAt: Date | null;
-  closesAt: Date | null;
+  opensAt: string | null;
+  closesAt: string | null;
   chapter: Chapter;
   isPublished: boolean;
   publishesAt: Date | null;

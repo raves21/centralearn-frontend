@@ -1,28 +1,7 @@
-import { forOwn, isObject, isEqual, sortBy } from "lodash";
+import { isEqual, sortBy } from "lodash";
 import { formatInTimeZone } from "date-fns-tz";
-
-export function diffToFormData<T extends Record<string, any>>(
-  obj1: T,
-  obj2: T
-): FormData {
-  const formData = new FormData();
-
-  forOwn(obj1, (value, key) => {
-    if (!isEqual(value, obj2[key])) {
-      // Handle nested objects or arrays by serializing them
-      const val =
-        isObject(value) &&
-        !((value as any) instanceof File) &&
-        !((value as any) instanceof Blob)
-          ? JSON.stringify(value)
-          : value;
-
-      formData.append(key, val);
-    }
-  });
-
-  return formData;
-}
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 export function isArrayEqualRegardlessOfOrder(arr1: any, arr2: any) {
   return isEqual(sortBy(arr1), sortBy(arr2));
@@ -32,11 +11,20 @@ export function getDateTimeFormat() {
   return "yyyy-MM-dd HH:mm:ss";
 }
 
+export function formatDateStringToDateObj(dateString: string) {
+  dayjs.extend(customParseFormat);
+  const dateObj = dayjs(dateString, "YYYY-MM-DD HH:mm:ss").toDate();
+  return dateObj;
+}
+
 export function getDateTimeFormatWithoutSeconds() {
   return "yyyy-MM-dd HH:mm";
 }
 
-export function formatToUTC(date: Date) {
+export function formatToUTC(date: Date | string) {
+  if(typeof date === "string"){
+    return formatInTimeZone(formatDateStringToDateObj(date), "UTC", getDateTimeFormat()); 
+  }
   return formatInTimeZone(date, "UTC", getDateTimeFormat());
 }
 
@@ -44,6 +32,6 @@ export function formatToLocal(date: Date) {
   return formatInTimeZone(
     date,
     Intl.DateTimeFormat().resolvedOptions().timeZone,
-    getDateTimeFormat()
+    getDateTimeFormat(),
   );
 }

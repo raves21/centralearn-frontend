@@ -20,7 +20,7 @@ import {
 import { Pencil, Trash } from "lucide-react";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/students/$studentId"
+  "/_protected/admin-panel/students/$studentId",
 )({
   component: RouteComponent,
 });
@@ -88,7 +88,7 @@ function RouteComponent() {
               <p className="bg-green-500 w-min text-white rounded-md py-1 px-2">
                 Student
               </p>
-              <p className="font-semibold text-4xl">
+              <p className="font-semibold text-3xl">
                 {studentInfo.user.firstName} {studentInfo.user.lastName}
               </p>
               <div className="flex items-center gap-4 mt-auto">

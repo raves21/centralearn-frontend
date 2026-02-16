@@ -5,10 +5,10 @@ import {
   Outlet,
   useMatchRoute,
 } from "@tanstack/react-router";
-import { Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavigationButton } from "@/utils/sharedTypes";
 import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute("/_protected/lms/classes/$classId")({
   component: RouteComponent,
@@ -53,11 +53,7 @@ function RouteComponent() {
   ];
 
   if ([courseClassInfoStatus].includes("error")) {
-    return (
-      <div className="size-full grid place-items-center">
-        <p className="text-xl font-medium">An error occured.</p>
-      </div>
-    );
+    return <ErrorComponent />;
   }
 
   if ([courseClassInfoStatus].includes("pending")) {
@@ -79,18 +75,14 @@ function RouteComponent() {
                   "px-2 py-1 rounded-full text-white",
                   courseClassInfo.status === "open"
                     ? "bg-green-500"
-                    : "bg-red-500"
+                    : "bg-red-500",
                 )}
               >
                 {courseClassInfo.status === "open" ? "Open" : "Closed"}
               </p>
             </div>
-            <p className="text-3xl font-bold">{courseClassInfo.course.name}</p>
+            <p className="text-2xl font-bold">{courseClassInfo.course.name}</p>
           </div>
-          <button className="px-4 py-2 rounded-full bg-mainaccent text-white flex items-center gap-3">
-            <Edit className="size-4" />
-            <p>Edit</p>
-          </button>
         </div>
         <div className="relative w-full h-[180px] overflow-hidden rounded-lg">
           <img
