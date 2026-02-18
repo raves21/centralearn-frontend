@@ -1,15 +1,15 @@
 import { GripVertical, Plus, Trash } from "lucide-react";
-import { type ContentBlock } from "../../stores/useManageAssessmentMaterialsStore";
+import { type ContentBlock } from "../../../stores/useManageAssessmentMaterialsStore";
 import { useShallow } from "zustand/react/shallow";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
-import { useManageAssessmentMaterialsStore } from "../../stores/useManageAssessmentMaterialsStore";
+import { useManageAssessmentMaterialsStore } from "../../../stores/useManageAssessmentMaterialsStore";
 import AddAssessmentMaterialBlockDialog from "./AddAssessmentMaterialBlockDialog";
 import EditEssayItemBlock from "./EditEssayItemBlock";
 import type {
   EssayItem,
   IdentificationItem,
   OptionBasedItem,
-} from "../../types";
+} from "../../../types";
 import EditIdentificationItemBlock from "./EditIdentificationItemBlock";
 import EditOptionBasedItemBlock from "./EditOptionBasedItemBlock";
 

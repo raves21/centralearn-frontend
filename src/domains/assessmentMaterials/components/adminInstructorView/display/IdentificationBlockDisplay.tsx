@@ -1,5 +1,5 @@
 import { Check, X } from "lucide-react";
-import type { AssessmentMaterial, IdentificationItem } from "../../types";
+import type { AssessmentMaterial, IdentificationItem } from "../../../types";
 import MaterialQuestionDisplay from "./MaterialQuestionDisplay";
 
 type Props = {

@@ -1,7 +1,7 @@
 import {
   useManageAssessmentMaterialsStore,
   type ContentBlock,
-} from "../../stores/useManageAssessmentMaterialsStore";
+} from "../../../stores/useManageAssessmentMaterialsStore";
 import { X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 

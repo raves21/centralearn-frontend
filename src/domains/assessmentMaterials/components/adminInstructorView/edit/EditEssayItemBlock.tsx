@@ -1,9 +1,9 @@
 import {
   useManageAssessmentMaterialsStore,
   type ContentBlock,
-} from "../../stores/useManageAssessmentMaterialsStore";
+} from "../../../stores/useManageAssessmentMaterialsStore";
 import { useShallow } from "zustand/react/shallow";
-import type { EssayItem } from "../../types";
+import type { EssayItem } from "../../../types";
 import { useEffect, useState } from "react";
 import EditAssessmentMaterialQuestion from "./EditAssessmentMaterialQuestion";
 import { Input } from "@/components/ui/input";

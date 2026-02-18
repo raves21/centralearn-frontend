@@ -1,5 +1,5 @@
 import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
-import type { AssessmentMaterialQuestion } from "../../types";
+import type { AssessmentMaterialQuestion } from "../../../types";
 
 type Props = {
   questionNumber: number;

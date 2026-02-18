@@ -1,4 +1,4 @@
-import { useAllAssessmentMaterials } from "../../api/queries";
+import { useAllAssessmentMaterials } from "../../../api/queries";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 
 type Props = {
@@ -14,7 +14,7 @@ import type {
   EssayItem,
   IdentificationItem,
   OptionBasedItem,
-} from "../../types";
+} from "../../../types";
 
 export default function AssessmentMaterialsListDisplay({
   assessmentId,

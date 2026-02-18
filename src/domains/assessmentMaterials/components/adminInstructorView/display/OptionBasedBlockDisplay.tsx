@@ -1,4 +1,4 @@
-import type { AssessmentMaterial, OptionBasedItem } from "../../types";
+import type { AssessmentMaterial, OptionBasedItem } from "../../../types";
 import MaterialQuestionDisplay from "./MaterialQuestionDisplay";
 import OptionBasedItemOptionDisplay from "./OptionBasedItemOptionDisplay";
 

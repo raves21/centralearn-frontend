@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-import AssessmentMaterialsListDisplay from "@/domains/assessmentMaterials/components/display/AssessmentMaterialsListDisplay";
+import AssessmentMaterialsListDisplay from "@/domains/assessmentMaterials/components/adminInstructorView/display/AssessmentMaterialsListDisplay";
 import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import { ContentType, type Assessment } from "@/domains/chapterContents/types";
 import LectureMaterialsListDisplay from "@/domains/lectureMaterial/components/displayLectureMaterials/LectureMaterialsListDisplay";

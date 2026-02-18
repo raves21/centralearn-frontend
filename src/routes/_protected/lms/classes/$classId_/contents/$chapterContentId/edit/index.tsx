@@ -4,7 +4,7 @@ import { ContentType, type Assessment } from "@/domains/chapterContents/types";
 import { createFileRoute } from "@tanstack/react-router";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
-import EditAssessmentMaterials from "@/domains/assessmentMaterials/components/edit/EditAssessmentMaterials";
+import EditAssessmentMaterials from "@/domains/assessmentMaterials/components/adminInstructorView/edit/EditAssessmentMaterials";
 
 export const Route = createFileRoute(
   "/_protected/lms/classes/$classId_/contents/$chapterContentId/edit/",

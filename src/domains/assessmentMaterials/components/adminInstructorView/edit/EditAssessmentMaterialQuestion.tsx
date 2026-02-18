@@ -2,7 +2,7 @@ import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 import {
   useManageAssessmentMaterialsStore,
   type ContentBlock,
-} from "../../stores/useManageAssessmentMaterialsStore";
+} from "../../../stores/useManageAssessmentMaterialsStore";
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";

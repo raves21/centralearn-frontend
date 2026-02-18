@@ -52,7 +52,10 @@ export type AssessmentMaterialsPaginated = PaginationProps & {
   data: AssessmentMaterial[];
 };
 
-// export type BulkChangesPayload = {
-//   assessment_id: string
-//   materials:
-// }
+export type QuestionnaireOptionBasedItem = OptionBasedItem & {
+  options: Omit<OptionBasedItemOption, "isCorrect">[]
+}
+
+export type QuestionnaireIdentificationItem = Omit<IdentificationItem, "acceptedAnswers">;
+
+export type AssessmentQuestionnaire = (AssessmentMaterial & {question: EssayItem | QuestionnaireIdentificationItem | QuestionnaireOptionBasedItem})[]

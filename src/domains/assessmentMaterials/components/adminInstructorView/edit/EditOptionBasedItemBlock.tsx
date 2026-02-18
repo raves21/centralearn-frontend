@@ -3,8 +3,8 @@ import { ReactSortable } from "react-sortablejs";
 import {
   type ContentBlock,
   useManageAssessmentMaterialsStore,
-} from "../../stores/useManageAssessmentMaterialsStore";
-import type { OptionBasedItem, OptionBasedItemOption } from "../../types";
+} from "../../../stores/useManageAssessmentMaterialsStore";
+import type { OptionBasedItem, OptionBasedItemOption } from "../../../types";
 import { useEffect, useRef, useState } from "react";
 import EditAssessmentMaterialQuestion from "./EditAssessmentMaterialQuestion";
 import { Plus } from "lucide-react";

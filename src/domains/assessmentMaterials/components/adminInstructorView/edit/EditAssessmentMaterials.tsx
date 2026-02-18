@@ -3,7 +3,7 @@ import {
   type ChapterContent,
 } from "@/domains/chapterContents/types";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useProcessBulkAssessmentMaterials } from "../../api/mutaions";
+import { useProcessBulkAssessmentMaterials } from "../../../api/mutaions";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import {
   Breadcrumb,
@@ -15,14 +15,14 @@ import {
 import { BookOpen, NotebookPen, X, Check, Plus } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { useSetTopPanelPointerEventsWhenDragging } from "@/utils/hooks/useSetTopPanelPointerEventsWhenDragging";
-import { useAllAssessmentMaterials } from "../../api/queries";
+import { useAllAssessmentMaterials } from "../../../api/queries";
 import {
   useManageAssessmentMaterialsStore,
   type ContentBlock,
   type EssayItemBlock,
   type IdentificationItemBlock,
   type OptionBasedItemBlock,
-} from "../../stores/useManageAssessmentMaterialsStore";
+} from "../../../stores/useManageAssessmentMaterialsStore";
 import { useShallow } from "zustand/react/shallow";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import AddAssessmentMaterialBlockDialog from "./AddAssessmentMaterialBlockDialog";
@@ -32,7 +32,7 @@ import type {
   EssayItem,
   IdentificationItem,
   OptionBasedItem,
-} from "../../types";
+} from "../../../types";
 import { toast } from "sonner";
 import { isEqual } from "lodash";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";

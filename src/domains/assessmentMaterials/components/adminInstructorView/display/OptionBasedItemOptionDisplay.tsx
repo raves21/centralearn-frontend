@@ -1,5 +1,5 @@
 import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
-import type { OptionBasedItemOption } from "../../types";
+import type { OptionBasedItemOption } from "../../../types";
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 

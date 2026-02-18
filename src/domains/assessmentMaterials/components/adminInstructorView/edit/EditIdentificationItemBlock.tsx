@@ -3,7 +3,7 @@ import {
   type ContentBlock,
   type IdentificationItemBlock,
   useManageAssessmentMaterialsStore,
-} from "../../stores/useManageAssessmentMaterialsStore";
+} from "../../../stores/useManageAssessmentMaterialsStore";
 import { useEffect, useRef, useState } from "react";
 import EditAssessmentMaterialQuestion from "./EditAssessmentMaterialQuestion";
 import IdentificationAcceptedAnswer from "./IdentificationAcceptedAnswers";

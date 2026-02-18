@@ -1,4 +1,4 @@
-import type { AssessmentMaterial, EssayItem } from "../../types";
+import type { AssessmentMaterial, EssayItem } from "../../../types";
 import MaterialQuestionDisplay from "./MaterialQuestionDisplay";
 
 type Props = {

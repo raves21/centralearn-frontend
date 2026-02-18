@@ -3,8 +3,8 @@ import {
   useManageAssessmentMaterialsStore,
   type ContentBlock,
   type OptionBasedItemOptionBlock,
-} from "../../stores/useManageAssessmentMaterialsStore";
-import type { OptionBasedItem } from "../../types";
+} from "../../../stores/useManageAssessmentMaterialsStore";
+import type { OptionBasedItem } from "../../../types";
 import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import AddOptionDialog from "./AddOptionDialog";
