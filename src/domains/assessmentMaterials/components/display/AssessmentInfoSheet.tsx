@@ -30,7 +30,7 @@ type Props = {
   chapterContent: ChapterContent & { content: Assessment };
 };
 
-export default function AssessmentInfoDrawer({
+export default function AssessmentInfoSheet({
   chapterContent,
   isOpen,
   closeDrawer,
@@ -56,7 +56,7 @@ export default function AssessmentInfoDrawer({
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
         showCloseButton={false}
-        className="sm:max-w-[500px] w-[500px]"
+        className="sm:max-w-[500px] w-[500px] text-base"
       >
         <div className="size-full flex flex-col">
           <div className="flex items-center gap-4 border-b border-gray-300 px-6 py-8">
@@ -65,7 +65,7 @@ export default function AssessmentInfoDrawer({
             </div>
             <p className="text-xl font-bold">{chapterContent.name}</p>
           </div>
-          <div className="p-6 flex flex-col gap-5">
+          <div className="p-6 flex flex-col gap-5 text-sm">
             <p className="text-gray-400 font-semibold">AVAILABILITY</p>
             <div className="flex items-center w-full justify-between px-2 py-3 rounded-md bg-gray-100">
               <div className="flex items-center gap-3 text-gray-500">
@@ -95,11 +95,11 @@ export default function AssessmentInfoDrawer({
             </div>
           </div>
           <hr className="mx-6 border-gray-200" />
-          <div className="p-6 flex flex-col gap-6">
+          <div className="p-6 flex flex-col gap-6 overflow-y-auto">
             <p className="text-gray-400 font-semibold tracking-wider text-sm">
               ASSESSMENT DETAILS
             </p>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 overflow-y-auto">
               <div className="flex items-center justify-between whitespace-nowrap gap-4">
                 <div className="flex items-center gap-3 text-gray-500">
                   <Trophy className="size-5" />
@@ -205,7 +205,10 @@ export default function AssessmentInfoDrawer({
                   }
                   className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
                 >
-                  Take Assessment
+                  {/* TODO */}
+                  {chapterContent.content.maxAttempts
+                    ? "Start Attempt"
+                    : "Take Assessment"}
                 </button>
               }
             />

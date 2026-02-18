@@ -91,7 +91,7 @@ function RouteComponent() {
 
   if (courseClassChapters && chaptersGlobalState) {
     return (
-      <div className="flex flex-col gap-12 w-full text-base">
+      <div className="flex flex-col gap-12 w-full text-base pb-16">
         <Accordion className="flex flex-col" type="single" collapsible>
           <ReactSortable
             list={chaptersGlobalState}

@@ -32,7 +32,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useEffect } from "react";
 import ManageAssessmentDialog from "./ManageAssessmentDialog";
 import { useState } from "react";
-import AssessmentInfoDrawer from "../../assessmentMaterials/components/display/AssessmentInfoDrawer";
+import AssessmentInfoSheet from "@/domains/assessmentMaterials/components/display/AssessmentInfoSheet";
 import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
 
 type Props = {
@@ -254,7 +254,7 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
         }
       />
       {selectedAssessment && (
-        <AssessmentInfoDrawer
+        <AssessmentInfoSheet
           isOpen={isAssessmentInfoDrawerOpen}
           closeDrawer={() => setIsAssessmentInfoDrawerOpen(false)}
           onOpenChange={() => setIsAssessmentInfoDrawerOpen((prev) => !prev)}

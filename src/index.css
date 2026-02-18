@@ -70,6 +70,9 @@
   --color-gray-bg: #f2f3f2;
   --color-main-bg: #ffffff;
   --color-main-text: #6a7282;
+  --breakpoint-1440: 1440px;
+  --breakpoint-mobile-m: 375px;
+  --breakpoint-mobile-l: 425px;
 }
 
 :root {
