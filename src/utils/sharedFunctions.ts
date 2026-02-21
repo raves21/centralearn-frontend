@@ -28,7 +28,15 @@ export function formatToUTC(date: Date | string) {
   return formatInTimeZone(date, "UTC", getDateTimeFormat());
 }
 
-export function formatToLocal(date: Date) {
+export function formatToLocal(date: Date | string) {
+
+  if(typeof date === "string"){
+    return formatInTimeZone(
+    formatDateStringToDateObj(date),
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    getDateTimeFormat(),
+  );
+  }
   return formatInTimeZone(
     date,
     Intl.DateTimeFormat().resolvedOptions().timeZone,
