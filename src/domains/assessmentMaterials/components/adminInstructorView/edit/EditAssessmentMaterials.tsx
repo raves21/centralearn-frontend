@@ -34,7 +34,6 @@ import type {
   OptionBasedItem,
 } from "../../../types";
 import { toast } from "sonner";
-import { isEqual } from "lodash";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
 
 type Props = {
@@ -382,21 +381,6 @@ export default function EditAssessmentMaterials({
           </button>
           <button
             onClick={() => {
-              const noChanges = isEqual(
-                useManageAssessmentMaterialsStore.getState().blocks,
-                useManageAssessmentMaterialsStore.getState().originalBlocks,
-              );
-              if (noChanges) {
-                navigate({
-                  to: "/lms/classes/$classId/contents/$chapterContentId",
-                  params: {
-                    chapterContentId: chapterContentInfo.id,
-                    classId,
-                  },
-                });
-                return;
-              }
-
               toggleOpenDialog(
                 <ConfirmationDialog
                   onClickYes={() => onSaveChanges()}
