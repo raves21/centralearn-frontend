@@ -149,8 +149,8 @@ export default function EditAssessmentMaterials({
     const formData = new FormData();
 
     try {
+      formData.append("assessment_id", chapterContentInfo.contentId);
       blocks.forEach((block, blockIndex) => {
-        formData.append("assessment_id", chapterContentInfo.contentId);
         if (block.dbId) {
           formData.append(`materials[${blockIndex}][id]`, block.dbId);
         }
@@ -178,7 +178,7 @@ export default function EditAssessmentMaterials({
         );
         formData.append(
           `materials[${blockIndex}][point_worth]`,
-          block.pointWorth.toString(),
+          block.pointWorth.toFixed(2),
         );
 
         //assessment material question
