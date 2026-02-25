@@ -27,7 +27,6 @@ export type Assessment = {
   maxAchievableScore: number;
   isAnswersViewableAfterSubmit: boolean;
   isScoreViewableAfterSubmit: boolean;
-  isMultiAttempts: boolean;
   maxAttempts: number | null;
   multiAttemptGradingType: "avg_score" | "highest_score" | null;
   createdAt: Date;

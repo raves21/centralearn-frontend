@@ -152,7 +152,7 @@ export default function AssessmentInfoSheet({
                   <p className="font-medium">Attempts</p>
                 </div>
                 <p className="font-semibold text-gray-800">
-                  {chapterContent.content.isMultiAttempts || "Unlimited"}
+                  {chapterContent.content.maxAttempts}
                 </p>
               </div>
             </div>

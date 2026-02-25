@@ -184,7 +184,6 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
           assessmentContent.isAnswersViewableAfterSubmit,
         is_score_viewable_after_submit:
           assessmentContent.isScoreViewableAfterSubmit,
-        is_multi_attempts: assessmentContent.isMultiAttempts,
         max_attempts: assessmentContent.maxAttempts,
         multi_attempt_grading_type: assessmentContent.multiAttemptGradingType,
       });
