@@ -9,6 +9,7 @@ import TiptapEditor from "@/components/shared/tiptap/TiptapEditor";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import AddOptionDialog from "./AddOptionDialog";
 import { useRef } from "react";
+import { cn } from "@/lib/utils";
 
 type Props = {
   block: ContentBlock & { material: OptionBasedItem };
@@ -147,7 +148,16 @@ export default function EditOption({ block, optionId, type }: Props) {
   }
 
   return (
-    <div className="flex gap-3 rounded-md border border-gray-300 px-5 py-8 w-fit">
+    <div
+      className={cn(
+        "flex gap-3 rounded-md border border-gray-300 px-5 py-8 w-fit",
+        {
+          "bg-green-200": !!block.material.options.find(
+            (option) => option.id === optionId,
+          )?.isCorrect,
+        },
+      )}
+    >
       <div className="flex flex-col gap-6">
         <button className="drag-handle relative cursor-grab rounded-full active:cursor-grabbing group p-3">
           <span className="absolute inset-0 rounded-full bg-gray-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
