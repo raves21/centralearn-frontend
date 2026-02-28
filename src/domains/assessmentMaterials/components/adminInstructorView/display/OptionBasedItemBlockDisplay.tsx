@@ -8,7 +8,7 @@ type Props = {
 
 export default function OptionBasedBlockDisplay({ assessmentMaterial }: Props) {
   return (
-    <div className="flex flex-col gap-6 p-6 rounded-md border border-gray-300">
+    <div className="flex flex-col gap-6 p-6 rounded-md bg-white">
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Option Based</p>
         <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">

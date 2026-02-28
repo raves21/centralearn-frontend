@@ -24,7 +24,7 @@ export default function OptionBasedItemOptionDisplay({
       )}
       <div
         className={cn(
-          "flex items-center gap-5 bg-white rounded-md p-4 w-full",
+          "flex items-center gap-5 bg-white rounded-md p-4 w-full border-gray-200 border",
           {
             "bg-green-100": option.isCorrect,
           },

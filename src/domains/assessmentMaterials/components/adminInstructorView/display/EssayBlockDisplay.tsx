@@ -7,7 +7,7 @@ type Props = {
 
 export default function EssayBlockDisplay({ assessmentMaterial }: Props) {
   return (
-    <div className="flex flex-col gap-7 p-6 rounded-md border border-gray-300">
+    <div className="flex flex-col gap-7 p-6 rounded-md bg-white">
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Essay</p>
         <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
@@ -19,7 +19,7 @@ export default function EssayBlockDisplay({ assessmentMaterial }: Props) {
         question={assessmentMaterial.question}
         questionNumber={assessmentMaterial.order}
       />
-      <div className="grid grid-cols-2 gap-6 w-fit rounded-md p-5 border border-gray-300">
+      <div className="grid grid-cols-2 gap-6 w-fit rounded-md p-5 bg-white border border-gray-200">
         <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Minimum Words:</p>
           {assessmentMaterial.material.minWordCount ? (

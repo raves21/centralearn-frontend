@@ -6,7 +6,7 @@ type Props = {
 };
 
 import ErrorComponent from "@/components/shared/ErrorComponent";
-import OptionBasedBlockDisplay from "./OptionBasedBlockDisplay";
+import OptionBasedBlockDisplay from "./OptionBasedItemBlockDisplay";
 import EssayBlockDisplay from "./EssayBlockDisplay";
 import IdentificationBlockDisplay from "./IdentificationBlockDisplay";
 import type {
@@ -32,7 +32,7 @@ export default function AssessmentMaterialsListDisplay({
 
   if (assessmentMaterials) {
     return (
-      <div className="flex flex-col gap-8 pb-24 pl-5">
+      <div className="flex flex-col gap-8 pb-24">
         {assessmentMaterials.map((assessmentMaterial) => {
           switch (assessmentMaterial.materialType) {
             case "App\\Models\\OptionBasedItem":
