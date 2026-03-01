@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
+import StudentTakeAssessmentButton from "../../studentView/StudentTakeAssessmentButton";
 
 type Props = {
   isOpen: boolean;
@@ -149,7 +150,7 @@ export default function AssessmentInfoSheet({
               <div className="flex items-center justify-between whitespace-nowrap gap-4">
                 <div className="flex items-center gap-3 text-gray-500">
                   <RotateCcw className="size-5" />
-                  <p className="font-medium">Attempts</p>
+                  <p className="font-medium">Max Attempts</p>
                 </div>
                 <p className="font-semibold text-gray-800">
                   {chapterContent.content.maxAttempts}
@@ -192,24 +193,10 @@ export default function AssessmentInfoSheet({
                 </button>
               }
               studentComponent={
-                <button
-                  disabled={!isAssessmentOpen}
-                  onClick={() =>
-                    navigate({
-                      to: "/lms/classes/$classId/contents/$chapterContentId",
-                      params: {
-                        chapterContentId: chapterContent.id,
-                        classId,
-                      },
-                    })
-                  }
-                  className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
-                >
-                  {/* TODO */}
-                  {chapterContent.content.maxAttempts
-                    ? "Start Attempt"
-                    : "Take Assessment"}
-                </button>
+                <StudentTakeAssessmentButton
+                  chapterContent={chapterContent}
+                  isAssessmentOpen={isAssessmentOpen}
+                />
               }
             />
             <button
