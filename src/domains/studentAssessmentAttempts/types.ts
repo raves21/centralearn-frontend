@@ -16,7 +16,7 @@ export type StudentAssessmentAttempt = {
     id: string;
     assessmentId: string;
     versionNumber: string;
-    questionnaire: AssessmentMaterial[];
+    questionnaireSnapshot: AssessmentMaterial[] | null;
   };
   attemptNumber: number;
   answers: {

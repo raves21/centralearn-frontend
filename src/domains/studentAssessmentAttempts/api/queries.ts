@@ -38,7 +38,22 @@ export function useStudentAssessmentAttemptInfo(attemptId: string) {
         `/student-assessment-attempts/${attemptId}`,
       );
 
-      return data.data as StudentAssessmentAttempt;
+      return {
+        data: data.data as StudentAssessmentAttempt,
+        assessment: data.assessment as {
+          id: string;
+          name: string;
+          maxAchievableScore: number;
+          chapterContent: {
+            id: string;
+            name: string;
+            chapter: {
+              id: string;
+              name: string;
+            };
+          };
+        },
+      };
     },
   });
 }
