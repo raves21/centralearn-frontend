@@ -1,8 +1,12 @@
 import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
 import { cn } from "@/lib/utils";
 import type { OptionBasedItemOption } from "@/domains/assessmentMaterials/types";
+import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
+import { useShallow } from "zustand/react/shallow";
+import { useMemo } from "react";
 
 type Props = {
+  materialId: string;
   option: OptionBasedItemOption;
   index: number;
   isOptionsAlphabetical: boolean;
@@ -12,13 +16,31 @@ export default function OptionBasedItemBlockOptions({
   option,
   index,
   isOptionsAlphabetical,
+  materialId,
 }: Props) {
   const alphabetLabel = String.fromCharCode(65 + index);
+
+  const [answers, setAnswerContent] = useAttemptAnswersStore(
+    useShallow((state) => [state.answers, state.setAnswerContent]),
+  );
+
+  const answerContent = useMemo<string | null | undefined>(() => {
+    const answer = answers.find((ans) => ans.materialId === materialId);
+    return answer?.content;
+  }, [answers]);
+
   return (
-    <div className="flex items-center gap-5">
+    <button
+      onClick={() => setAnswerContent(materialId, option.id)}
+      className="flex items-center gap-5 text-start"
+    >
       <div
         className={cn(
           "flex items-center gap-5 bg-white rounded-md p-4 w-full border-gray-200 border",
+          {
+            "bg-mainaccent text-white":
+              answerContent && answerContent === option.id,
+          },
         )}
       >
         {isOptionsAlphabetical && (
@@ -40,6 +62,6 @@ export default function OptionBasedItemBlockOptions({
           />
         )}
       </div>
-    </div>
+    </button>
   );
 }

@@ -7,12 +7,36 @@ import type {
 import OptionBasedItemBlock from "./OptionBasedItemBlock";
 import EssayItemBlock from "./EssayItemBlock";
 import IdentificationItemBlock from "./IdentificationItemBlock";
+import {
+  useAttemptAnswersStore,
+  type Answer,
+} from "../stores/useAttemptAnswersStore";
+import { useEffect } from "react";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
 };
 
 export default function Questionnaire({ questionnaireSnapshot }: Props) {
+  const setAnswers = useAttemptAnswersStore((state) => state.setAnswers);
+  const answers = useAttemptAnswersStore((state) => state.answers);
+
+  //set initial answers in global state
+  useEffect(() => {
+    if (questionnaireSnapshot) {
+      const answersFormatted: Answer[] = questionnaireSnapshot.map((item) => ({
+        materialId: item.materialId,
+        materialType: item.materialType,
+        content: null,
+      }));
+      setAnswers(answersFormatted);
+    }
+  }, [questionnaireSnapshot]);
+
+  useEffect(() => {
+    console.log(answers);
+  }, [answers]);
+
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
     return (
       <div className="flex flex-col gap-8 pb-24">
