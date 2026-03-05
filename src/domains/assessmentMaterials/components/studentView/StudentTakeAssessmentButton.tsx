@@ -40,7 +40,7 @@ export default function StudentTakeAssessmentButton({
     return (
       <button
         disabled={true}
-        className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+        className="w-full font-semibold text-lg grid place-items-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
       >
         <div className="flex items-center justify-center gap-3">
           <Loader2 className="size-5 animate-spin stroke-[3px]" />

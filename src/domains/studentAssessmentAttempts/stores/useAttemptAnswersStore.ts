@@ -2,10 +2,7 @@ import { create } from "zustand";
 
 export type Answer = {
   materialId: string;
-  materialType:
-    | "App\\Models\\OptionBasedItem"
-    | "App\\Models\\EssayItem"
-    | "App\\Models\\IdentificationItem";
+  materialType: "option_based_item" | "essay_item" | "identification_item";
   content: string | null;
 };
 

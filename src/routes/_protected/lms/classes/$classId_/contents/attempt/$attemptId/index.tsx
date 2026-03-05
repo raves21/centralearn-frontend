@@ -100,6 +100,7 @@ function RouteComponent() {
             studentAssessmentAttemptInfo.data.assessmentVersion
               .questionnaireSnapshot
           }
+          attemptId={attemptId}
         />
       </div>
     );

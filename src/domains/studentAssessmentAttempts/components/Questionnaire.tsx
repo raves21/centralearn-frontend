@@ -12,71 +12,82 @@ import {
   type Answer,
 } from "../stores/useAttemptAnswersStore";
 import { useEffect } from "react";
+import SubmitButton from "./SubmitButton";
+import { useShallow } from "zustand/react/shallow";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
+  attemptId: string;
 };
 
-export default function Questionnaire({ questionnaireSnapshot }: Props) {
-  const setAnswers = useAttemptAnswersStore((state) => state.setAnswers);
-  const answers = useAttemptAnswersStore((state) => state.answers);
+export default function Questionnaire({
+  questionnaireSnapshot,
+  attemptId,
+}: Props) {
+  const [answers, setAnswers] = useAttemptAnswersStore(
+    useShallow((state) => [state.answers, state.setAnswers]),
+  );
 
   //set initial answers in global state
   useEffect(() => {
     if (questionnaireSnapshot) {
       const answersFormatted: Answer[] = questionnaireSnapshot.map((item) => ({
         materialId: item.materialId,
-        materialType: item.materialType,
+        materialType:
+          item.materialType === "App\\Models\\EssayItem"
+            ? "essay_item"
+            : item.materialType === "App\\Models\\IdentificationItem"
+              ? "identification_item"
+              : "option_based_item",
         content: null,
       }));
       setAnswers(answersFormatted);
     }
   }, [questionnaireSnapshot]);
 
-  useEffect(() => {
-    console.log(answers);
-  }, [answers]);
-
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
     return (
       <div className="flex flex-col gap-8 pb-24">
-        {questionnaireSnapshot.map((questionnaireItem) => {
-          switch (questionnaireItem.materialType) {
-            case "App\\Models\\OptionBasedItem":
-              return (
-                <OptionBasedItemBlock
-                  key={questionnaireItem.id}
-                  questionnaireItem={
-                    questionnaireItem as AssessmentMaterial & {
-                      materialable: OptionBasedItem;
+        <div className="flex flex-col gap-8">
+          {questionnaireSnapshot.map((questionnaireItem) => {
+            switch (questionnaireItem.materialType) {
+              case "App\\Models\\OptionBasedItem":
+                return (
+                  <OptionBasedItemBlock
+                    key={questionnaireItem.id}
+                    questionnaireItem={
+                      questionnaireItem as AssessmentMaterial & {
+                        materialable: OptionBasedItem;
+                      }
                     }
-                  }
-                />
-              );
-            case "App\\Models\\EssayItem":
-              return (
-                <EssayItemBlock
-                  key={questionnaireItem.id}
-                  questionnaireItem={
-                    questionnaireItem as AssessmentMaterial & {
-                      materialable: EssayItem;
+                  />
+                );
+              case "App\\Models\\EssayItem":
+                return (
+                  <EssayItemBlock
+                    key={questionnaireItem.id}
+                    questionnaireItem={
+                      questionnaireItem as AssessmentMaterial & {
+                        materialable: EssayItem;
+                      }
                     }
-                  }
-                />
-              );
-            case "App\\Models\\IdentificationItem":
-              return (
-                <IdentificationItemBlock
-                  key={questionnaireItem.id}
-                  questionnaireItem={
-                    questionnaireItem as AssessmentMaterial & {
-                      materialable: IdentificationItem;
+                  />
+                );
+              case "App\\Models\\IdentificationItem":
+                return (
+                  <IdentificationItemBlock
+                    key={questionnaireItem.id}
+                    questionnaireItem={
+                      questionnaireItem as AssessmentMaterial & {
+                        materialable: IdentificationItem;
+                      }
                     }
-                  }
-                />
-              );
-          }
-        })}
+                  />
+                );
+            }
+          })}
+        </div>
+        <SubmitButton answers={answers} attemptId={attemptId} />
       </div>
     );
   } else {
