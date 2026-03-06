@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useStudentAssessmentAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
 import Questionnaire from "@/domains/studentAssessmentAttempts/components/Questionnaire";
+import type { Answer } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
 import { useRouteRoleGuard } from "@/utils/hooks/useRouteRoleGuard";
 import { Role } from "@/utils/sharedTypes";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -41,6 +42,13 @@ function RouteComponent() {
   }
 
   if (studentAssessmentAttemptInfo) {
+    const answersFromDb: Answer[] =
+      studentAssessmentAttemptInfo.data.answers.map((answer) => ({
+        assessmentMaterialId: answer.asmt_material_id,
+        content: answer.content,
+        materialType: answer.material_type,
+      }));
+
     const assessment = studentAssessmentAttemptInfo.assessment;
     const chapterContent = assessment.chapterContent;
     const chapter = chapterContent.chapter;
@@ -79,23 +87,9 @@ function RouteComponent() {
               )}
             </div>
           </div>
-          {/* <button
-            onClick={() =>
-              navigate({
-                to: "/lms/classes/$classId/contents/$chapterContentId/edit",
-                params: {
-                  chapterContentId,
-                  classId,
-                },
-              })
-            }
-            className="px-4 py-2 rounded-md bg-mainaccent text-white flex items-center gap-3"
-          >
-            <Edit className="size-4" />
-            <p>Enter edit mode</p>
-          </button> */}
         </div>
         <Questionnaire
+          answersFromDb={answersFromDb}
           questionnaireSnapshot={
             studentAssessmentAttemptInfo.data.assessmentVersion
               .questionnaireSnapshot

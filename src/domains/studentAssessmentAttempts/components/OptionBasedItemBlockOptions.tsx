@@ -3,20 +3,23 @@ import { cn } from "@/lib/utils";
 import type { OptionBasedItemOption } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
 import { useShallow } from "zustand/react/shallow";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useUpdateAttemptAnswer } from "../api/mutations";
 
 type Props = {
-  materialId: string;
+  assessmentMaterialId: string;
   option: OptionBasedItemOption;
   index: number;
   isOptionsAlphabetical: boolean;
+  attemptId: string;
 };
 
 export default function OptionBasedItemBlockOptions({
   option,
   index,
   isOptionsAlphabetical,
-  materialId,
+  assessmentMaterialId,
+  attemptId,
 }: Props) {
   const alphabetLabel = String.fromCharCode(65 + index);
 
@@ -25,13 +28,36 @@ export default function OptionBasedItemBlockOptions({
   );
 
   const answerContent = useMemo<string | null | undefined>(() => {
-    const answer = answers.find((ans) => ans.materialId === materialId);
+    const answer = answers.find(
+      (ans) => ans.assessmentMaterialId === assessmentMaterialId,
+    );
     return answer?.content;
-  }, [answers]);
+  }, [answers, assessmentMaterialId]);
+
+  const { mutate: updateAttemptAnswer } = useUpdateAttemptAnswer();
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (answerContent) {
+        updateAttemptAnswer({
+          attemptId,
+          answer: {
+            content: answerContent,
+            assessmentMaterialId,
+            materialType: "option_based_item",
+          },
+        });
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [answerContent]);
 
   return (
     <button
-      onClick={() => setAnswerContent(materialId, option.id)}
+      onClick={() => setAnswerContent(assessmentMaterialId, option.id)}
       className="flex items-center gap-5 text-start"
     >
       <div

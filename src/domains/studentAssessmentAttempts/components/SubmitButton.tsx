@@ -30,7 +30,10 @@ export default function SubmitButton({ answers, attemptId }: Props) {
             if (!answer.content) {
               throw new Error("There are unanswered questions.");
             }
-            formData.append(`answers[${i}][material_id]`, answer.materialId);
+            formData.append(
+              `answers[${i}][material_id]`,
+              answer.assessmentMaterialId,
+            );
             formData.append(
               `answers[${i}][material_type]`,
               answer.materialType,

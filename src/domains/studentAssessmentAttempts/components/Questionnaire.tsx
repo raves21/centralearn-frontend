@@ -17,12 +17,14 @@ import { useShallow } from "zustand/react/shallow";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
+  answersFromDb: Answer[];
   attemptId: string;
 };
 
 export default function Questionnaire({
   questionnaireSnapshot,
   attemptId,
+  answersFromDb,
 }: Props) {
   const [answers, setAnswers] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.setAnswers]),
@@ -30,20 +32,15 @@ export default function Questionnaire({
 
   //set initial answers in global state
   useEffect(() => {
-    if (questionnaireSnapshot) {
-      const answersFormatted: Answer[] = questionnaireSnapshot.map((item) => ({
-        materialId: item.materialId,
-        materialType:
-          item.materialType === "App\\Models\\EssayItem"
-            ? "essay_item"
-            : item.materialType === "App\\Models\\IdentificationItem"
-              ? "identification_item"
-              : "option_based_item",
-        content: null,
+    if (answersFromDb) {
+      const answersFormatted: Answer[] = answersFromDb.map((answerFromDb) => ({
+        assessmentMaterialId: answerFromDb.assessmentMaterialId,
+        materialType: answerFromDb.materialType,
+        content: answerFromDb.content,
       }));
       setAnswers(answersFormatted);
     }
-  }, [questionnaireSnapshot]);
+  }, [answersFromDb]);
 
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
     return (
@@ -55,6 +52,7 @@ export default function Questionnaire({
                 return (
                   <OptionBasedItemBlock
                     key={questionnaireItem.id}
+                    attemptId={attemptId}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
                         materialable: OptionBasedItem;
@@ -65,6 +63,7 @@ export default function Questionnaire({
               case "App\\Models\\EssayItem":
                 return (
                   <EssayItemBlock
+                    attemptId={attemptId}
                     key={questionnaireItem.id}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
@@ -77,6 +76,7 @@ export default function Questionnaire({
                 return (
                   <IdentificationItemBlock
                     key={questionnaireItem.id}
+                    attemptId={attemptId}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
                         materialable: IdentificationItem;

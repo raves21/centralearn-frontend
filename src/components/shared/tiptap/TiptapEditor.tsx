@@ -5,6 +5,7 @@ import { TextStyleKit } from "@tiptap/extension-text-style";
 import TiptapEditorMenuBar from "./TiptapEditorMenuBar";
 import Placeholder from "@tiptap/extension-placeholder";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 interface TiptapEditorProps {
   content: string;
@@ -55,6 +56,10 @@ const TiptapEditor = ({
   //     }
   //   }
   // }, [content, editor]);
+
+  useEffect(() => {
+    console.log("CONTENT", content);
+  }, [content]);
 
   if (!editor) {
     return null;

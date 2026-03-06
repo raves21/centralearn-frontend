@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type Answer = {
-  materialId: string;
+  assessmentMaterialId: string;
   materialType: "option_based_item" | "essay_item" | "identification_item";
   content: string | null;
 };
@@ -12,7 +12,10 @@ type Values = {
 
 type Actions = {
   setAnswers: (answers: Answer[]) => void;
-  setAnswerContent: (materialId: string, content: string | null) => void;
+  setAnswerContent: (
+    assessmentMaterialId: string,
+    content: string | null,
+  ) => void;
 };
 
 type Store = Values & Actions;
@@ -24,10 +27,10 @@ const defaultValues: Values = {
 export const useAttemptAnswersStore = create<Store>((set) => ({
   ...defaultValues,
   setAnswers: (answers) => set({ answers }),
-  setAnswerContent: (materialId, content) =>
+  setAnswerContent: (assessmentMaterialId, content) =>
     set((state) => ({
       answers: state.answers.map((answer) => {
-        if (answer.materialId === materialId) {
+        if (answer.assessmentMaterialId === assessmentMaterialId) {
           return {
             ...answer,
             content,

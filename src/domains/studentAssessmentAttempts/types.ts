@@ -20,7 +20,7 @@ export type StudentAssessmentAttempt = {
   };
   attemptNumber: number;
   answers: {
-    material_id: string;
+    asmt_material_id: string;
     material_type: "option_based_item" | "essay_item" | "identification_item";
     content: string;
   }[];

@@ -7,12 +7,16 @@ import OptionBasedItemBlockOptions from "./OptionBasedItemBlockOptions";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
+  attemptId: string;
 };
 
-export default function OptionBasedItemBlock({ questionnaireItem }: Props) {
+export default function OptionBasedItemBlock({
+  questionnaireItem,
+  attemptId,
+}: Props) {
   return (
     <div
-      id={questionnaireItem.materialId}
+      id={questionnaireItem.id}
       className="flex flex-col gap-6 p-6 rounded-md bg-white"
     >
       <div className="flex items-center justify-between">
@@ -33,7 +37,8 @@ export default function OptionBasedItemBlock({ questionnaireItem }: Props) {
             <OptionBasedItemBlockOptions
               key={index}
               option={option}
-              materialId={questionnaireItem.materialId}
+              attemptId={attemptId}
+              assessmentMaterialId={questionnaireItem.id}
               index={index}
               isOptionsAlphabetical={
                 questionnaireItem.materialable.isOptionsAlphabetical

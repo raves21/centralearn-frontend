@@ -6,27 +6,53 @@ import type {
 } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
 import { useShallow } from "zustand/react/shallow";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useUpdateAttemptAnswer } from "../api/mutations";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
+  attemptId: string;
 };
 
-export default function IdentificationItemBlock({ questionnaireItem }: Props) {
+export default function IdentificationItemBlock({
+  questionnaireItem,
+  attemptId,
+}: Props) {
   const [answers, setAnswerContent] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.setAnswerContent]),
   );
 
   const answerContent = useMemo<string | null | undefined>(() => {
     const answer = answers.find(
-      (ans) => ans.materialId === questionnaireItem.materialId,
+      (ans) => ans.assessmentMaterialId === questionnaireItem.id,
     );
     return answer?.content;
-  }, [answers]);
+  }, [answers, questionnaireItem]);
+
+  const { mutate: updateAttemptAnswer } = useUpdateAttemptAnswer();
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (answerContent) {
+        updateAttemptAnswer({
+          attemptId,
+          answer: {
+            content: answerContent,
+            assessmentMaterialId: questionnaireItem.id,
+            materialType: "identification_item",
+          },
+        });
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [answerContent]);
 
   return (
     <div
-      id={questionnaireItem.materialId}
+      id={questionnaireItem.id}
       className="flex flex-col gap-7 p-6 rounded-md bg-white"
     >
       <div className="flex items-center justify-between">
@@ -45,10 +71,7 @@ export default function IdentificationItemBlock({ questionnaireItem }: Props) {
         <Input
           value={answerContent ?? ""}
           onChange={(e) =>
-            setAnswerContent(
-              questionnaireItem.materialId,
-              e.currentTarget.value,
-            )
+            setAnswerContent(questionnaireItem.id, e.currentTarget.value)
           }
         />
       </div>
