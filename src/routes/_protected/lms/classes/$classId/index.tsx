@@ -119,7 +119,6 @@ function RouteComponent() {
                   new_order: chapter.new_order,
                 }));
 
-              console.log(updates);
               if (updates.length > 0) {
                 try {
                   await reorderChapterBulk(updates);

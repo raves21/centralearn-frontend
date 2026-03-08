@@ -44,22 +44,14 @@ const TiptapEditor = ({
     },
   });
 
-  // // Update editor content if the prop changes externally (optional, but good for initial load or reset)
-  // useEffect(() => {
-  //   if (editor && content !== editor.getHTML()) {
-  //     // Only set content if it's different to avoid cursor jumping issues if we were to sync on every keystroke
-  //     // strictly speaking, for local state driven by this editor, we might not need this useEffect
-  //     // if we trust the editor state is the source of truth while active.
-  //     // But for initial load it is needed.
-  //     if (editor.isEmpty && content) {
-  //       editor.commands.setContent(content);
-  //     }
-  //   }
-  // }, [content, editor]);
-
+  // Sync editor content when the prop changes externally (e.g. after store hydration).
+  // Only update when the editor is currently empty and the new content is non-empty,
+  // so we don't jump the cursor while the user is actively typing.
   useEffect(() => {
-    console.log("CONTENT", content);
-  }, [content]);
+    if (editor && editor.isEmpty && content) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   if (!editor) {
     return null;

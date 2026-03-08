@@ -4,6 +4,7 @@ import type {
   OptionBasedItem,
 } from "@/domains/assessmentMaterials/types";
 import OptionBasedItemBlockOptions from "./OptionBasedItemBlockOptions";
+import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptAnswer";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
@@ -14,6 +15,12 @@ export default function OptionBasedItemBlock({
   questionnaireItem,
   attemptId,
 }: Props) {
+  useDebounceUpdateAnswer({
+    assessmentMaterialId: questionnaireItem.id,
+    materialType: "option_based_item",
+    attemptId,
+  });
+
   return (
     <div
       id={questionnaireItem.id}
@@ -37,7 +44,6 @@ export default function OptionBasedItemBlock({
             <OptionBasedItemBlockOptions
               key={index}
               option={option}
-              attemptId={attemptId}
               assessmentMaterialId={questionnaireItem.id}
               index={index}
               isOptionsAlphabetical={

@@ -2,16 +2,12 @@ import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
 import { cn } from "@/lib/utils";
 import type { OptionBasedItemOption } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
-import { useShallow } from "zustand/react/shallow";
-import { useEffect, useMemo } from "react";
-import { useUpdateAttemptAnswer } from "../api/mutations";
-
+import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 type Props = {
   assessmentMaterialId: string;
   option: OptionBasedItemOption;
   index: number;
   isOptionsAlphabetical: boolean;
-  attemptId: string;
 };
 
 export default function OptionBasedItemBlockOptions({
@@ -19,45 +15,22 @@ export default function OptionBasedItemBlockOptions({
   index,
   isOptionsAlphabetical,
   assessmentMaterialId,
-  attemptId,
 }: Props) {
   const alphabetLabel = String.fromCharCode(65 + index);
 
-  const [answers, setAnswerContent] = useAttemptAnswersStore(
-    useShallow((state) => [state.answers, state.setAnswerContent]),
-  );
+  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
 
-  const answerContent = useMemo<string | null | undefined>(() => {
-    const answer = answers.find(
-      (ans) => ans.assessmentMaterialId === assessmentMaterialId,
-    );
-    return answer?.content;
-  }, [answers, assessmentMaterialId]);
-
-  const { mutate: updateAttemptAnswer } = useUpdateAttemptAnswer();
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (answerContent) {
-        updateAttemptAnswer({
-          attemptId,
-          answer: {
-            content: answerContent,
-            assessmentMaterialId,
-            materialType: "option_based_item",
-          },
-        });
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [answerContent]);
+  const answerContent = useAnswerContent({ assessmentMaterialId });
 
   return (
     <button
-      onClick={() => setAnswerContent(assessmentMaterialId, option.id)}
+      onClick={() =>
+        setAnswer(assessmentMaterialId, {
+          assessmentMaterialId,
+          content: option.id,
+          materialType: "option_based_item",
+        })
+      }
       className="flex items-center gap-5 text-start"
     >
       <div

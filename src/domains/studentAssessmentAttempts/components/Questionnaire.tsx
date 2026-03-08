@@ -30,16 +30,14 @@ export default function Questionnaire({
     useShallow((state) => [state.answers, state.setAnswers]),
   );
 
-  //set initial answers in global state
   useEffect(() => {
-    if (answersFromDb) {
-      const answersFormatted: Answer[] = answersFromDb.map((answerFromDb) => ({
-        assessmentMaterialId: answerFromDb.assessmentMaterialId,
-        materialType: answerFromDb.materialType,
-        content: answerFromDb.content,
-      }));
-      setAnswers(answersFormatted);
-    }
+    //set original answers
+    const answersFormatted: Answer[] = answersFromDb.map((answerFromDb) => ({
+      assessmentMaterialId: answerFromDb.assessmentMaterialId,
+      materialType: answerFromDb.materialType,
+      content: answerFromDb.content,
+    }));
+    setAnswers(answersFormatted);
   }, [answersFromDb]);
 
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {

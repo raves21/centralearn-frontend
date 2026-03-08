@@ -12,6 +12,7 @@ export type StudentAssessmentAttemptInfo = {
 export type StudentAssessmentAttempt = {
   id: string;
   studentId: string;
+  maxAchievableScore: number | null;
   assessmentVersion: {
     id: string;
     assessmentId: string;

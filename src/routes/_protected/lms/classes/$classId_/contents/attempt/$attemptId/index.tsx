@@ -79,10 +79,12 @@ function RouteComponent() {
             <div className="flex items-center gap-4">
               <NotebookPen className="size-8" />
               <p className="text-2xl font-bold">{chapterContent.name}</p>
-              {assessment.maxAchievableScore && (
+              {studentAssessmentAttemptInfo.data.maxAchievableScore && (
                 <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">
-                  {assessment.maxAchievableScore}{" "}
-                  {assessment.maxAchievableScore === 1 ? "point" : "points"}
+                  {studentAssessmentAttemptInfo.data.maxAchievableScore}{" "}
+                  {studentAssessmentAttemptInfo.data.maxAchievableScore === 1
+                    ? "point"
+                    : "points"}
                 </div>
               )}
             </div>

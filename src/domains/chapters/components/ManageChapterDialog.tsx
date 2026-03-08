@@ -80,7 +80,7 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
   const editProps = props.type === "edit" ? props : null;
 
   const { data: chapterInfo, status: chapterInfoStatus } = useChapterInfo(
-    editProps?.chapter.id
+    editProps?.chapter.id,
   );
 
   useEffect(() => {
@@ -98,14 +98,10 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
     }
   }, [chapterInfo]);
 
-  useEffect(() => {
-    console.log("chapterinfostatus", chapterInfoStatus);
-  }, [chapterInfoStatus]);
-
   const onSubmit = async (data: FormValues) => {
     try {
       const { data: courseClassChapterCount } = await api.get(
-        `/course-classes/${classId}/chapter-count`
+        `/course-classes/${classId}/chapter-count`,
       );
       const formData = new FormData();
       formData.append("course_class_id", classId);
@@ -121,7 +117,7 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
       if (data.published_at) {
         formData.append(
           "published_at",
-          format(data.published_at, getDateTimeFormat())
+          format(data.published_at, getDateTimeFormat()),
         );
       } else {
         formData.append("published_at", "");

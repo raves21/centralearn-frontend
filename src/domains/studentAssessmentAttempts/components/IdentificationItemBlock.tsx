@@ -5,9 +5,8 @@ import type {
   IdentificationItem,
 } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
-import { useShallow } from "zustand/react/shallow";
-import { useEffect, useMemo } from "react";
-import { useUpdateAttemptAnswer } from "../api/mutations";
+import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptAnswer";
+import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
@@ -18,37 +17,17 @@ export default function IdentificationItemBlock({
   questionnaireItem,
   attemptId,
 }: Props) {
-  const [answers, setAnswerContent] = useAttemptAnswersStore(
-    useShallow((state) => [state.answers, state.setAnswerContent]),
-  );
+  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
 
-  const answerContent = useMemo<string | null | undefined>(() => {
-    const answer = answers.find(
-      (ans) => ans.assessmentMaterialId === questionnaireItem.id,
-    );
-    return answer?.content;
-  }, [answers, questionnaireItem]);
+  const answerContent = useAnswerContent({
+    assessmentMaterialId: questionnaireItem.id,
+  });
 
-  const { mutate: updateAttemptAnswer } = useUpdateAttemptAnswer();
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (answerContent) {
-        updateAttemptAnswer({
-          attemptId,
-          answer: {
-            content: answerContent,
-            assessmentMaterialId: questionnaireItem.id,
-            materialType: "identification_item",
-          },
-        });
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [answerContent]);
+  useDebounceUpdateAnswer({
+    assessmentMaterialId: questionnaireItem.id,
+    attemptId,
+    materialType: "identification_item",
+  });
 
   return (
     <div
@@ -71,7 +50,11 @@ export default function IdentificationItemBlock({
         <Input
           value={answerContent ?? ""}
           onChange={(e) =>
-            setAnswerContent(questionnaireItem.id, e.currentTarget.value)
+            setAnswer(questionnaireItem.id, {
+              assessmentMaterialId: questionnaireItem.id,
+              content: e.currentTarget.value,
+              materialType: "identification_item",
+            })
           }
         />
       </div>

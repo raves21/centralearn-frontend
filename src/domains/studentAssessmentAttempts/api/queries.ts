@@ -43,7 +43,6 @@ export function useStudentAssessmentAttemptInfo(attemptId: string) {
         assessment: data.assessment as {
           id: string;
           name: string;
-          maxAchievableScore: number;
           chapterContent: {
             id: string;
             name: string;

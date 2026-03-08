@@ -5,9 +5,9 @@ import type {
   EssayItem,
 } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
-import { useShallow } from "zustand/react/shallow";
-import { useEffect, useMemo } from "react";
-import { useUpdateAttemptAnswer } from "../api/mutations";
+import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptAnswer";
+import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
+import { useEffect } from "react";
 
 type Props = {
   attemptId: string;
@@ -18,44 +18,17 @@ export default function EssayItemBlock({
   questionnaireItem,
   attemptId,
 }: Props) {
-  const [answers, setAnswerContent] = useAttemptAnswersStore(
-    useShallow((state) => [state.answers, state.setAnswerContent]),
-  );
+  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
 
-  const { mutate: updateAttemptAnswer } = useUpdateAttemptAnswer();
+  const answerContent = useAnswerContent({
+    assessmentMaterialId: questionnaireItem.id,
+  });
 
-  const answerContent = useMemo<string | null | undefined>(() => {
-    const answer = answers.find(
-      (ans) => ans.assessmentMaterialId === questionnaireItem.id,
-    );
-    return answer?.content;
-  }, [answers, questionnaireItem]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (answerContent) {
-        updateAttemptAnswer({
-          attemptId,
-          answer: {
-            content: answerContent,
-            assessmentMaterialId: questionnaireItem.id,
-            materialType: "essay_item",
-          },
-        });
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [answerContent]);
-
-  useEffect(() => {
-    const answer = answers.find(
-      (ans) => ans.assessmentMaterialId === questionnaireItem.id,
-    );
-    console.log("asdnwdonet", answer);
-  }, [answers]);
+  useDebounceUpdateAnswer({
+    assessmentMaterialId: questionnaireItem.id,
+    materialType: "essay_item",
+    attemptId,
+  });
 
   return (
     <div
@@ -117,7 +90,13 @@ export default function EssayItemBlock({
       </div>
       <TiptapEditor
         content={answerContent ?? ""}
-        onChange={(content) => setAnswerContent(questionnaireItem.id, content)}
+        onChange={(content) =>
+          setAnswer(questionnaireItem.id, {
+            assessmentMaterialId: questionnaireItem.id,
+            content,
+            materialType: "essay_item",
+          })
+        }
       />
     </div>
   );
