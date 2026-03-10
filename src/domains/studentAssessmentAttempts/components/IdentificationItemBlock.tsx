@@ -7,6 +7,8 @@ import type {
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
 import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptAnswer";
 import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
+import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
+import { cn } from "@/lib/utils";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
@@ -23,6 +25,8 @@ export default function IdentificationItemBlock({
     assessmentMaterialId: questionnaireItem.id,
   });
 
+  const isUnanswered = useIsUnanswered({ itemId: questionnaireItem.id });
+
   useDebounceUpdateAnswer({
     assessmentMaterialId: questionnaireItem.id,
     attemptId,
@@ -32,7 +36,9 @@ export default function IdentificationItemBlock({
   return (
     <div
       id={questionnaireItem.id}
-      className="flex flex-col gap-7 p-6 rounded-md bg-white"
+      className={cn("flex flex-col gap-7 p-6 rounded-md bg-white", {
+        "border border-red-500": isUnanswered,
+      })}
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Identification</p>

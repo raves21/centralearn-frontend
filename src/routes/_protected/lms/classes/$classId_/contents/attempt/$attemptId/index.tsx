@@ -91,6 +91,10 @@ function RouteComponent() {
           </div>
         </div>
         <Questionnaire
+          items={
+            studentAssessmentAttemptInfo.data.assessmentVersion
+              .questionnaireSnapshot
+          }
           answersFromDb={answersFromDb}
           questionnaireSnapshot={
             studentAssessmentAttemptInfo.data.assessmentVersion

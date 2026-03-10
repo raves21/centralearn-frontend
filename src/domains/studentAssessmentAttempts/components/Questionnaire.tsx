@@ -19,12 +19,14 @@ type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
   answersFromDb: Answer[];
   attemptId: string;
+  items: AssessmentMaterial[] | null;
 };
 
 export default function Questionnaire({
   questionnaireSnapshot,
   attemptId,
   answersFromDb,
+  items,
 }: Props) {
   const [answers, setAnswers] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.setAnswers]),
@@ -85,7 +87,7 @@ export default function Questionnaire({
             }
           })}
         </div>
-        <SubmitButton answers={answers} attemptId={attemptId} />
+        <SubmitButton items={items} answers={answers} attemptId={attemptId} />
       </div>
     );
   } else {

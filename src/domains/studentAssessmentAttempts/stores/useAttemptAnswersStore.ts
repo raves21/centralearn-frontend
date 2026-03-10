@@ -6,14 +6,20 @@ export type Answer = {
   content: string | null;
 };
 
+export type UnansweredItem = Omit<Answer, "content"> & {
+  itemNumber: number;
+};
+
 type Values = {
   answers: Answer[];
   isAnswersHydrated: boolean;
+  unansweredItems: UnansweredItem[];
 };
 
 type Actions = {
   setAnswers: (answers: Answer[]) => void;
   setAnswer: (assessmentMaterialId: string, answerPayload: Answer) => void;
+  setUnansweredItems: (unansweredItems: UnansweredItem[]) => void;
 };
 
 type Store = Values & Actions;
@@ -21,6 +27,7 @@ type Store = Values & Actions;
 const defaultValues: Values = {
   answers: [],
   isAnswersHydrated: false,
+  unansweredItems: [],
 };
 
 export const useAttemptAnswersStore = create<Store>((set) => ({
@@ -47,4 +54,6 @@ export const useAttemptAnswersStore = create<Store>((set) => ({
         answers: [...state.answers, answerPayload],
       };
     }),
+  setUnansweredItems: (unansweredItems) => set({ unansweredItems }),
+  resetState: () => set(defaultValues),
 }));

@@ -5,6 +5,8 @@ import type {
 } from "@/domains/assessmentMaterials/types";
 import OptionBasedItemBlockOptions from "./OptionBasedItemBlockOptions";
 import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptAnswer";
+import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
+import { cn } from "@/lib/utils";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
@@ -21,10 +23,14 @@ export default function OptionBasedItemBlock({
     attemptId,
   });
 
+  const isUnanswered = useIsUnanswered({ itemId: questionnaireItem.id });
+
   return (
     <div
       id={questionnaireItem.id}
-      className="flex flex-col gap-6 p-6 rounded-md bg-white"
+      className={cn("flex flex-col gap-7 p-6 rounded-md bg-white", {
+        "border border-red-500": isUnanswered,
+      })}
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Option Based</p>

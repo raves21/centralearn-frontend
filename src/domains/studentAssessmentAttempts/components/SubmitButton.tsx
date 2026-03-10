@@ -1,20 +1,91 @@
 import { toast } from "sonner";
 import { useSubmitAttempt } from "../api/mutations";
-import type { Answer } from "../stores/useAttemptAnswersStore";
+import {
+  useAttemptAnswersStore,
+  type Answer,
+  type UnansweredItem,
+} from "../stores/useAttemptAnswersStore";
 import { Loader2 } from "lucide-react";
+import type { AssessmentMaterial } from "@/domains/assessmentMaterials/types";
+import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 
 type Props = {
   attemptId: string;
   answers: Answer[];
+  items: AssessmentMaterial[] | null;
 };
 
-export default function SubmitButton({ answers, attemptId }: Props) {
+export default function SubmitButton({ answers, attemptId, items }: Props) {
   const { mutateAsync: submitAttempt, status: submitAttemptStatus } =
     useSubmitAttempt();
 
+  const setUnansweredItems = useAttemptAnswersStore(
+    (state) => state.setUnansweredItems,
+  );
+
+  const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
+
+  //set an array refs of the unanswered items
+  function checkUnansweredItemsState(
+    items: AssessmentMaterial[] | null,
+    answers: Answer[],
+  ): UnansweredItem[] {
+    if (items && items.length > 0) {
+      let firstUnansweredItem: HTMLElement | null = null;
+      let unansweredItems: UnansweredItem[] = [];
+
+      items.forEach((item) => {
+        const foundAnswer = answers.find(
+          (ans) => ans.assessmentMaterialId === item.id,
+        );
+
+        const answerNotFound = !foundAnswer;
+        const answerFoundButNoContent =
+          foundAnswer && !foundAnswer.content?.trim();
+
+        if (answerNotFound || answerFoundButNoContent) {
+          firstUnansweredItem = document.getElementById(item.id);
+          unansweredItems.push({
+            assessmentMaterialId: item.id,
+            materialType:
+              item.materialType === "App\\Models\\EssayItem"
+                ? "essay_item"
+                : item.materialType === "App\\Models\\IdentificationItem"
+                  ? "identification_item"
+                  : "option_based_item",
+            itemNumber: item.order,
+          });
+        }
+      });
+
+      if (firstUnansweredItem && unansweredItems.length !== 0) {
+        setUnansweredItems(unansweredItems);
+        toggleOpenDialog(
+          <div className="flex flex-col gap-4 p-3 w-[300px] h-[500px] bg-white rounded-md items-center">
+            <p className="text-lg font-medium">Unanswered Questions</p>
+            <div className="flex flex-col gap-3 w-full h-px flex-grow overflow-y-auto">
+              {unansweredItems.map((unansweredItem) => (
+                <div className="w-full border border-gray-300 rounded-md">
+                  <div className="flex items-center font-medium">
+                    <p>Question {unansweredItem.itemNumber}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>,
+        );
+      }
+      return unansweredItems;
+    }
+    return [];
+  }
+
   return (
     <button
-      disabled={answers.length === 0 || submitAttemptStatus === "pending"}
+      disabled={
+        // answers.length === 0 ||
+        submitAttemptStatus === "pending" || !items || items?.length === 0
+      }
       onClick={async () => {
         try {
           const formData = new FormData();
@@ -26,10 +97,8 @@ export default function SubmitButton({ answers, attemptId }: Props) {
           formData.append("attempt_id", attemptId);
 
           answers.forEach((answer, i) => {
-            //todo: handle unanswers questions here. this is just temp
-            if (!answer.content) {
-              throw new Error("There are unanswered questions.");
-            }
+            checkUnansweredItemsState(items, answers);
+
             formData.append(
               `answers[${i}][material_id]`,
               answer.assessmentMaterialId,
@@ -38,7 +107,9 @@ export default function SubmitButton({ answers, attemptId }: Props) {
               `answers[${i}][material_type]`,
               answer.materialType,
             );
-            formData.append(`answers[${i}][content]`, answer.content);
+            if (answer.content?.trim()) {
+              formData.append(`answers[${i}][content]`, answer.content);
+            }
           });
           await submitAttempt(formData);
         } catch (error) {
