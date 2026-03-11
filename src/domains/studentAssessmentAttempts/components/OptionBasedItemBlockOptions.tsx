@@ -2,12 +2,12 @@ import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
 import { cn } from "@/lib/utils";
 import type { OptionBasedItemOption } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
-import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 type Props = {
   assessmentMaterialId: string;
   option: OptionBasedItemOption;
   index: number;
   isOptionsAlphabetical: boolean;
+  answerContent: string | null | undefined;
 };
 
 export default function OptionBasedItemBlockOptions({
@@ -15,12 +15,11 @@ export default function OptionBasedItemBlockOptions({
   index,
   isOptionsAlphabetical,
   assessmentMaterialId,
+  answerContent,
 }: Props) {
   const alphabetLabel = String.fromCharCode(65 + index);
 
   const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
-
-  const answerContent = useAnswerContent({ assessmentMaterialId });
 
   return (
     <button

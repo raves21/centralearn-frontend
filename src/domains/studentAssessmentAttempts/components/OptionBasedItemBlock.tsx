@@ -7,6 +7,7 @@ import OptionBasedItemBlockOptions from "./OptionBasedItemBlockOptions";
 import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptAnswer";
 import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
 import { cn } from "@/lib/utils";
+import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
@@ -23,7 +24,14 @@ export default function OptionBasedItemBlock({
     attemptId,
   });
 
-  const isUnanswered = useIsUnanswered({ itemId: questionnaireItem.id });
+  const answerContent = useAnswerContent({
+    assessmentMaterialId: questionnaireItem.id,
+  });
+
+  const isUnanswered = useIsUnanswered({
+    itemId: questionnaireItem.id,
+    answerContent,
+  });
 
   return (
     <div
@@ -49,6 +57,7 @@ export default function OptionBasedItemBlock({
           {questionnaireItem.materialable.options.map((option, index) => (
             <OptionBasedItemBlockOptions
               key={index}
+              answerContent={answerContent}
               option={option}
               assessmentMaterialId={questionnaireItem.id}
               index={index}

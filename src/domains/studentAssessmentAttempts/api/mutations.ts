@@ -54,7 +54,7 @@ export function useUpdateAttemptAnswer() {
         answer: {
           asmt_material_id: answer.assessmentMaterialId,
           material_type: answer.materialType,
-          content: answer.content,
+          content: answer.content || null,
         },
       });
     },

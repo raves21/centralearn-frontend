@@ -1,6 +1,6 @@
 import { useUpdateAttemptAnswer } from "@/domains/studentAssessmentAttempts/api/mutations";
 import { useAttemptAnswersStore } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 type Args = {
@@ -18,12 +18,11 @@ export function useDebounceUpdateAnswer({
     useShallow((state) => [state.answers, state.isAnswersHydrated]),
   );
 
-  const answerContent = useMemo<string | null | undefined>(() => {
-    const answer = answers.find(
-      (ans) => ans.assessmentMaterialId === assessmentMaterialId,
-    );
-    return answer?.content;
-  }, [answers, assessmentMaterialId]);
+  const answer = answers.find(
+    (ans) => ans.assessmentMaterialId === assessmentMaterialId,
+  );
+
+  const answerContent = answer?.content;
 
   const { mutate: updateAttemptAnswer } = useUpdateAttemptAnswer();
 
@@ -42,11 +41,27 @@ export function useDebounceUpdateAnswer({
     }
 
     const handler = setTimeout(() => {
-      if (answerContent) {
+      if (materialType === "option_based_item") {
+        if (answerContent) {
+          updateAttemptAnswer({
+            attemptId,
+            answer: {
+              content: answerContent,
+              assessmentMaterialId,
+              materialType,
+            },
+          });
+        }
+      }
+
+      if (
+        materialType === "identification_item" ||
+        materialType === "essay_item"
+      ) {
         updateAttemptAnswer({
           attemptId,
           answer: {
-            content: answerContent,
+            content: answerContent || "",
             assessmentMaterialId,
             materialType,
           },

@@ -25,7 +25,10 @@ export default function EssayItemBlock({
     assessmentMaterialId: questionnaireItem.id,
   });
 
-  const isUnanswered = useIsUnanswered({ itemId: questionnaireItem.id });
+  const isUnanswered = useIsUnanswered({
+    itemId: questionnaireItem.id,
+    answerContent,
+  });
 
   useDebounceUpdateAnswer({
     assessmentMaterialId: questionnaireItem.id,
@@ -42,7 +45,7 @@ export default function EssayItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Essay</p>
-        <div className="font-semibold text-mainaccent bordber border-mainaccent rounded-md px-3 py-2">
+        <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
           {questionnaireItem.pointWorth} point
           {questionnaireItem.pointWorth > 1 && <span>s</span>}
         </div>

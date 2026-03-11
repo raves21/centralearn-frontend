@@ -25,7 +25,10 @@ export default function IdentificationItemBlock({
     assessmentMaterialId: questionnaireItem.id,
   });
 
-  const isUnanswered = useIsUnanswered({ itemId: questionnaireItem.id });
+  const isUnanswered = useIsUnanswered({
+    itemId: questionnaireItem.id,
+    answerContent,
+  });
 
   useDebounceUpdateAnswer({
     assessmentMaterialId: questionnaireItem.id,

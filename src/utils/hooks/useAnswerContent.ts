@@ -1,5 +1,5 @@
 import { useAttemptAnswersStore } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 type Args = {
   assessmentMaterialId: string;
@@ -8,11 +8,16 @@ type Args = {
 export function useAnswerContent({ assessmentMaterialId }: Args) {
   const answers = useAttemptAnswersStore((state) => state.answers);
 
-  const answerContent = useMemo<string | null | undefined>(() => {
+  const [answerContent, setAnswerContent] = useState<string | null | undefined>(
+    null,
+  );
+
+  useEffect(() => {
     const answer = answers.find(
       (ans) => ans.assessmentMaterialId === assessmentMaterialId,
     );
-    return answer?.content;
+
+    setAnswerContent(answer?.content);
   }, [answers, assessmentMaterialId]);
 
   return answerContent;

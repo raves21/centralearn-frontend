@@ -25,6 +25,24 @@ export default function SubmitButton({ answers, attemptId, items }: Props) {
 
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
+  function buildFormDataPayload(attemptId: string, answers: Answer[]) {
+    const formData = new FormData();
+
+    formData.append("attempt_id", attemptId);
+
+    answers.forEach((answer, i) => {
+      formData.append(
+        `answers[${i}][asmt_material_id]`,
+        answer.assessmentMaterialId,
+      );
+      formData.append(`answers[${i}][material_type]`, answer.materialType);
+      if (answer.content?.trim()) {
+        formData.append(`answers[${i}][content]`, answer.content);
+      }
+    });
+    return formData;
+  }
+
   //set an array refs of the unanswered items
   function checkUnansweredItemsState(
     items: AssessmentMaterial[] | null,
@@ -40,8 +58,24 @@ export default function SubmitButton({ answers, attemptId, items }: Props) {
         );
 
         const answerNotFound = !foundAnswer;
-        const answerFoundButNoContent =
-          foundAnswer && !foundAnswer.content?.trim();
+        let answerFoundButNoContent = false;
+
+        if (foundAnswer) {
+          if (item.materialType === "App\\Models\\EssayItem") {
+            //since essay items are html strings due to tiptap editor, we must extract the text content only
+            const html = foundAnswer.content!;
+            const div = document.createElement("div");
+            div.innerHTML = html;
+
+            if (!div.textContent.trim()) {
+              answerFoundButNoContent = true;
+            }
+          } else if (item.materialType === "App\\Models\\IdentificationItem") {
+            if (!foundAnswer.content?.trim()) {
+              answerFoundButNoContent = true;
+            }
+          }
+        }
 
         if (answerNotFound || answerFoundButNoContent) {
           firstUnansweredItem = document.getElementById(item.id);
@@ -61,16 +95,53 @@ export default function SubmitButton({ answers, attemptId, items }: Props) {
       if (firstUnansweredItem && unansweredItems.length !== 0) {
         setUnansweredItems(unansweredItems);
         toggleOpenDialog(
-          <div className="flex flex-col gap-4 p-3 w-[300px] h-[500px] bg-white rounded-md items-center">
-            <p className="text-lg font-medium">Unanswered Questions</p>
-            <div className="flex flex-col gap-3 w-full h-px flex-grow overflow-y-auto">
+          <div className="flex flex-col gap-8 p-6 w-[500px] h-[400px] bg-white rounded-md">
+            {/* Header */}
+            <p className="text-lg font-medium text-center">
+              Unanswered Questions
+            </p>
+
+            {/* Scrollable section */}
+            <div className="flex flex-col gap-3 w-full flex-1 min-h-0 overflow-y-auto bg-red-200">
               {unansweredItems.map((unansweredItem) => (
-                <div className="w-full border border-gray-300 rounded-md">
+                <button
+                  key={unansweredItem.assessmentMaterialId}
+                  onClick={() => {
+                    const itemRef = document.getElementById(
+                      unansweredItem.assessmentMaterialId,
+                    );
+
+                    if (itemRef) {
+                      toggleOpenDialog(null);
+                      itemRef.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                  className="w-full border border-gray-300 rounded-md px-3 py-4 hover:bg-gray-100"
+                >
                   <div className="flex items-center font-medium">
                     <p>Question {unansweredItem.itemNumber}</p>
                   </div>
-                </div>
+                </button>
               ))}
+
+              {/* Just to demonstrate overflow */}
+              <div className="w-full h-[800px] bg-red-500"></div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center h-[15%] w-full gap-3">
+              <button
+                onClick={() => toggleOpenDialog(null)}
+                className="w-1/2 h-full grid place-items-center bg-gray-100 hover:bg-gray-200 rounded-md"
+              >
+                Close
+              </button>
+
+              <button className="w-1/2 h-full grid place-items-center bg-mainaccent hover:bg-indigo-800 text-white rounded-md">
+                Submit Anyway
+              </button>
             </div>
           </div>,
         );
@@ -83,35 +154,16 @@ export default function SubmitButton({ answers, attemptId, items }: Props) {
   return (
     <button
       disabled={
-        // answers.length === 0 ||
         submitAttemptStatus === "pending" || !items || items?.length === 0
       }
       onClick={async () => {
         try {
-          const formData = new FormData();
+          const formData = buildFormDataPayload(attemptId, answers);
+          const unansweredItems = checkUnansweredItemsState(items, answers);
 
-          if (answers.length === 0) {
-            toast.error("Error. No answers given.");
+          if (unansweredItems.length === 0) {
+            await submitAttempt(formData);
           }
-
-          formData.append("attempt_id", attemptId);
-
-          answers.forEach((answer, i) => {
-            checkUnansweredItemsState(items, answers);
-
-            formData.append(
-              `answers[${i}][material_id]`,
-              answer.assessmentMaterialId,
-            );
-            formData.append(
-              `answers[${i}][material_type]`,
-              answer.materialType,
-            );
-            if (answer.content?.trim()) {
-              formData.append(`answers[${i}][content]`, answer.content);
-            }
-          });
-          await submitAttempt(formData);
         } catch (error) {
           console.error(error);
           toast.error("An error occured. Please try again later.");
