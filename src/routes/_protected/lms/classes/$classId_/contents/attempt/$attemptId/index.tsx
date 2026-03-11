@@ -91,6 +91,7 @@ function RouteComponent() {
           </div>
         </div>
         <Questionnaire
+          classId={classId}
           items={
             studentAssessmentAttemptInfo.data.assessmentVersion
               .questionnaireSnapshot

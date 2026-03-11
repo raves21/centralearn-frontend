@@ -1,6 +1,7 @@
 import { useAttemptAnswersStore } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { getHtmlStringText } from "../sharedFunctions";
 
 type Args = {
   itemId: string;
@@ -14,38 +15,47 @@ export function useIsUnanswered({ itemId, answerContent }: Args) {
 
   const [isUnanswered, setIsUnanswered] = useState<boolean>(false);
 
+  const isFirstMount = useRef<boolean>(false);
+
   useEffect(() => {
-    const foundUnansweredItem = unansweredItems.find(
-      (unansweredItem) => unansweredItem.assessmentMaterialId === itemId,
-    );
+    if (!isFirstMount.current) {
+      isFirstMount.current = true;
+      return;
+    }
 
-    if (foundUnansweredItem) {
-      let answerContentFinal = answerContent;
+    if (unansweredItems.length > 0) {
+      console.log(unansweredItems);
+      const foundUnansweredItem = unansweredItems.find(
+        (unansweredItem) => unansweredItem.assessmentMaterialId === itemId,
+      );
 
-      if (foundUnansweredItem.materialType === "essay_item") {
-        const div = document.createElement("div");
-        div.innerHTML = answerContent!;
-        answerContentFinal = div.innerText.trim();
-      }
+      if (foundUnansweredItem) {
+        let answerContentFinal = answerContent;
 
-      //found but already has answer content
-      if (!!answerContentFinal?.trim()) {
-        setIsUnanswered(false);
-        setUnansweredItems(
-          useAttemptAnswersStore
-            .getState()
-            .unansweredItems.filter(
-              (item) =>
-                item.assessmentMaterialId !==
-                foundUnansweredItem.assessmentMaterialId,
-            ),
-        );
+        if (foundUnansweredItem.materialType === "essay_item") {
+          answerContentFinal = getHtmlStringText(answerContent);
+        }
+
+        //found but already has answer content
+        if (!!answerContentFinal?.trim()) {
+          setIsUnanswered(false);
+          setUnansweredItems(
+            useAttemptAnswersStore
+              .getState()
+              .unansweredItems.filter(
+                (item) =>
+                  item.assessmentMaterialId !==
+                  foundUnansweredItem.assessmentMaterialId,
+              ),
+          );
+        } else {
+          setIsUnanswered(true);
+        }
       } else {
-        //found but has no answer content
-        setIsUnanswered(true);
+        if (!getHtmlStringText(answerContent)) {
+          setIsUnanswered(true);
+        }
       }
-    } else {
-      setIsUnanswered(false);
     }
   }, [unansweredItems, itemId, answerContent]);
 

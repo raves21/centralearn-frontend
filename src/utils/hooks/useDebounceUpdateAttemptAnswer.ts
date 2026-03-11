@@ -2,6 +2,7 @@ import { useUpdateAttemptAnswer } from "@/domains/studentAssessmentAttempts/api/
 import { useAttemptAnswersStore } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
 import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { getHtmlStringText } from "../sharedFunctions";
 
 type Args = {
   materialType: "option_based_item" | "essay_item" | "identification_item";
@@ -61,7 +62,7 @@ export function useDebounceUpdateAnswer({
         updateAttemptAnswer({
           attemptId,
           answer: {
-            content: answerContent || "",
+            content: getHtmlStringText(answerContent) || "",
             assessmentMaterialId,
             materialType,
           },

@@ -20,6 +20,7 @@ type Props = {
   answersFromDb: Answer[];
   attemptId: string;
   items: AssessmentMaterial[] | null;
+  classId: string;
 };
 
 export default function Questionnaire({
@@ -27,12 +28,14 @@ export default function Questionnaire({
   attemptId,
   answersFromDb,
   items,
+  classId,
 }: Props) {
   const [answers, setAnswers] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.setAnswers]),
   );
 
   useEffect(() => {
+    useAttemptAnswersStore.getState().resetState();
     //set original answers
     const answersFormatted: Answer[] = answersFromDb.map((answerFromDb) => ({
       assessmentMaterialId: answerFromDb.assessmentMaterialId,
@@ -87,7 +90,12 @@ export default function Questionnaire({
             }
           })}
         </div>
-        <SubmitButton items={items} answers={answers} attemptId={attemptId} />
+        <SubmitButton
+          classId={classId}
+          items={items}
+          answers={answers}
+          attemptId={attemptId}
+        />
       </div>
     );
   } else {

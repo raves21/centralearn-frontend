@@ -146,7 +146,7 @@ export default function StudentTakeAssessmentButton({
                 }}
                 className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
               >
-                Start Attempt
+                Start New Attempt
               </button>
             );
           }

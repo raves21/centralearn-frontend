@@ -8,7 +8,7 @@ export default function GlobalDialog() {
       state.isDialogOpen,
       state.dialogContent,
       state.toggleOpenDialog,
-    ])
+    ]),
   );
 
   return (
@@ -20,7 +20,7 @@ export default function GlobalDialog() {
       <div className="fixed font-poppins inset-0 grid place-items-center w-dvw overflow-x-hidden hide-scrollbar overflow-y-auto bg-black/85 backdrop-blur-[1px]">
         <DialogPanel
           transition
-          className="duration-150 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+          className="duration-150 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 overflow-y-auto"
         >
           {dialogContent}
         </DialogPanel>

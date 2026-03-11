@@ -20,6 +20,7 @@ type Actions = {
   setAnswers: (answers: Answer[]) => void;
   setAnswer: (assessmentMaterialId: string, answerPayload: Answer) => void;
   setUnansweredItems: (unansweredItems: UnansweredItem[]) => void;
+  resetState: () => void;
 };
 
 type Store = Values & Actions;

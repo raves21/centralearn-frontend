@@ -22,24 +22,36 @@ export function getDateTimeFormatWithoutSeconds() {
 }
 
 export function formatToUTC(date: Date | string) {
-  if(typeof date === "string"){
-    return formatInTimeZone(formatDateStringToDateObj(date), "UTC", getDateTimeFormat()); 
+  if (typeof date === "string") {
+    return formatInTimeZone(
+      formatDateStringToDateObj(date),
+      "UTC",
+      getDateTimeFormat(),
+    );
   }
   return formatInTimeZone(date, "UTC", getDateTimeFormat());
 }
 
 export function formatToLocal(date: Date | string) {
-
-  if(typeof date === "string"){
+  if (typeof date === "string") {
     return formatInTimeZone(
-    formatDateStringToDateObj(date),
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-    getDateTimeFormat(),
-  );
+      formatDateStringToDateObj(date),
+      Intl.DateTimeFormat().resolvedOptions().timeZone,
+      getDateTimeFormat(),
+    );
   }
   return formatInTimeZone(
     date,
     Intl.DateTimeFormat().resolvedOptions().timeZone,
     getDateTimeFormat(),
   );
+}
+
+export function getHtmlStringText(htmlString: string | null | undefined) {
+  if (htmlString) {
+    const div = document.createElement("div");
+    div.innerHTML = htmlString;
+    return div.innerText.trim();
+  }
+  return "";
 }
