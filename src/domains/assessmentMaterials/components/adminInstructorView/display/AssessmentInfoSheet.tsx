@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Clock,
   Eye,
+  Loader2,
   NotebookPen,
   RotateCcw,
   Trophy,
@@ -23,6 +24,8 @@ import { cn } from "@/lib/utils";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
 import StudentTakeAssessmentButton from "../../studentView/StudentTakeAssessmentButton";
+import { useCurrentUser } from "@/domains/auth/api/queries";
+import { useResultAndAttempts } from "@/domains/studentAssessmentAttempts/api/queries";
 
 type Props = {
   isOpen: boolean;
@@ -53,6 +56,10 @@ export default function AssessmentInfoSheet({
     return isNowOrBefore;
   }, [chapterContent]);
 
+  const { data: currentUser } = useCurrentUser();
+  const { data: resultAndAttempts, status: resultAndAttemptsStatus } =
+    useResultAndAttempts(currentUser?.studentId, chapterContent.contentId);
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
@@ -66,99 +73,149 @@ export default function AssessmentInfoSheet({
             </div>
             <p className="text-xl font-bold">{chapterContent.name}</p>
           </div>
-          <div className="p-6 flex flex-col gap-5 text-sm">
-            <p className="text-gray-400 font-semibold">AVAILABILITY</p>
-            <div className="flex items-center w-full justify-between px-2 py-3 rounded-md bg-gray-100">
-              <div className="flex items-center gap-3 text-gray-500">
-                <Calendar className="size-5" />
-                <p className="font-medium">Status</p>
-              </div>
-              <div
-                className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-full",
-                  isAssessmentOpen
-                    ? "text-green-500 bg-green-100"
-                    : "text-red-500 bg-red-100",
-                )}
-              >
-                {isAssessmentOpen ? (
-                  <>
-                    <CheckCircle2 className="size-4" />
-                    <p className="font-medium text-sm">Open</p>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="size-4" />
-                    <p className="font-medium text-sm">Closed</p>
-                  </>
-                )}
+          <div className="flex flex-col flex-grow min-h-0 overflow-y-auto">
+            <div className="p-6 flex flex-col gap-5 text-sm">
+              <p className="text-gray-400 font-semibold">AVAILABILITY</p>
+              <div className="flex items-center w-full justify-between px-2 py-3 rounded-md bg-gray-100">
+                <div className="flex items-center gap-3 text-gray-500">
+                  <Calendar className="size-5" />
+                  <p className="font-medium">Status</p>
+                </div>
+                <div
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-full",
+                    isAssessmentOpen
+                      ? "text-green-500 bg-green-100"
+                      : "text-red-500 bg-red-100",
+                  )}
+                >
+                  {isAssessmentOpen ? (
+                    <>
+                      <CheckCircle2 className="size-4" />
+                      <p className="font-medium text-sm">Open</p>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="size-4" />
+                      <p className="font-medium text-sm">Closed</p>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <hr className="mx-6 border-gray-200" />
-          <div className="p-6 flex flex-col gap-6 overflow-y-auto">
-            <p className="text-gray-400 font-semibold tracking-wider text-sm">
-              ASSESSMENT DETAILS
-            </p>
-            <div className="flex flex-col gap-5 overflow-y-auto">
-              <div className="flex items-center justify-between whitespace-nowrap gap-4">
-                <div className="flex items-center gap-3 text-gray-500">
-                  <Trophy className="size-5" />
-                  <p className="font-medium">Max Score</p>
+            <hr className="mx-6 border-gray-200" />
+            <div className="p-6 flex flex-col gap-6">
+              <p className="text-gray-400 font-semibold tracking-wider text-sm">
+                ASSESSMENT DETAILS
+              </p>
+              <div className="flex flex-col gap-5">
+                <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                  <div className="flex items-center gap-3 text-gray-500">
+                    <Trophy className="size-5" />
+                    <p className="font-medium">Max Score</p>
+                  </div>
+                  <p className="font-semibold text-gray-800">
+                    {chapterContent.content.maxAchievableScore || 0} pts
+                  </p>
                 </div>
-                <p className="font-semibold text-gray-800">
-                  {chapterContent.content.maxAchievableScore || 0} pts
-                </p>
-              </div>
 
-              <div className="flex items-center justify-between whitespace-nowrap gap-4">
-                <div className="flex items-center gap-3 text-gray-500">
-                  <Clock className="size-5" />
-                  <p className="font-medium">Time Limit</p>
+                <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                  <div className="flex items-center gap-3 text-gray-500">
+                    <Clock className="size-5" />
+                    <p className="font-medium">Time Limit</p>
+                  </div>
+                  <p className="font-semibold text-gray-800">
+                    {chapterContent.content.timeLimit
+                      ? `${chapterContent.content.timeLimit} minutes`
+                      : "No time limit"}
+                  </p>
                 </div>
-                <p className="font-semibold text-gray-800">
-                  {chapterContent.content.timeLimit
-                    ? `${chapterContent.content.timeLimit} minutes`
-                    : "No time limit"}
-                </p>
-              </div>
 
-              <div className="flex items-center justify-between whitespace-nowrap gap-4">
-                <div className="flex items-center gap-3 text-gray-500">
-                  <Eye className="size-5" />
-                  <p className="font-medium">Score Visibility</p>
-                </div>
-                <p className="font-semibold text-gray-800">
-                  {chapterContent.content.isScoreViewableAfterSubmit
-                    ? "Visible after submit"
-                    : "Hidden"}
-                </p>
-              </div>
+                <RoleBasedComponent
+                  adminComponent={
+                    <>
+                      <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Eye className="size-5" />
+                          <p className="font-medium">Score Visibility</p>
+                        </div>
+                        <p className="font-semibold text-gray-800">
+                          {chapterContent.content.isScoreViewableAfterSubmit
+                            ? "Visible after submit"
+                            : "Hidden"}
+                        </p>
+                      </div>
 
-              <div className="flex items-center justify-between whitespace-nowrap gap-4">
-                <div className="flex items-center gap-3 text-gray-500">
-                  <Eye className="size-5" />
-                  <p className="font-medium">Answer Visibility</p>
-                </div>
-                <p className="font-semibold text-gray-800">
-                  {chapterContent.content.isAnswersViewableAfterSubmit
-                    ? "Visible after submit"
-                    : "Hidden"}
-                </p>
-              </div>
+                      <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Eye className="size-5" />
+                          <p className="font-medium">Answer Visibility</p>
+                        </div>
+                        <p className="font-semibold text-gray-800">
+                          {chapterContent.content.isAnswersViewableAfterSubmit
+                            ? "Visible after submit"
+                            : "Hidden"}
+                        </p>
+                      </div>
+                    </>
+                  }
+                  instructorComponent={
+                    <>
+                      <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Eye className="size-5" />
+                          <p className="font-medium">Score Visibility</p>
+                        </div>
+                        <p className="font-semibold text-gray-800">
+                          {chapterContent.content.isScoreViewableAfterSubmit
+                            ? "Visible after submit"
+                            : "Hidden"}
+                        </p>
+                      </div>
 
-              <div className="flex items-center justify-between whitespace-nowrap gap-4">
-                <div className="flex items-center gap-3 text-gray-500">
-                  <RotateCcw className="size-5" />
-                  <p className="font-medium">Max Attempts</p>
+                      <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                        <div className="flex items-center gap-3 text-gray-500">
+                          <Eye className="size-5" />
+                          <p className="font-medium">Answer Visibility</p>
+                        </div>
+                        <p className="font-semibold text-gray-800">
+                          {chapterContent.content.isAnswersViewableAfterSubmit
+                            ? "Visible after submit"
+                            : "Hidden"}
+                        </p>
+                      </div>
+                    </>
+                  }
+                />
+
+                <div className="flex items-center justify-between whitespace-nowrap gap-4">
+                  <div className="flex items-center gap-3 text-gray-500">
+                    <RotateCcw className="size-5" />
+                    <p className="font-medium">Max Attempts</p>
+                  </div>
+                  <p className="font-semibold text-gray-800">
+                    {chapterContent.content.maxAttempts}
+                  </p>
                 </div>
-                <p className="font-semibold text-gray-800">
-                  {chapterContent.content.maxAttempts}
-                </p>
               </div>
             </div>
+            {resultAndAttemptsStatus === "pending" && (
+              <div className="w-full pt-8 grid place-items-center">
+                <Loader2 className="size-8 stroke-mainaccent animate-spin" />
+              </div>
+            )}
+            {resultAndAttempts && (
+              <>
+                <hr className="mx-6 border-gray-200" />
+                <div className="p-6 flex flex-col gap-6 overflow-y-auto">
+                  <p className="text-gray-400 font-semibold tracking-wider text-sm">
+                    ASSESSMENT RESULT
+                  </p>
+                </div>
+              </>
+            )}
           </div>
-          <div className="mt-auto flex flex-col gap-3 px-6 pb-6">
+          <div className="mt-auto flex flex-col gap-3 px-6 py-6">
             <RoleBasedComponent
               adminComponent={
                 <button

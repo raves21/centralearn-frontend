@@ -56,3 +56,37 @@ export function useStudentAssessmentAttemptInfo(attemptId: string) {
     },
   });
 }
+
+export function useResultAndAttempts(
+  studentId: string | undefined,
+  assessmentId: string,
+) {
+  return useQuery({
+    queryKey: ["studentAssessmentResultAndAttempts", studentId, assessmentId],
+    queryFn: async () => {
+      const { data } = await api.get(
+        "/assessment-results/result-and-attempts",
+        {
+          params: {
+            student_id: studentId,
+            assessment_id: assessmentId,
+          },
+        },
+      );
+
+      return data as {
+        id: string;
+        finalScore: number;
+        lastRecordedAt: string;
+        attempts: {
+          id: string;
+          totalScore: number;
+          status: "ongoing" | "submitted";
+          attemptNumber: number;
+          submittedAt: string;
+        }[];
+      };
+    },
+    enabled: !!studentId,
+  });
+}
