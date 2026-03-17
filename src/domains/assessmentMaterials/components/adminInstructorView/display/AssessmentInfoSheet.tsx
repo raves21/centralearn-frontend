@@ -4,8 +4,15 @@ import type {
 } from "@/domains/chapterContents/types";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/custom-accordion";
+import {
   Calendar,
   CheckCircle2,
+  ChevronDown,
   Clock,
   Eye,
   Loader2,
@@ -73,7 +80,7 @@ export default function AssessmentInfoSheet({
             </div>
             <p className="text-xl font-bold">{chapterContent.name}</p>
           </div>
-          <div className="flex flex-col flex-grow min-h-0 overflow-y-auto">
+          <div className="flex flex-col flex-grow pb-4 min-h-0 overflow-y-auto">
             <div className="p-6 flex flex-col gap-5 text-sm">
               <p className="text-gray-400 font-semibold">AVAILABILITY</p>
               <div className="flex items-center w-full justify-between px-2 py-3 rounded-md bg-gray-100">
@@ -199,21 +206,96 @@ export default function AssessmentInfoSheet({
                 </div>
               </div>
             </div>
-            {resultAndAttemptsStatus === "pending" && (
-              <div className="w-full pt-8 grid place-items-center">
-                <Loader2 className="size-8 stroke-mainaccent animate-spin" />
-              </div>
-            )}
-            {resultAndAttempts && (
-              <>
-                <hr className="mx-6 border-gray-200" />
-                <div className="p-6 flex flex-col gap-6 overflow-y-auto">
-                  <p className="text-gray-400 font-semibold tracking-wider text-sm">
-                    ASSESSMENT RESULT
-                  </p>
-                </div>
-              </>
-            )}
+            <RoleBasedComponent
+              studentComponent={
+                <>
+                  {resultAndAttemptsStatus === "pending" && (
+                    <div className="w-full pt-8 grid place-items-center">
+                      <Loader2 className="size-8 stroke-mainaccent animate-spin" />
+                    </div>
+                  )}
+                  {resultAndAttempts && (
+                    <>
+                      <hr className="mx-6 border-gray-200" />
+                      <div className="p-6 flex flex-col gap-4">
+                        <p className="text-gray-400 font-semibold tracking-wider text-sm">
+                          ASSESSMENT RESULT
+                        </p>
+                        <Accordion type="single" collapsible className="w-full">
+                          <AccordionItem
+                            value="result"
+                            className="rounded-md flex flex-col gap-3"
+                          >
+                            <AccordionTrigger className="group flex items-start border border-gray-200 justify-between px-3 py-4 bg-white hover:bg-gray-100/50 transition-colors">
+                              <div className="flex items-start gap-[10px]">
+                                <ChevronDown className="stroke-gray-800 size-5 transition-transform pt-[2] group-data-[state=open]:rotate-180" />
+                                <div className="flex flex-col gap-2">
+                                  <p className="font-medium">Final Result</p>
+                                  <p className="text-gray-400">
+                                    {dayjs(
+                                      formatToLocal(
+                                        resultAndAttempts.lastRecordedAt,
+                                      ),
+                                    ).format("MMM D, YYYY h:mm a")}
+                                  </p>
+                                </div>
+                              </div>
+                              {resultAndAttempts.finalScore ? (
+                                <div className="flex items-center gap-2">
+                                  <p className="font-medium">
+                                    {resultAndAttempts.finalScore}
+                                  </p>
+                                  <p className="font-medium">
+                                    /<span>&nbsp;</span>
+                                    {resultAndAttempts.maxScore}
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="font-medium bg-yellow-200 text-yellow-800 my-auto rounded-full py-2 px-3 text-xs">
+                                  Pending
+                                </p>
+                              )}
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col gap-3 w-full pl-7 relative">
+                              <div className="h-full absolute w-[4px] bg-mainaccent top-0 left-0 rounded-full" />
+                              {resultAndAttempts.attempts.map((attempt) => (
+                                <button className="flex text-start items-stretch rounded-md border border-gray-200 justify-between px-3 py-4 bg-white hover:bg-gray-100/50 transition-colors">
+                                  <div className="flex flex-col gap-2">
+                                    <p className="font-medium">
+                                      Attempt {attempt.attemptNumber}
+                                    </p>
+                                    <p className="text-gray-400">
+                                      {dayjs(
+                                        formatToLocal(attempt.submittedAt),
+                                      ).format("MMM D, YYYY h:mm a")}
+                                    </p>
+                                  </div>
+                                  {attempt.totalScore ? (
+                                    <div className="flex gap-2 items-center pr-1">
+                                      <p className="font-medium text-[15px]">
+                                        {attempt.totalScore}
+                                      </p>
+                                      <p className="font-medium text-[15px]">
+                                        /<span>&nbsp;</span>
+                                        {resultAndAttempts.maxScore}
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <p className="font-medium bg-yellow-200 text-yellow-800 rounded-full h-fit my-auto py-2 px-3 text-xs">
+                                      Pending
+                                    </p>
+                                  )}
+                                </button>
+                              ))}
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </div>
+                    </>
+                  )}
+                </>
+              }
+            />
           </div>
           <div className="mt-auto flex flex-col gap-3 px-6 py-6">
             <RoleBasedComponent

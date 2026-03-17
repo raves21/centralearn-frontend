@@ -76,11 +76,12 @@ export function useResultAndAttempts(
 
       return data as {
         id: string;
-        finalScore: number;
+        finalScore: number | null;
+        maxScore: number;
         lastRecordedAt: string;
         attempts: {
           id: string;
-          totalScore: number;
+          totalScore: number | null;
           status: "ongoing" | "submitted";
           attemptNumber: number;
           submittedAt: string;
