@@ -2,6 +2,7 @@ import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
 import { cn } from "@/lib/utils";
 import type { OptionBasedItemOption } from "@/domains/assessmentMaterials/types";
 import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
+import { useShallow } from "zustand/react/shallow";
 type Props = {
   assessmentMaterialId: string;
   option: OptionBasedItemOption;
@@ -19,10 +20,13 @@ export default function OptionBasedItemBlockOptions({
 }: Props) {
   const alphabetLabel = String.fromCharCode(65 + index);
 
-  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
+  const [setAnswer, isReadOnly] = useAttemptAnswersStore(
+    useShallow((state) => [state.setAnswer, state.isReadOnly]),
+  );
 
   return (
     <button
+      disabled={isReadOnly}
       onClick={() =>
         setAnswer(assessmentMaterialId, {
           assessmentMaterialId,

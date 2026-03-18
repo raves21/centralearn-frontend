@@ -96,6 +96,7 @@ function RouteComponent() {
             studentAssessmentAttemptInfo.data.assessmentVersion
               .questionnaireSnapshot
           }
+          attemptStatus={studentAssessmentAttemptInfo.data.status}
           answersFromDb={answersFromDb}
           questionnaireSnapshot={
             studentAssessmentAttemptInfo.data.assessmentVersion

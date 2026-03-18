@@ -21,6 +21,7 @@ type Props = {
   attemptId: string;
   items: AssessmentMaterial[] | null;
   classId: string;
+  attemptStatus: "ongoing" | "submitted";
 };
 
 export default function Questionnaire({
@@ -29,9 +30,14 @@ export default function Questionnaire({
   answersFromDb,
   items,
   classId,
+  attemptStatus,
 }: Props) {
-  const [answers, setAnswers] = useAttemptAnswersStore(
-    useShallow((state) => [state.answers, state.setAnswers]),
+  const [answers, setAnswers, setIsReadOnly] = useAttemptAnswersStore(
+    useShallow((state) => [
+      state.answers,
+      state.setAnswers,
+      state.setIsReadOnly,
+    ]),
   );
 
   useEffect(() => {
@@ -43,7 +49,10 @@ export default function Questionnaire({
       content: answerFromDb.content,
     }));
     setAnswers(answersFormatted);
-  }, [answersFromDb]);
+
+    //set read only
+    setIsReadOnly(attemptStatus === "submitted");
+  }, [answersFromDb, attemptStatus]);
 
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
     return (
@@ -90,12 +99,14 @@ export default function Questionnaire({
             }
           })}
         </div>
-        <SubmitButton
-          classId={classId}
-          items={items}
-          answers={answers}
-          attemptId={attemptId}
-        />
+        {attemptStatus === "ongoing" && (
+          <SubmitButton
+            classId={classId}
+            items={items}
+            answers={answers}
+            attemptId={attemptId}
+          />
+        )}
       </div>
     );
   } else {

@@ -218,9 +218,6 @@ export default function AssessmentInfoSheet({
                     <>
                       <hr className="mx-6 border-gray-200" />
                       <div className="p-6 flex flex-col gap-4">
-                        <p className="text-gray-400 font-semibold tracking-wider text-sm">
-                          ASSESSMENT RESULT
-                        </p>
                         <Accordion type="single" collapsible className="w-full">
                           <AccordionItem
                             value="result"
@@ -259,29 +256,53 @@ export default function AssessmentInfoSheet({
                             <AccordionContent className="flex flex-col gap-3 w-full pl-7 relative">
                               <div className="h-full absolute w-[4px] bg-mainaccent top-0 left-0 rounded-full" />
                               {resultAndAttempts.attempts.map((attempt) => (
-                                <button className="flex text-start items-stretch rounded-md border border-gray-200 justify-between px-3 py-4 bg-white hover:bg-gray-100/50 transition-colors">
+                                <button
+                                  onClick={() =>
+                                    navigate({
+                                      to: "/lms/classes/$classId/contents/attempt/$attemptId",
+                                      params: {
+                                        attemptId: attempt.id,
+                                        classId,
+                                      },
+                                    })
+                                  }
+                                  className="flex text-start items-stretch rounded-md border border-gray-200 justify-between px-3 py-4 bg-white hover:bg-gray-100/50 transition-colors"
+                                >
                                   <div className="flex flex-col gap-2">
-                                    <p className="font-medium">
-                                      Attempt {attempt.attemptNumber}
-                                    </p>
-                                    <p className="text-gray-400">
-                                      {dayjs(
-                                        formatToLocal(attempt.submittedAt),
-                                      ).format("MMM D, YYYY h:mm a")}
-                                    </p>
+                                    <div className="flex items-center gap-2">
+                                      <p className="font-medium">
+                                        Attempt {attempt.attemptNumber}
+                                      </p>
+                                      {attempt.status === "ongoing" ? (
+                                        <p className="px-3 py-[6px] text-xs bg-yellow-200 text-yellow-800 rounded-full">
+                                          Ongoing
+                                        </p>
+                                      ) : (
+                                        <p className="px-3 py-[6px] text-xs bg-green-200 text-green-800 rounded-full">
+                                          Submitted
+                                        </p>
+                                      )}
+                                    </div>
+                                    {attempt.submittedAt && (
+                                      <p className="text-gray-400">
+                                        {dayjs(
+                                          formatToLocal(attempt.submittedAt),
+                                        ).format("MMM D, YYYY h:mm a")}
+                                      </p>
+                                    )}
                                   </div>
                                   {attempt.totalScore ? (
                                     <div className="flex gap-2 items-center pr-1">
-                                      <p className="font-medium text-[15px]">
+                                      <p className="font-medium">
                                         {attempt.totalScore}
                                       </p>
-                                      <p className="font-medium text-[15px]">
+                                      <p className="font-medium">
                                         /<span>&nbsp;</span>
                                         {resultAndAttempts.maxScore}
                                       </p>
                                     </div>
                                   ) : (
-                                    <p className="font-medium bg-yellow-200 text-yellow-800 rounded-full h-fit my-auto py-2 px-3 text-xs">
+                                    <p className="bg-yellow-200 text-yellow-800 rounded-full h-fit my-auto py-2 px-3 text-xs">
                                       Pending
                                     </p>
                                   )}

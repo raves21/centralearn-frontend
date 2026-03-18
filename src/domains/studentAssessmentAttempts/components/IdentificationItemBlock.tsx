@@ -9,6 +9,7 @@ import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptA
 import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
 import { cn } from "@/lib/utils";
+import { useShallow } from "zustand/react/shallow";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
@@ -19,7 +20,9 @@ export default function IdentificationItemBlock({
   questionnaireItem,
   attemptId,
 }: Props) {
-  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
+  const [setAnswer, isReadOnly] = useAttemptAnswersStore(
+    useShallow((state) => [state.setAnswer, state.isReadOnly]),
+  );
 
   const answerContent = useAnswerContent({
     assessmentMaterialId: questionnaireItem.id,
@@ -57,6 +60,7 @@ export default function IdentificationItemBlock({
       <div className="flex flex-col gap-5 w-[400px]">
         <p className="text-[15px] font-medium">Answer</p>
         <Input
+          disabled={isReadOnly}
           value={answerContent ?? ""}
           onChange={(e) =>
             setAnswer(questionnaireItem.id, {

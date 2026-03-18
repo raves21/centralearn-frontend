@@ -84,7 +84,7 @@ export function useResultAndAttempts(
           totalScore: number | null;
           status: "ongoing" | "submitted";
           attemptNumber: number;
-          submittedAt: string;
+          submittedAt: string | null;
         }[];
       };
     },

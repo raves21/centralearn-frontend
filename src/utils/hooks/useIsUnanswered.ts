@@ -24,7 +24,6 @@ export function useIsUnanswered({ itemId, answerContent }: Args) {
     }
 
     if (unansweredItems.length > 0) {
-      console.log(unansweredItems);
       const foundUnansweredItem = unansweredItems.find(
         (unansweredItem) => unansweredItem.assessmentMaterialId === itemId,
       );

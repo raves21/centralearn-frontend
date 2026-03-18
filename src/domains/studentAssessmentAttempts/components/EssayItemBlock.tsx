@@ -9,6 +9,8 @@ import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptA
 import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 import { cn } from "@/lib/utils";
 import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
+import { useShallow } from "zustand/react/shallow";
+import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
 
 type Props = {
   attemptId: string;
@@ -19,7 +21,9 @@ export default function EssayItemBlock({
   questionnaireItem,
   attemptId,
 }: Props) {
-  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
+  const [setAnswer, isReadOnly] = useAttemptAnswersStore(
+    useShallow((state) => [state.setAnswer, state.isReadOnly]),
+  );
 
   const answerContent = useAnswerContent({
     assessmentMaterialId: questionnaireItem.id,
@@ -96,16 +100,26 @@ export default function EssayItemBlock({
           )}
         </div>
       </div>
-      <TiptapEditor
-        content={answerContent ?? ""}
-        onChange={(content) =>
-          setAnswer(questionnaireItem.id, {
-            assessmentMaterialId: questionnaireItem.id,
-            content,
-            materialType: "essay_item",
-          })
-        }
-      />
+      {isReadOnly ? (
+        answerContent ? (
+          <RenderTiptapHTML content={answerContent} />
+        ) : (
+          <div className="w-full py-4 border border-gray-300 rounded-md grid place-items-center font-medium">
+            No Answer
+          </div>
+        )
+      ) : (
+        <TiptapEditor
+          content={answerContent ?? ""}
+          onChange={(content) =>
+            setAnswer(questionnaireItem.id, {
+              assessmentMaterialId: questionnaireItem.id,
+              content,
+              materialType: "essay_item",
+            })
+          }
+        />
+      )}
     </div>
   );
 }
