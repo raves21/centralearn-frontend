@@ -53,9 +53,17 @@ export type AssessmentMaterialsPaginated = PaginationProps & {
 };
 
 export type QuestionnaireOptionBasedItem = OptionBasedItem & {
-  options: Omit<OptionBasedItemOption, "isCorrect">[]
-}
+  options: Omit<OptionBasedItemOption, "isCorrect">[];
+};
 
-export type QuestionnaireIdentificationItem = Omit<IdentificationItem, "acceptedAnswers">;
+export type QuestionnaireIdentificationItem = Omit<
+  IdentificationItem,
+  "acceptedAnswers"
+>;
 
-export type AssessmentQuestionnaire = (AssessmentMaterial & {question: EssayItem | QuestionnaireIdentificationItem | QuestionnaireOptionBasedItem})[]
+export type AssessmentQuestionnaire = (AssessmentMaterial & {
+  question:
+    | EssayItem
+    | QuestionnaireIdentificationItem
+    | QuestionnaireOptionBasedItem;
+})[];

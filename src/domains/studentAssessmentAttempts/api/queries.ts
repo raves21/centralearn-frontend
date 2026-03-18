@@ -1,6 +1,7 @@
 import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
 import type {
+  ResultAndAttempts,
   StudentAssessmentAttempt,
   StudentAssessmentAttemptInfo,
 } from "../types";
@@ -74,19 +75,7 @@ export function useResultAndAttempts(
         },
       );
 
-      return data as {
-        id: string;
-        finalScore: number | null;
-        maxScore: number;
-        lastRecordedAt: string;
-        attempts: {
-          id: string;
-          totalScore: number | null;
-          status: "ongoing" | "submitted";
-          attemptNumber: number;
-          submittedAt: string | null;
-        }[];
-      };
+      return data as ResultAndAttempts;
     },
     enabled: !!studentId,
   });

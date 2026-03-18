@@ -49,10 +49,7 @@ export default function Questionnaire({
       content: answerFromDb.content,
     }));
     setAnswers(answersFormatted);
-
-    //set read only
-    setIsReadOnly(attemptStatus === "submitted");
-  }, [answersFromDb, attemptStatus]);
+  }, [answersFromDb]);
 
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
     return (

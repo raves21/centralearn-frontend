@@ -30,3 +30,19 @@ export type StudentAssessmentAttempt = {
   submittedAt: string | null;
   totalScore: number | null;
 };
+
+export type ResultAndAttempts = {
+  assessmentResult: {
+    id: string;
+    finalScore: number | null;
+    maxScore: number;
+    lastRecordedAt: string;
+  };
+  attempts: {
+    id: string;
+    totalScore: number | null;
+    status: "ongoing" | "submitted";
+    attemptNumber: number;
+    submittedAt: string | null;
+  }[];
+};
