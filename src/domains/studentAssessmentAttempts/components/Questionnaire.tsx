@@ -14,6 +14,7 @@ import {
 import { useEffect } from "react";
 import SubmitButton from "./SubmitButton";
 import { useShallow } from "zustand/react/shallow";
+import type { SubmissionSummaryItem } from "../types";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
@@ -22,6 +23,7 @@ type Props = {
   items: AssessmentMaterial[] | null;
   classId: string;
   attemptStatus: "ongoing" | "submitted";
+  submissionSummary: Record<string, SubmissionSummaryItem>;
 };
 
 export default function Questionnaire({
@@ -31,13 +33,10 @@ export default function Questionnaire({
   items,
   classId,
   attemptStatus,
+  submissionSummary,
 }: Props) {
-  const [answers, setAnswers, setIsReadOnly] = useAttemptAnswersStore(
-    useShallow((state) => [
-      state.answers,
-      state.setAnswers,
-      state.setIsReadOnly,
-    ]),
+  const [answers, setAnswers] = useAttemptAnswersStore(
+    useShallow((state) => [state.answers, state.setAnswers]),
   );
 
   useEffect(() => {
@@ -61,6 +60,10 @@ export default function Questionnaire({
                 return (
                   <OptionBasedItemBlock
                     key={questionnaireItem.id}
+                    submissionSummaryItem={
+                      submissionSummary[questionnaireItem.id]
+                    }
+                    isReadOnly={attemptStatus === "submitted"}
                     attemptId={attemptId}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
@@ -72,7 +75,11 @@ export default function Questionnaire({
               case "App\\Models\\EssayItem":
                 return (
                   <EssayItemBlock
+                    submissionSummaryItem={
+                      submissionSummary[questionnaireItem.id]
+                    }
                     attemptId={attemptId}
+                    isReadOnly={attemptStatus === "submitted"}
                     key={questionnaireItem.id}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
@@ -85,6 +92,10 @@ export default function Questionnaire({
                 return (
                   <IdentificationItemBlock
                     key={questionnaireItem.id}
+                    submissionSummaryItem={
+                      submissionSummary[questionnaireItem.id]
+                    }
+                    isReadOnly={attemptStatus === "submitted"}
                     attemptId={attemptId}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {

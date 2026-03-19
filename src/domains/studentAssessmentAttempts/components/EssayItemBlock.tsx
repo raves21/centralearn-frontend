@@ -9,21 +9,24 @@ import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptA
 import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 import { cn } from "@/lib/utils";
 import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
-import { useShallow } from "zustand/react/shallow";
 import RenderTiptapHTML from "@/components/shared/tiptap/RenderTiptapHTML";
+import type { SubmissionSummaryItem } from "../types";
+import PointsEarned from "./PointsEarned";
 
 type Props = {
   attemptId: string;
   questionnaireItem: AssessmentMaterial & { materialable: EssayItem };
+  submissionSummaryItem: SubmissionSummaryItem;
+  isReadOnly: boolean;
 };
 
 export default function EssayItemBlock({
   questionnaireItem,
   attemptId,
+  isReadOnly,
+  submissionSummaryItem,
 }: Props) {
-  const [setAnswer, isReadOnly] = useAttemptAnswersStore(
-    useShallow((state) => [state.setAnswer, state.isReadOnly]),
-  );
+  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
 
   const answerContent = useAnswerContent({
     assessmentMaterialId: questionnaireItem.id,
@@ -38,6 +41,7 @@ export default function EssayItemBlock({
     assessmentMaterialId: questionnaireItem.id,
     materialType: "essay_item",
     attemptId,
+    enabled: isReadOnly === false,
   });
 
   return (
@@ -49,10 +53,17 @@ export default function EssayItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Essay</p>
-        <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
-          {questionnaireItem.pointWorth} point
-          {questionnaireItem.pointWorth > 1 && <span>s</span>}
-        </div>
+        {isReadOnly ? (
+          <PointsEarned
+            itemPointWorth={questionnaireItem.pointWorth}
+            pointsEarned={submissionSummaryItem.points_earned}
+          />
+        ) : (
+          <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
+            {questionnaireItem.pointWorth} point
+            {questionnaireItem.pointWorth > 1 && <span>s</span>}
+          </div>
+        )}
       </div>
       <MaterialQuestionDisplay
         question={questionnaireItem.question}

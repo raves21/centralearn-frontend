@@ -126,7 +126,10 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
         }}
       >
         {chapterContents.map((content) => (
-          <div className="flex items-start gap-3 w-full" key={content.id}>
+          <div
+            className="flex items-start text-sm gap-3 w-full"
+            key={content.id}
+          >
             <RoleBasedComponent
               adminComponent={
                 <button

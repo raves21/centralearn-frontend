@@ -58,17 +58,17 @@ export default function AssessmentInfoSheet({
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
         showCloseButton={false}
-        className="sm:max-w-[500px] w-[500px] text-base"
+        className="sm:max-w-[500px] w-[500px] text-sm"
       >
         <div className="size-full flex flex-col">
           <div className="flex items-center gap-4 border-b border-gray-300 px-6 py-8">
             <div className="p-2 rounded-md bg-gray-300">
-              <NotebookPen className="stroke-mainaccent size-7" />
+              <NotebookPen className="stroke-mainaccent size-5" />
             </div>
-            <p className="text-xl font-bold">{chapterContent.name}</p>
+            <p className="text-base font-bold">{chapterContent.name}</p>
           </div>
           <div className="flex flex-col flex-grow pb-4 min-h-0 overflow-y-auto">
-            <div className="p-6 flex flex-col gap-5 text-sm">
+            <div className="p-6 flex flex-col gap-5">
               <p className="text-gray-400 font-semibold">AVAILABILITY</p>
               <div className="flex items-center w-full justify-between px-2 py-3 rounded-md bg-gray-100">
                 <div className="flex items-center gap-3 text-gray-500">
@@ -86,12 +86,12 @@ export default function AssessmentInfoSheet({
                   {isAssessmentOpen ? (
                     <>
                       <CheckCircle2 className="size-4" />
-                      <p className="font-medium text-sm">Open</p>
+                      <p className="font-medium">Open</p>
                     </>
                   ) : (
                     <>
                       <XCircle className="size-4" />
-                      <p className="font-medium text-sm">Closed</p>
+                      <p className="font-medium">Closed</p>
                     </>
                   )}
                 </div>
@@ -99,7 +99,7 @@ export default function AssessmentInfoSheet({
             </div>
             <hr className="mx-6 border-gray-200" />
             <div className="p-6 flex flex-col gap-6">
-              <p className="text-gray-400 font-semibold tracking-wider text-sm">
+              <p className="text-gray-400 font-semibold tracking-wider">
                 ASSESSMENT DETAILS
               </p>
               <div className="flex flex-col gap-5">
@@ -215,7 +215,7 @@ export default function AssessmentInfoSheet({
                       },
                     })
                   }
-                  className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent transition-colors hover:bg-indigo-900"
+                  className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent transition-colors hover:bg-indigo-900"
                 >
                   View
                 </button>
@@ -231,7 +231,7 @@ export default function AssessmentInfoSheet({
                       },
                     })
                   }
-                  className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent transition-colors hover:bg-indigo-900"
+                  className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent transition-colors hover:bg-indigo-900"
                 >
                   View
                 </button>
@@ -245,7 +245,7 @@ export default function AssessmentInfoSheet({
             />
             <button
               onClick={closeDrawer}
-              className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md bg-white border border-gray-300 transition-colors hover:bg-gray-200"
+              className="w-full font-semibold grid place-item-center py-3 rounded-md bg-white border border-gray-300 transition-colors hover:bg-gray-200"
             >
               Back to Content
             </button>

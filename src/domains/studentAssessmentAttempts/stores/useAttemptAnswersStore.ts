@@ -14,14 +14,12 @@ type Values = {
   answers: Answer[];
   isAnswersHydrated: boolean;
   unansweredItems: UnansweredItem[];
-  isReadOnly: boolean;
 };
 
 type Actions = {
   setAnswers: (answers: Answer[]) => void;
   setAnswer: (assessmentMaterialId: string, answerPayload: Answer) => void;
   setUnansweredItems: (unansweredItems: UnansweredItem[]) => void;
-  setIsReadOnly: (isReadOnly: boolean) => void;
   resetState: () => void;
 };
 
@@ -31,7 +29,6 @@ const defaultValues: Values = {
   answers: [],
   isAnswersHydrated: false,
   unansweredItems: [],
-  isReadOnly: false,
 };
 
 export const useAttemptAnswersStore = create<Store>((set) => ({
@@ -59,6 +56,5 @@ export const useAttemptAnswersStore = create<Store>((set) => ({
       };
     }),
   setUnansweredItems: (unansweredItems) => set({ unansweredItems }),
-  setIsReadOnly: (isReadOnly) => set({ isReadOnly }),
   resetState: () => set(defaultValues),
 }));

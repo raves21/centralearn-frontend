@@ -66,7 +66,7 @@ function RouteComponent() {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-4">
-              <p className="text-xl text-gray-400 font-medium">
+              <p className="text-lg text-gray-400 font-medium">
                 {courseClassInfo.course.code} | {courseClassInfo.semester.name}{" "}
                 | {courseClassInfo.section.name}
               </p>
@@ -81,7 +81,7 @@ function RouteComponent() {
                 {courseClassInfo.status === "open" ? "Open" : "Closed"}
               </p>
             </div>
-            <p className="text-2xl font-bold">{courseClassInfo.course.name}</p>
+            <p className="text-xl font-bold">{courseClassInfo.course.name}</p>
           </div>
         </div>
         <div className="relative w-full h-[180px] overflow-hidden rounded-lg">

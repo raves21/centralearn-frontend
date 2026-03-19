@@ -91,7 +91,7 @@ function RouteComponent() {
 
   if (courseClassChapters && chaptersGlobalState) {
     return (
-      <div className="flex flex-col gap-12 w-full text-base pb-16">
+      <div className="flex flex-col text-sm gap-12 w-full pb-16">
         <Accordion className="flex flex-col" type="single" collapsible>
           <ReactSortable
             list={chaptersGlobalState}
@@ -153,7 +153,7 @@ function RouteComponent() {
                       )}
                     >
                       <ChevronDown className="stroke-gray-800 transition-transform" />
-                      <div className="flex flex-col gap-2 text-base">
+                      <div className="flex flex-col gap-2">
                         <p className="font-medium">{chapter.name}</p>
                         <p className="text-gray-400">{chapter.description}</p>
                       </div>

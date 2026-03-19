@@ -8,12 +8,14 @@ type Args = {
   materialType: "option_based_item" | "essay_item" | "identification_item";
   assessmentMaterialId: string;
   attemptId: string;
+  enabled: boolean;
 };
 
 export function useDebounceUpdateAnswer({
   assessmentMaterialId,
   materialType,
   attemptId,
+  enabled,
 }: Args) {
   const [answers, isAnswersHydrated] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.isAnswersHydrated]),
@@ -33,45 +35,48 @@ export function useDebounceUpdateAnswer({
   const isFirstMount = useRef(true);
 
   useEffect(() => {
-    if (!isAnswersHydrated) return;
+    //only run if enabled (not read-only)
+    if (enabled) {
+      if (!isAnswersHydrated) return;
 
-    // Skip the very first time the effect fires after hydration.
-    if (isFirstMount.current) {
-      isFirstMount.current = false;
-      return;
-    }
+      // Skip the very first time the effect fires after hydration.
+      if (isFirstMount.current) {
+        isFirstMount.current = false;
+        return;
+      }
 
-    const handler = setTimeout(() => {
-      if (materialType === "option_based_item") {
-        if (answerContent) {
+      const handler = setTimeout(() => {
+        if (materialType === "option_based_item") {
+          if (answerContent) {
+            updateAttemptAnswer({
+              attemptId,
+              answer: {
+                content: answerContent,
+                assessmentMaterialId,
+                materialType,
+              },
+            });
+          }
+        }
+
+        if (
+          materialType === "identification_item" ||
+          materialType === "essay_item"
+        ) {
           updateAttemptAnswer({
             attemptId,
             answer: {
-              content: answerContent,
+              content: getHtmlStringText(answerContent) || "",
               assessmentMaterialId,
               materialType,
             },
           });
         }
-      }
+      }, 1500);
 
-      if (
-        materialType === "identification_item" ||
-        materialType === "essay_item"
-      ) {
-        updateAttemptAnswer({
-          attemptId,
-          answer: {
-            content: getHtmlStringText(answerContent) || "",
-            assessmentMaterialId,
-            materialType,
-          },
-        });
-      }
-    }, 1500);
-
-    return () => {
-      clearTimeout(handler);
-    };
+      return () => {
+        clearTimeout(handler);
+      };
+    }
   }, [answerContent, isAnswersHydrated]);
 }

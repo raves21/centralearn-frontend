@@ -9,20 +9,23 @@ import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptA
 import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
 import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
 import { cn } from "@/lib/utils";
-import { useShallow } from "zustand/react/shallow";
+import type { SubmissionSummaryItem } from "../types";
+import PointsEarned from "./PointsEarned";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
   attemptId: string;
+  isReadOnly: boolean;
+  submissionSummaryItem: SubmissionSummaryItem;
 };
 
 export default function IdentificationItemBlock({
   questionnaireItem,
   attemptId,
+  isReadOnly,
+  submissionSummaryItem,
 }: Props) {
-  const [setAnswer, isReadOnly] = useAttemptAnswersStore(
-    useShallow((state) => [state.setAnswer, state.isReadOnly]),
-  );
+  const setAnswer = useAttemptAnswersStore((state) => state.setAnswer);
 
   const answerContent = useAnswerContent({
     assessmentMaterialId: questionnaireItem.id,
@@ -37,6 +40,7 @@ export default function IdentificationItemBlock({
     assessmentMaterialId: questionnaireItem.id,
     attemptId,
     materialType: "identification_item",
+    enabled: isReadOnly === false,
   });
 
   return (
@@ -48,10 +52,17 @@ export default function IdentificationItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Identification</p>
-        <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
-          {questionnaireItem.pointWorth} point
-          {questionnaireItem.pointWorth > 1 && <span>s</span>}
-        </div>
+        {isReadOnly ? (
+          <PointsEarned
+            itemPointWorth={questionnaireItem.pointWorth}
+            pointsEarned={submissionSummaryItem.points_earned}
+          />
+        ) : (
+          <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
+            {questionnaireItem.pointWorth} point
+            {questionnaireItem.pointWorth > 1 && <span>s</span>}
+          </div>
+        )}
       </div>
       <MaterialQuestionDisplay
         question={questionnaireItem.question}

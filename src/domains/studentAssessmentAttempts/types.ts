@@ -9,6 +9,12 @@ export type StudentAssessmentAttemptInfo = {
   canStartNewAttempt: boolean;
 };
 
+export type SubmissionSummaryItem = {
+  is_correct: boolean;
+  points_earned: number | null;
+  answer_content: string | null;
+};
+
 export type StudentAssessmentAttempt = {
   id: string;
   studentId: string;
@@ -19,6 +25,7 @@ export type StudentAssessmentAttempt = {
     versionNumber: string;
     questionnaireSnapshot: AssessmentMaterial[] | null;
   };
+  submissionSummary: Record<string, SubmissionSummaryItem>;
   attemptNumber: number;
   answers: {
     asmt_material_id: string;

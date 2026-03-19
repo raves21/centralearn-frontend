@@ -81,6 +81,7 @@ export default function ResultAndAttemptsDisplay({
                 <div className="h-full absolute w-[4px] bg-mainaccent top-0 left-0 rounded-full" />
                 {resultAndAttempts.attempts.map((attempt) => (
                   <button
+                    key={attempt.id}
                     onClick={() =>
                       navigate({
                         to: "/lms/classes/$classId/contents/attempt/$attemptId",

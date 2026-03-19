@@ -12,7 +12,7 @@ export default function MaterialQuestionDisplay({
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
-      <p className="font-semibold text-lg">Question {questionNumber}</p>
+      <p className="font-semibold text-base">Question {questionNumber}</p>
       <div className="flex flex-col gap-4">
         {question.questionText && (
           <RenderTiptapHTML

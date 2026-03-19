@@ -8,20 +8,27 @@ import { useDebounceUpdateAnswer } from "@/utils/hooks/useDebounceUpdateAttemptA
 import { useIsUnanswered } from "@/utils/hooks/useIsUnanswered";
 import { cn } from "@/lib/utils";
 import { useAnswerContent } from "@/utils/hooks/useAnswerContent";
+import type { SubmissionSummaryItem } from "../types";
+import PointsEarned from "./PointsEarned";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
+  submissionSummaryItem: SubmissionSummaryItem;
   attemptId: string;
+  isReadOnly: boolean;
 };
 
 export default function OptionBasedItemBlock({
   questionnaireItem,
   attemptId,
+  isReadOnly,
+  submissionSummaryItem,
 }: Props) {
   useDebounceUpdateAnswer({
     assessmentMaterialId: questionnaireItem.id,
     materialType: "option_based_item",
     attemptId,
+    enabled: isReadOnly === false,
   });
 
   const answerContent = useAnswerContent({
@@ -42,10 +49,17 @@ export default function OptionBasedItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Option Based</p>
-        <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
-          {questionnaireItem.pointWorth} point
-          {questionnaireItem.pointWorth > 1 && <span>s</span>}
-        </div>
+        {isReadOnly ? (
+          <PointsEarned
+            itemPointWorth={questionnaireItem.pointWorth}
+            pointsEarned={submissionSummaryItem.points_earned}
+          />
+        ) : (
+          <div className="font-semibold text-mainaccent border border-mainaccent rounded-md px-3 py-2">
+            {questionnaireItem.pointWorth} point
+            {questionnaireItem.pointWorth > 1 && <span>s</span>}
+          </div>
+        )}
       </div>
       <MaterialQuestionDisplay
         question={questionnaireItem.question}
@@ -57,6 +71,7 @@ export default function OptionBasedItemBlock({
           {questionnaireItem.materialable.options.map((option, index) => (
             <OptionBasedItemBlockOptions
               key={index}
+              isReadOnly={isReadOnly}
               answerContent={answerContent}
               option={option}
               assessmentMaterialId={questionnaireItem.id}

@@ -40,7 +40,7 @@ export default function StudentTakeAssessmentButton({
     return (
       <button
         disabled={true}
-        className="w-full font-semibold text-lg grid place-items-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+        className="w-full font-semibold grid place-items-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
       >
         <div className="flex items-center justify-center gap-3">
           <Loader2 className="size-5 animate-spin stroke-[3px]" />
@@ -54,7 +54,7 @@ export default function StudentTakeAssessmentButton({
     return (
       <button
         disabled={true}
-        className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+        className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
       >
         <div className="flex items-center justify-center gap-3">
           <X className="size-5 stroke-[3px]" />
@@ -74,7 +74,7 @@ export default function StudentTakeAssessmentButton({
           <button
             disabled={true}
             onClick={() => {}}
-            className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+            className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
           >
             No attempts left.
           </button>
@@ -92,7 +92,7 @@ export default function StudentTakeAssessmentButton({
                 },
               })
             }
-            className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+            className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
           >
             Continue Attempt {continueAttempt.attemptNumber}
           </button>
@@ -113,7 +113,7 @@ export default function StudentTakeAssessmentButton({
                 },
               });
             }}
-            className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+            className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
           >
             Continue Attempt {continueAttempt.attemptNumber}
           </button>
@@ -144,7 +144,7 @@ export default function StudentTakeAssessmentButton({
                     toast.error("An error occured. Please try again later.");
                   }
                 }}
-                className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+                className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
               >
                 Start New Attempt
               </button>
@@ -155,7 +155,7 @@ export default function StudentTakeAssessmentButton({
             return (
               <button
                 disabled={true}
-                className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+                className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
               >
                 <div className="flex items-center justify-center gap-3">
                   <Loader2 className="size-5 animate-spin stroke-[3px]" />
@@ -169,7 +169,7 @@ export default function StudentTakeAssessmentButton({
             return (
               <button
                 disabled={true}
-                className="w-full font-semibold text-lg grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
+                className="w-full font-semibold grid place-item-center py-3 rounded-md text-white bg-mainaccent disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-gray-300 transition-colors hover:bg-indigo-900"
               >
                 <div className="flex items-center justify-center gap-3">
                   <X className="size-5 stroke-[3px]" />
