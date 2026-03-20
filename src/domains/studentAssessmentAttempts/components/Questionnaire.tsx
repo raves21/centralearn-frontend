@@ -16,15 +16,22 @@ import SubmitButton from "./SubmitButton";
 import { useShallow } from "zustand/react/shallow";
 import type { SubmissionSummaryItem } from "../types";
 
+type ReadOnlyAttemptProps = {
+  attemptStatus: "submitted";
+  submissionSummary: Record<string, SubmissionSummaryItem>;
+};
+
+type OngoingAttemptProps = {
+  attemptStatus: "ongoing";
+};
+
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
   answersFromDb: Answer[];
   attemptId: string;
   items: AssessmentMaterial[] | null;
   classId: string;
-  attemptStatus: "ongoing" | "submitted";
-  submissionSummary: Record<string, SubmissionSummaryItem>;
-};
+} & (ReadOnlyAttemptProps | OngoingAttemptProps);
 
 export default function Questionnaire({
   questionnaireSnapshot,
@@ -32,15 +39,15 @@ export default function Questionnaire({
   answersFromDb,
   items,
   classId,
-  attemptStatus,
-  submissionSummary,
+  ...props
 }: Props) {
-  const [answers, setAnswers] = useAttemptAnswersStore(
-    useShallow((state) => [state.answers, state.setAnswers]),
+  const [answers, setAnswers, resetState] = useAttemptAnswersStore(
+    useShallow((state) => [state.answers, state.setAnswers, state.resetState]),
   );
 
   useEffect(() => {
-    useAttemptAnswersStore.getState().resetState();
+    //reset global state on mount
+    resetState();
     //set original answers
     const answersFormatted: Answer[] = answersFromDb.map((answerFromDb) => ({
       assessmentMaterialId: answerFromDb.assessmentMaterialId,
@@ -48,7 +55,14 @@ export default function Questionnaire({
       content: answerFromDb.content,
     }));
     setAnswers(answersFormatted);
+
+    //reset the global state on unmount
+    return () => {
+      resetState();
+    };
   }, [answersFromDb]);
+
+  const readOnlyProps = props.attemptStatus === "submitted" ? props : null;
 
   if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
     return (
@@ -61,9 +75,9 @@ export default function Questionnaire({
                   <OptionBasedItemBlock
                     key={questionnaireItem.id}
                     submissionSummaryItem={
-                      submissionSummary[questionnaireItem.id]
+                      readOnlyProps?.submissionSummary[questionnaireItem.id]
                     }
-                    isReadOnly={attemptStatus === "submitted"}
+                    isReadOnly={!!readOnlyProps}
                     attemptId={attemptId}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
@@ -76,10 +90,10 @@ export default function Questionnaire({
                 return (
                   <EssayItemBlock
                     submissionSummaryItem={
-                      submissionSummary[questionnaireItem.id]
+                      readOnlyProps?.submissionSummary[questionnaireItem.id]
                     }
                     attemptId={attemptId}
-                    isReadOnly={attemptStatus === "submitted"}
+                    isReadOnly={!!readOnlyProps}
                     key={questionnaireItem.id}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
@@ -93,9 +107,9 @@ export default function Questionnaire({
                   <IdentificationItemBlock
                     key={questionnaireItem.id}
                     submissionSummaryItem={
-                      submissionSummary[questionnaireItem.id]
+                      readOnlyProps?.submissionSummary[questionnaireItem.id]
                     }
-                    isReadOnly={attemptStatus === "submitted"}
+                    isReadOnly={!!readOnlyProps}
                     attemptId={attemptId}
                     questionnaireItem={
                       questionnaireItem as AssessmentMaterial & {
@@ -107,7 +121,7 @@ export default function Questionnaire({
             }
           })}
         </div>
-        {attemptStatus === "ongoing" && (
+        {props.attemptStatus === "ongoing" && (
           <SubmitButton
             classId={classId}
             items={items}

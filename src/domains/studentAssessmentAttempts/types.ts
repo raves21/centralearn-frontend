@@ -25,7 +25,7 @@ export type StudentAssessmentAttempt = {
     versionNumber: string;
     questionnaireSnapshot: AssessmentMaterial[] | null;
   };
-  submissionSummary: Record<string, SubmissionSummaryItem>;
+  submissionSummary: Record<string, SubmissionSummaryItem> | null;
   attemptNumber: number;
   answers: {
     asmt_material_id: string;

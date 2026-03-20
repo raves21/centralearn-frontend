@@ -13,7 +13,7 @@ import PointsEarned from "./PointsEarned";
 
 type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
-  submissionSummaryItem: SubmissionSummaryItem;
+  submissionSummaryItem?: SubmissionSummaryItem;
   attemptId: string;
   isReadOnly: boolean;
 };
@@ -49,7 +49,7 @@ export default function OptionBasedItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Option Based</p>
-        {isReadOnly ? (
+        {isReadOnly && submissionSummaryItem ? (
           <PointsEarned
             itemPointWorth={questionnaireItem.pointWorth}
             pointsEarned={submissionSummaryItem.points_earned}

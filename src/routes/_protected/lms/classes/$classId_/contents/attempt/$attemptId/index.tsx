@@ -90,23 +90,40 @@ function RouteComponent() {
             </div>
           </div>
         </div>
-        <Questionnaire
-          classId={classId}
-          items={
-            studentAssessmentAttemptInfo.data.assessmentVersion
-              .questionnaireSnapshot
-          }
-          attemptStatus={studentAssessmentAttemptInfo.data.status}
-          answersFromDb={answersFromDb}
-          questionnaireSnapshot={
-            studentAssessmentAttemptInfo.data.assessmentVersion
-              .questionnaireSnapshot
-          }
-          submissionSummary={
-            studentAssessmentAttemptInfo.data.submissionSummary
-          }
-          attemptId={attemptId}
-        />
+        {studentAssessmentAttemptInfo.data.status === "ongoing" ? (
+          <Questionnaire
+            classId={classId}
+            items={
+              studentAssessmentAttemptInfo.data.assessmentVersion
+                .questionnaireSnapshot
+            }
+            attemptStatus={studentAssessmentAttemptInfo.data.status}
+            answersFromDb={answersFromDb}
+            questionnaireSnapshot={
+              studentAssessmentAttemptInfo.data.assessmentVersion
+                .questionnaireSnapshot
+            }
+            attemptId={attemptId}
+          />
+        ) : (
+          <Questionnaire
+            classId={classId}
+            items={
+              studentAssessmentAttemptInfo.data.assessmentVersion
+                .questionnaireSnapshot
+            }
+            attemptStatus={studentAssessmentAttemptInfo.data.status}
+            answersFromDb={answersFromDb}
+            questionnaireSnapshot={
+              studentAssessmentAttemptInfo.data.assessmentVersion
+                .questionnaireSnapshot
+            }
+            submissionSummary={
+              studentAssessmentAttemptInfo.data.submissionSummary!
+            }
+            attemptId={attemptId}
+          />
+        )}
       </div>
     );
   }

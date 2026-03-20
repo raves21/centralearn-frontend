@@ -16,7 +16,7 @@ type Props = {
   questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
   attemptId: string;
   isReadOnly: boolean;
-  submissionSummaryItem: SubmissionSummaryItem;
+  submissionSummaryItem?: SubmissionSummaryItem;
 };
 
 export default function IdentificationItemBlock({
@@ -52,7 +52,7 @@ export default function IdentificationItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Identification</p>
-        {isReadOnly ? (
+        {isReadOnly && submissionSummaryItem ? (
           <PointsEarned
             itemPointWorth={questionnaireItem.pointWorth}
             pointsEarned={submissionSummaryItem.points_earned}

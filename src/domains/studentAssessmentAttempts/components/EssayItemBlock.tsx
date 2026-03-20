@@ -16,7 +16,7 @@ import PointsEarned from "./PointsEarned";
 type Props = {
   attemptId: string;
   questionnaireItem: AssessmentMaterial & { materialable: EssayItem };
-  submissionSummaryItem: SubmissionSummaryItem;
+  submissionSummaryItem?: SubmissionSummaryItem;
   isReadOnly: boolean;
 };
 
@@ -53,7 +53,7 @@ export default function EssayItemBlock({
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold text-gray-400">Essay</p>
-        {isReadOnly ? (
+        {isReadOnly && submissionSummaryItem ? (
           <PointsEarned
             itemPointWorth={questionnaireItem.pointWorth}
             pointsEarned={submissionSummaryItem.points_earned}
@@ -113,7 +113,13 @@ export default function EssayItemBlock({
       </div>
       {isReadOnly ? (
         answerContent ? (
-          <RenderTiptapHTML content={answerContent} />
+          <div className="flex flex-col gap-3">
+            <p className="text-[15px] font-medium">Answer</p>
+            <RenderTiptapHTML
+              content={answerContent}
+              className="shadow-none border border-gray-200"
+            />
+          </div>
         ) : (
           <div className="w-full py-4 border border-gray-300 rounded-md grid place-items-center font-medium">
             No Answer

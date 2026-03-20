@@ -14,8 +14,8 @@ export default function PointsEarned({ itemPointWorth, pointsEarned }: Props) {
 
   if (pointsEarned === 0) {
     return (
-      <div className="font-semibold bg-red-200 text-red-500 border-red-500 border rounded-md px-3 py-2 flex items-center gap-2">
-        <p className="text-red-500">0</p>
+      <div className="font-semibold bg-red-200 text-red-800 border-red-500 border rounded-md px-3 py-2 flex items-center gap-2">
+        <p className="text-red-800">0</p>
         <p>/</p>
         <p>{itemPointWorth}</p>
       </div>
@@ -24,8 +24,8 @@ export default function PointsEarned({ itemPointWorth, pointsEarned }: Props) {
 
   if (pointsEarned === itemPointWorth) {
     return (
-      <div className="font-semibold bg-green-200 text-green-500 border-green-500 border rounded-md px-3 py-2 flex items-center gap-2">
-        <p className="text-green-500">{pointsEarned}</p>
+      <div className="font-semibold bg-green-200 text-green-800 border-green-500 border rounded-md px-3 py-2 flex items-center gap-2">
+        <p className="text-green-800">{pointsEarned}</p>
         <p>/</p>
         <p>{itemPointWorth}</p>
       </div>
