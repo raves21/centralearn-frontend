@@ -5,8 +5,9 @@ import type {
   StudentAssessmentAttempt,
   StudentAssessmentAttemptInfo,
 } from "../types";
+import { neverRefetchSettings } from "@/utils/queryClient";
 
-export function useStudentAssessmentAttemptAvailability({
+export function useAttemptAvailability({
   studentId,
   assessmentId,
 }: {
@@ -31,7 +32,7 @@ export function useStudentAssessmentAttemptAvailability({
   });
 }
 
-export function useStudentAssessmentAttemptInfo(attemptId: string) {
+export function useAttemptInfo(attemptId: string) {
   return useQuery({
     queryKey: ["attemptInfo", attemptId],
     queryFn: async () => {
@@ -78,5 +79,19 @@ export function useResultAndAttempts(
       return data as ResultAndAttempts;
     },
     enabled: !!studentId,
+  });
+}
+
+export function useAttemptRemainingTime(attemptId: string) {
+  return useQuery({
+    queryKey: ["attemptRemainingTime", attemptId],
+    queryFn: async () => {
+      const { data } = await api.get(
+        `/student-assessment-attempts/${attemptId}/remaining-time`,
+      );
+
+      return data as number | null;
+    },
+    ...neverRefetchSettings,
   });
 }

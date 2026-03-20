@@ -14,16 +14,11 @@ import {
 import { useEffect } from "react";
 import SubmitButton from "./SubmitButton";
 import { useShallow } from "zustand/react/shallow";
-import type { SubmissionSummaryItem } from "../types";
-
-type ReadOnlyAttemptProps = {
-  attemptStatus: "submitted";
-  submissionSummary: Record<string, SubmissionSummaryItem>;
-};
-
-type OngoingAttemptProps = {
-  attemptStatus: "ongoing";
-};
+import { useAttemptRemainingTime } from "../api/queries";
+import { useNavigate } from "@tanstack/react-router";
+import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import ErrorComponent from "@/components/shared/ErrorComponent";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
@@ -31,7 +26,7 @@ type Props = {
   attemptId: string;
   items: AssessmentMaterial[] | null;
   classId: string;
-} & (ReadOnlyAttemptProps | OngoingAttemptProps);
+};
 
 export default function Questionnaire({
   questionnaireSnapshot,
@@ -39,11 +34,13 @@ export default function Questionnaire({
   answersFromDb,
   items,
   classId,
-  ...props
 }: Props) {
   const [answers, setAnswers, resetState] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.setAnswers, state.resetState]),
   );
+
+  const navigate = useNavigate();
+  const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
   useEffect(() => {
     //reset global state on mount
@@ -62,80 +59,97 @@ export default function Questionnaire({
     };
   }, [answersFromDb]);
 
-  const readOnlyProps = props.attemptStatus === "submitted" ? props : null;
+  const { data: attemptRemainingTime, status: attemptRemainingTimeStatus } =
+    useAttemptRemainingTime(attemptId);
 
-  if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
-    return (
-      <div className="flex flex-col gap-8 pb-24">
-        <div className="flex flex-col gap-8">
-          {questionnaireSnapshot.map((questionnaireItem) => {
-            switch (questionnaireItem.materialType) {
-              case "App\\Models\\OptionBasedItem":
-                return (
-                  <OptionBasedItemBlock
-                    key={questionnaireItem.id}
-                    submissionSummaryItem={
-                      readOnlyProps?.submissionSummary[questionnaireItem.id]
-                    }
-                    isReadOnly={!!readOnlyProps}
-                    attemptId={attemptId}
-                    questionnaireItem={
-                      questionnaireItem as AssessmentMaterial & {
-                        materialable: OptionBasedItem;
+  useEffect(() => {
+    if (attemptRemainingTime && attemptRemainingTime < 0) {
+      navigate({ to: "/lms/classes/$classId", params: { classId } });
+      toggleOpenDialog(
+        <div className="p-8 flex flex-col justify-center items-center gap-12 bg-white rounded-lg">
+          <p className="text-xl font-semibold">This Assessment is closed.</p>
+          <button
+            onClick={() => toggleOpenDialog(null)}
+            className="px-6 py-3 font-medium text-lg text-white rounded-lg bg-mainaccent hover:bg-indigo-800 transition-colors flex items-center gap-2.5"
+          >
+            <p>OK</p>
+          </button>
+        </div>,
+      );
+    }
+  }, [attemptRemainingTime]);
+
+  if (attemptRemainingTimeStatus === "pending") {
+    return <LoadingComponent />;
+  }
+
+  if (attemptRemainingTimeStatus === "error") {
+    return <ErrorComponent />;
+  }
+
+  if (attemptRemainingTime) {
+    if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
+      return (
+        <div className="flex flex-col gap-8 pb-24">
+          <div className="flex flex-col gap-8">
+            {questionnaireSnapshot.map((questionnaireItem) => {
+              switch (questionnaireItem.materialType) {
+                case "App\\Models\\OptionBasedItem":
+                  return (
+                    <OptionBasedItemBlock
+                      key={questionnaireItem.id}
+                      isReadOnly={false}
+                      attemptId={attemptId}
+                      questionnaireItem={
+                        questionnaireItem as AssessmentMaterial & {
+                          materialable: OptionBasedItem;
+                        }
                       }
-                    }
-                  />
-                );
-              case "App\\Models\\EssayItem":
-                return (
-                  <EssayItemBlock
-                    submissionSummaryItem={
-                      readOnlyProps?.submissionSummary[questionnaireItem.id]
-                    }
-                    attemptId={attemptId}
-                    isReadOnly={!!readOnlyProps}
-                    key={questionnaireItem.id}
-                    questionnaireItem={
-                      questionnaireItem as AssessmentMaterial & {
-                        materialable: EssayItem;
+                    />
+                  );
+                case "App\\Models\\EssayItem":
+                  return (
+                    <EssayItemBlock
+                      attemptId={attemptId}
+                      isReadOnly={false}
+                      key={questionnaireItem.id}
+                      questionnaireItem={
+                        questionnaireItem as AssessmentMaterial & {
+                          materialable: EssayItem;
+                        }
                       }
-                    }
-                  />
-                );
-              case "App\\Models\\IdentificationItem":
-                return (
-                  <IdentificationItemBlock
-                    key={questionnaireItem.id}
-                    submissionSummaryItem={
-                      readOnlyProps?.submissionSummary[questionnaireItem.id]
-                    }
-                    isReadOnly={!!readOnlyProps}
-                    attemptId={attemptId}
-                    questionnaireItem={
-                      questionnaireItem as AssessmentMaterial & {
-                        materialable: IdentificationItem;
+                    />
+                  );
+                case "App\\Models\\IdentificationItem":
+                  return (
+                    <IdentificationItemBlock
+                      key={questionnaireItem.id}
+                      isReadOnly={false}
+                      attemptId={attemptId}
+                      questionnaireItem={
+                        questionnaireItem as AssessmentMaterial & {
+                          materialable: IdentificationItem;
+                        }
                       }
-                    }
-                  />
-                );
-            }
-          })}
-        </div>
-        {props.attemptStatus === "ongoing" && (
+                    />
+                  );
+              }
+            })}
+          </div>
           <SubmitButton
             classId={classId}
             items={items}
             answers={answers}
             attemptId={attemptId}
           />
-        )}
-      </div>
-    );
-  } else {
-    return (
-      <div className="w-full grid place-items-center py-24">
-        <p className="font-medium text-base">This assessment is empty.</p>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div className="w-full grid place-items-center py-24">
+          <p className="font-medium text-base">This assessment is empty.</p>
+        </div>
+      );
+    }
   }
 }

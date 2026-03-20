@@ -4,7 +4,7 @@ import type {
   ChapterContent,
 } from "@/domains/chapterContents/types";
 import { useStartAttempt } from "@/domains/studentAssessmentAttempts/api/mutations";
-import { useStudentAssessmentAttemptAvailability } from "@/domains/studentAssessmentAttempts/api/queries";
+import { useAttemptAvailability } from "@/domains/studentAssessmentAttempts/api/queries";
 import { Navigate, useNavigate, useParams } from "@tanstack/react-router";
 import { Loader2, X } from "lucide-react";
 import { toast } from "sonner";
@@ -29,7 +29,7 @@ export default function StudentTakeAssessmentButton({
   const {
     data: studentAssessmentAttemptInfo,
     status: studentAssessmentAttemptStatus,
-  } = useStudentAssessmentAttemptAvailability({
+  } = useAttemptAvailability({
     assessmentId: chapterContent.contentId,
     studentId: currentUser?.studentId,
   });

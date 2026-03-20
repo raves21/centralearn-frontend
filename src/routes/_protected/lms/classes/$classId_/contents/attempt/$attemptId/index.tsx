@@ -7,8 +7,9 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-import { useStudentAssessmentAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
+import { useAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
 import Questionnaire from "@/domains/studentAssessmentAttempts/components/Questionnaire";
+import ReadOnlyQuestionnaire from "@/domains/studentAssessmentAttempts/components/ReadOnlyQuestionnaire";
 import type { Answer } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
 import { useRouteRoleGuard } from "@/utils/hooks/useRouteRoleGuard";
 import { Role } from "@/utils/sharedTypes";
@@ -31,7 +32,7 @@ function RouteComponent() {
   const {
     data: studentAssessmentAttemptInfo,
     status: studentAssessmentAttemptStatus,
-  } = useStudentAssessmentAttemptInfo(attemptId);
+  } = useAttemptInfo(attemptId);
 
   if ([studentAssessmentAttemptStatus].includes("error")) {
     return <ErrorComponent />;
@@ -78,7 +79,16 @@ function RouteComponent() {
             </div>
             <div className="flex items-center gap-4">
               <NotebookPen className="size-8" />
-              <p className="text-2xl font-bold">{chapterContent.name}</p>
+              {studentAssessmentAttemptInfo.data.status === "ongoing" ? (
+                <p className="text-2xl font-bold">{chapterContent.name}</p>
+              ) : (
+                <div className="flex items-center gap-5">
+                  <p className="text-2xl font-bold">{chapterContent.name}</p>
+                  <p className="py-1 px-2 rounded-md bg-orange-200 text-orange-800 border border-orange-800">
+                    Read-Only
+                  </p>
+                </div>
+              )}
               {studentAssessmentAttemptInfo.data.maxAchievableScore && (
                 <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">
                   {studentAssessmentAttemptInfo.data.maxAchievableScore}{" "}
@@ -97,7 +107,6 @@ function RouteComponent() {
               studentAssessmentAttemptInfo.data.assessmentVersion
                 .questionnaireSnapshot
             }
-            attemptStatus={studentAssessmentAttemptInfo.data.status}
             answersFromDb={answersFromDb}
             questionnaireSnapshot={
               studentAssessmentAttemptInfo.data.assessmentVersion
@@ -106,13 +115,11 @@ function RouteComponent() {
             attemptId={attemptId}
           />
         ) : (
-          <Questionnaire
-            classId={classId}
+          <ReadOnlyQuestionnaire
             items={
               studentAssessmentAttemptInfo.data.assessmentVersion
                 .questionnaireSnapshot
             }
-            attemptStatus={studentAssessmentAttemptInfo.data.status}
             answersFromDb={answersFromDb}
             questionnaireSnapshot={
               studentAssessmentAttemptInfo.data.assessmentVersion
