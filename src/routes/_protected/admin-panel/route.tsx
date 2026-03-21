@@ -102,7 +102,7 @@ function RouteComponent() {
       <TopPanel type="admin-panel" />
       <div className="flex flex-grow overflow-hidden size-full">
         <SidePanel routes={routes} />
-        <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+        <div className="flex-grow overflow-auto mx-auto pt-[150px] pl-[325px] max-w-[80%]">
           <Outlet />
         </div>
       </div>

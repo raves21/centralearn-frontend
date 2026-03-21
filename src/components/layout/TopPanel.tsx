@@ -16,7 +16,7 @@ export default function TopPanel({ type }: Props) {
   const isAdminPanelRoute = matchRoute({ to: "/admin-panel", fuzzy: true });
 
   const topPanelPointerEventsNone = useGeneralStore(
-    (state) => state.topPanelPointerEventsNone
+    (state) => state.topPanelPointerEventsNone,
   );
 
   if (!currentUser) return <Navigate to="/login" replace />;
@@ -24,10 +24,10 @@ export default function TopPanel({ type }: Props) {
   return (
     <div
       className={cn(
-        "px-3 h-[9dvh] fixed top-0 z-50 left-0 max-h-[90px] bg-main-bg w-full flex items-center justify-between",
+        "px-3 h-[9dvh] fixed top-0 z-50 left-0 max-h-[90px] bg-main-bg w-full flex items-center justify-between border-b border-gray-300",
         {
           "pointer-events-none": topPanelPointerEventsNone,
-        }
+        },
       )}
     >
       <Logo type={type} />

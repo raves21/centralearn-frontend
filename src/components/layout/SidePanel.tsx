@@ -10,7 +10,7 @@ export default function SidePanel({ routes }: Props) {
   const matchRoute = useMatchRoute();
 
   return (
-    <div className="flex flex-col fixed left-0 top-[9dvh] pt-[28px] px-2 w-[30%] max-w-[300px] h-[calc(100dvh-9dvh)] overflow-auto bg-main-bg">
+    <div className="flex flex-col fixed left-0 pt-[120px] px-2 w-[30%] max-w-[300px] h-full overflow-auto bg-main-bg">
       {routes.map((route) => (
         <Link
           {...route.linkProps}
@@ -22,7 +22,7 @@ export default function SidePanel({ routes }: Props) {
                 to: route.linkProps.to,
                 fuzzy: true,
               }),
-            }
+            },
           )}
         >
           {route.icon}

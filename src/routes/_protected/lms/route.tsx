@@ -68,7 +68,7 @@ function RouteComponent() {
           <TopPanel type="lms" />
           <div className="flex flex-grow overflow-hidden size-full">
             <SidePanel routes={adminLmsRoutes} />
-            <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+            <div className="flex-grow overflow-auto mx-auto pt-[150px] pl-[325px] max-w-[80%]">
               <Outlet />
             </div>
           </div>
@@ -79,7 +79,7 @@ function RouteComponent() {
           <TopPanel type="lms" />
           <div className="flex flex-grow overflow-hidden size-full">
             <SidePanel routes={instructorLmsRoutes} />
-            <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+            <div className="flex-grow overflow-auto mx-auto pt-[150px] pl-[325px] max-w-[80%]">
               <Outlet />
             </div>
           </div>
@@ -90,7 +90,7 @@ function RouteComponent() {
           <TopPanel type="lms" />
           <div className="flex flex-grow overflow-hidden size-full">
             <SidePanel routes={studentLmsRoutes} />
-            <div className="flex-grow overflow-auto px-7 pt-[calc(9dvh+28px)] pl-[325px]">
+            <div className="flex-grow overflow-auto mx-auto pt-[150px] pl-[325px] max-w-[80%]">
               <Outlet />
             </div>
           </div>
