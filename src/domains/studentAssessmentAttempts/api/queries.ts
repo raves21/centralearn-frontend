@@ -2,7 +2,6 @@ import { api } from "@/utils/axiosBackend";
 import { useQuery } from "@tanstack/react-query";
 import type {
   ResultAndAttempts,
-  StudentAssessmentAttempt,
   AttemptAvailability,
   StudentAssessmentAttemptInfoWithAssessment,
 } from "../types";
