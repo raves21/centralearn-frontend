@@ -138,7 +138,7 @@ export default function EditOptionBasedItemBlock({ block }: Props) {
                 />,
               )
             }
-            className="flex justify-center items-center gap-4 border hover:bg-gray-200 transition-colors rounded-md border-mainaccent w-[600px] py-4"
+            className="flex justify-center items-center gap-4 border hover:bg-gray-200 transition-colors rounded-md border-mainaccent w-full py-4"
           >
             <Plus className="size-4 stroke-mainaccent" />
             <p className="font-medium text-mainaccent">Add Option</p>

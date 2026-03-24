@@ -150,7 +150,7 @@ export default function EditOption({ block, optionId, type }: Props) {
   return (
     <div
       className={cn(
-        "flex gap-3 rounded-md border border-gray-300 px-5 py-8 w-fit",
+        "flex gap-3 rounded-md border border-gray-300 px-5 py-8 w-full",
         {
           "bg-green-200": !!block.material.options.find(
             (option) => option.id === optionId,
@@ -185,7 +185,7 @@ export default function EditOption({ block, optionId, type }: Props) {
           <Plus className="size-5 relative z-10 text-gray-500 group-hover:text-green-500 transition-colors duration-200" />
         </button>
       </div>
-      <div className="flex flex-col gap-4 items-end">
+      <div className="flex flex-col gap-4 flex-1 min-w-0">
         <div
           onClick={() => setCorrectOption()}
           className="flex items-center gap-2 hover:cursor-pointer select-none w-min"
@@ -219,7 +219,7 @@ export default function EditOption({ block, optionId, type }: Props) {
             ]}
             content={optionText}
             placeholder="Start typing option text here..."
-            className="w-[900px] [&_.tiptap-editor]:max-h-[150px]"
+            className="[&_.tiptap-editor]:max-h-[150px] w-full"
             onChange={(value) => {
               updateBlock(block.id, {
                 ...block,
@@ -240,7 +240,7 @@ export default function EditOption({ block, optionId, type }: Props) {
           />
         )}
         {type === "image" && optionFileImage && (
-          <div className="max-w-fit border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+          <div className="max-full border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-50">
             <img
               src={
                 optionFileImage instanceof File
