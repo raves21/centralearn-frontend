@@ -1,20 +1,12 @@
 import ErrorComponent from "@/components/shared/ErrorComponent";
 import LoadingComponent from "@/components/shared/LoadingComponent";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { useAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
-import Questionnaire from "@/domains/studentAssessmentAttempts/components/Questionnaire";
-import ReadOnlyQuestionnaire from "@/domains/studentAssessmentAttempts/components/ReadOnlyQuestionnaire";
+import OngoingAttempt from "@/domains/studentAssessmentAttempts/components/OngoingAttempt";
+import SubmittedAttempt from "@/domains/studentAssessmentAttempts/components/SubmittedAttempt";
 import type { Answer } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
 import { useRouteRoleGuard } from "@/utils/hooks/useRouteRoleGuard";
 import { Role } from "@/utils/sharedTypes";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { NotebookPen } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
   "/_protected/lms/classes/$classId_/contents/attempt/$attemptId/",
@@ -50,88 +42,39 @@ function RouteComponent() {
         materialType: answer.material_type,
       }));
 
-    const assessment = studentAssessmentAttemptInfo.assessment;
-    const chapterContent = assessment.chapterContent;
-    const chapter = chapterContent.chapter;
-    return (
-      <div className="flex flex-col gap-12 w-full">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-8">
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <Link
-                      to="/lms/classes/$classId"
-                      params={{
-                        classId,
-                      }}
-                    >
-                      {chapter.name}
-                    </Link>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{chapterContent.name}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-            </div>
-            <div className="flex items-center gap-4">
-              <NotebookPen className="size-8" />
-              {studentAssessmentAttemptInfo.data.status === "ongoing" ? (
-                <p className="text-2xl font-bold">{chapterContent.name}</p>
-              ) : (
-                <div className="flex items-center gap-5">
-                  <p className="text-2xl font-bold">{chapterContent.name}</p>
-                  <p className="py-1 px-2 rounded-md bg-orange-200 text-orange-800 border border-orange-800">
-                    Read-Only
-                  </p>
-                </div>
-              )}
-              {studentAssessmentAttemptInfo.data.maxAchievableScore && (
-                <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">
-                  {studentAssessmentAttemptInfo.data.maxAchievableScore}{" "}
-                  {studentAssessmentAttemptInfo.data.maxAchievableScore === 1
-                    ? "point"
-                    : "points"}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        {studentAssessmentAttemptInfo.data.status === "ongoing" ? (
-          <Questionnaire
-            classId={classId}
-            items={
-              studentAssessmentAttemptInfo.data.assessmentVersion
-                .questionnaireSnapshot
-            }
-            answersFromDb={answersFromDb}
-            questionnaireSnapshot={
-              studentAssessmentAttemptInfo.data.assessmentVersion
-                .questionnaireSnapshot
-            }
-            attemptId={attemptId}
-          />
-        ) : (
-          <ReadOnlyQuestionnaire
-            items={
-              studentAssessmentAttemptInfo.data.assessmentVersion
-                .questionnaireSnapshot
-            }
-            answersFromDb={answersFromDb}
-            questionnaireSnapshot={
-              studentAssessmentAttemptInfo.data.assessmentVersion
-                .questionnaireSnapshot
-            }
-            submissionSummary={
-              studentAssessmentAttemptInfo.data.submissionSummary!
-            }
-            attemptId={attemptId}
-          />
-        )}
-      </div>
-    );
+    if (studentAssessmentAttemptInfo.data.status === "ongoing") {
+      return (
+        <OngoingAttempt
+          studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
+          classId={classId}
+          items={
+            studentAssessmentAttemptInfo.data.assessmentVersion
+              .questionnaireSnapshot
+          }
+          answersFromDb={answersFromDb}
+          questionnaireSnapshot={
+            studentAssessmentAttemptInfo.data.assessmentVersion
+              .questionnaireSnapshot
+          }
+          attemptId={attemptId}
+        />
+      );
+    } else {
+      return (
+        <SubmittedAttempt
+          classId={classId}
+          studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
+          answersFromDb={answersFromDb}
+          questionnaireSnapshot={
+            studentAssessmentAttemptInfo.data.assessmentVersion
+              .questionnaireSnapshot
+          }
+          submissionSummary={
+            studentAssessmentAttemptInfo.data.submissionSummary!
+          }
+          attemptId={attemptId}
+        />
+      );
+    }
   }
 }

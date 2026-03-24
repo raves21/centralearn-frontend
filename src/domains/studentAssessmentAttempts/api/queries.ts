@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import type {
   ResultAndAttempts,
   StudentAssessmentAttempt,
-  StudentAssessmentAttemptInfo,
+  AttemptAvailability,
+  StudentAssessmentAttemptInfoWithAssessment,
 } from "../types";
 import { neverRefetchSettings } from "@/utils/queryClient";
 
@@ -26,7 +27,7 @@ export function useAttemptAvailability({
           },
         },
       );
-      return data as StudentAssessmentAttemptInfo;
+      return data as AttemptAvailability;
     },
     enabled: !!studentId,
   });
@@ -41,20 +42,9 @@ export function useAttemptInfo(attemptId: string) {
       );
 
       return {
-        data: data.data as StudentAssessmentAttempt,
-        assessment: data.assessment as {
-          id: string;
-          name: string;
-          chapterContent: {
-            id: string;
-            name: string;
-            chapter: {
-              id: string;
-              name: string;
-            };
-          };
-        },
-      };
+        data: data.data,
+        assessment: data.assessment,
+      } as StudentAssessmentAttemptInfoWithAssessment;
     },
   });
 }

@@ -1,6 +1,6 @@
 import type { AssessmentMaterial } from "../assessmentMaterials/types";
 
-export type StudentAssessmentAttemptInfo = {
+export type AttemptAvailability = {
   attemptsLeft: number;
   continueAttempt: {
     attemptId: string;
@@ -36,6 +36,22 @@ export type StudentAssessmentAttempt = {
   startedAt: string;
   submittedAt: string | null;
   totalScore: number | null;
+};
+
+export type StudentAssessmentAttemptInfoWithAssessment = {
+  data: StudentAssessmentAttempt;
+  assessment: {
+    id: string;
+    name: string;
+    chapterContent: {
+      id: string;
+      name: string;
+      chapter: {
+        id: string;
+        name: string;
+      };
+    };
+  };
 };
 
 export type ResultAndAttempts = {
