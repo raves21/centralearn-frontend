@@ -96,6 +96,7 @@ export default function OngoingAttempt({
       return (
         <div className="flex flex-col gap-12 w-full">
           <OngoingAttemptHeader
+            initialTimeRemaining={attemptRemainingTime}
             classId={classId}
             studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
           />

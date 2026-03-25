@@ -225,7 +225,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
 
       // Assessment specific form data
       // Using bracket notation for 'content' array as per PHP usually expecting this for nested creation/validation
-      formData.append("content[time_limit]", data.time_limit.toString());
+      formData.append("content[time_limit]", (data.time_limit * 60).toString());
       formData.append(
         "content[is_answers_viewable_after_submit]",
         data.is_answers_viewable_after_submit ? "1" : "0",

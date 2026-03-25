@@ -42,7 +42,7 @@ export type StudentAssessmentAttemptInfoWithAssessment = {
   data: StudentAssessmentAttempt;
   assessment: {
     id: string;
-    name: string;
+    timeLimit: number;
     chapterContent: {
       id: string;
       name: string;
