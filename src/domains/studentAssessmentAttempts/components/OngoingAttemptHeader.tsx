@@ -68,13 +68,15 @@ export default function OngoingAttemptHeader({
               </div>
             )}
           </div>
-          <OngoingAttemptTimer
-            totalDurationSeconds={
-              studentAssessmentAttemptInfo.assessment.timeLimit
-            }
-            remainingTimeSeconds={initialTimeRemaining}
-            classId={classId}
-          />
+          {studentAssessmentAttemptInfo.assessment.timeLimit && (
+            <OngoingAttemptTimer
+              totalDurationSeconds={
+                studentAssessmentAttemptInfo.assessment.timeLimit
+              }
+              remainingTimeSeconds={initialTimeRemaining}
+              classId={classId}
+            />
+          )}
         </div>
       </div>
     </div>
