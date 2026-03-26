@@ -14,12 +14,14 @@ type Props = {
   studentAssessmentAttemptInfo: StudentAssessmentAttemptInfoWithAssessment;
   classId: string;
   initialTimeRemaining: number;
+  attemptId: string
 };
 
 export default function OngoingAttemptHeader({
   studentAssessmentAttemptInfo,
   classId,
   initialTimeRemaining,
+  attemptId
 }: Props) {
   const chapterContent = studentAssessmentAttemptInfo.assessment.chapterContent;
 
@@ -70,6 +72,7 @@ export default function OngoingAttemptHeader({
           </div>
           {studentAssessmentAttemptInfo.assessment.timeLimit && (
             <OngoingAttemptTimer
+              attemptId={attemptId}
               totalDurationSeconds={
                 studentAssessmentAttemptInfo.assessment.timeLimit
               }

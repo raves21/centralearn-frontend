@@ -9,7 +9,6 @@ import EssayItemBlock from "./EssayItemBlock";
 import IdentificationItemBlock from "./IdentificationItemBlock";
 import {
   useAttemptAnswersStore,
-  type Answer,
 } from "../stores/useAttemptAnswersStore";
 import { useEffect } from "react";
 import SubmitButton from "./SubmitButton";
@@ -20,7 +19,7 @@ import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
 import OngoingAttemptHeader from "./OngoingAttemptHeader";
-import type { StudentAssessmentAttemptInfoWithAssessment } from "../types";
+import type { Answer, StudentAssessmentAttemptInfoWithAssessment } from "../types";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
@@ -96,6 +95,7 @@ export default function OngoingAttempt({
       return (
         <div className="flex flex-col gap-12 w-full">
           <OngoingAttemptHeader
+            attemptId={attemptId}
             initialTimeRemaining={attemptRemainingTime}
             classId={classId}
             studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}

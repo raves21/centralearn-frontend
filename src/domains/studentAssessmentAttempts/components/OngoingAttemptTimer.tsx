@@ -3,39 +3,55 @@ import { formatSecondsToTimer } from "@/utils/sharedFunctions";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSubmitAttempt } from "../api/mutations";
+import { buildSubmitAttemptPayload } from "../sharedFunctions";
+import { BadgeCheck } from "lucide-react";
+import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
 
 type Props = {
   totalDurationSeconds: number;
   remainingTimeSeconds: number;
   classId: string;
+  attemptId: string
 };
 
 export default function OngoingAttemptTimer({
   totalDurationSeconds,
   remainingTimeSeconds,
   classId,
+  attemptId,
 }: Props) {
   const [remainingSeconds, setRemainingSeconds] = useState(
     Math.floor(remainingTimeSeconds),
   );
 
+  const answers = useAttemptAnswersStore((state) => state.answers)
+
   const toggleOpenDialog = useGlobalStore((state) => state.toggleOpenDialog);
 
   const navigate = useNavigate();
 
+  const {mutate: submitAttempt} = useSubmitAttempt()
+
   useEffect(() => {
     if (remainingSeconds <= 0) {
+      submitAttempt(buildSubmitAttemptPayload(attemptId, answers))
       navigate({ to: "/lms/classes/$classId", params: { classId } });
       toggleOpenDialog(
-        <div className="p-8 flex flex-col justify-center items-center gap-12 bg-white rounded-lg">
-          <p className="text-xl font-semibold">This Assessment is closed.</p>
+        <div className="h-[500px] w-[400px] flex flex-col p-6 bg-white rounded-md">
+          <div className="flex flex-col justify-center items-center gap-10 flex-grow text-center">
+            <BadgeCheck className="stroke-green-500/40 size-[180px]" />
+            <p className="text-2xl font-medium">
+              Time's up! Your attempt has been auto-submitted.
+            </p>
+          </div>
           <button
             onClick={() => toggleOpenDialog(null)}
-            className="px-6 py-3 font-medium text-lg text-white rounded-lg bg-mainaccent hover:bg-indigo-800 transition-colors flex items-center gap-2.5"
+            className="w-full bg-mainaccent text-white rounded-md hover:bg-indigo-800 py-4 grid place-items-center"
           >
-            <p>OK</p>
+            OK
           </button>
-        </div>,
+        </div>
       );
       return;
     }

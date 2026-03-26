@@ -69,3 +69,14 @@ export type ResultAndAttempts = {
     submittedAt: string | null;
   }[];
 };
+
+
+export type Answer = {
+  assessmentMaterialId: string;
+  materialType: "option_based_item" | "essay_item" | "identification_item";
+  content: string | null;
+};
+
+export type UnansweredItem = Omit<Answer, "content"> & {
+  itemNumber: number;
+};

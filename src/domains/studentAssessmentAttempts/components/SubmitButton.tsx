@@ -1,10 +1,5 @@
 import { toast } from "sonner";
 import { useSubmitAttempt } from "../api/mutations";
-import {
-  useAttemptAnswersStore,
-  type Answer,
-  type UnansweredItem,
-} from "../stores/useAttemptAnswersStore";
 import { BadgeCheck, Loader2 } from "lucide-react";
 import type { AssessmentMaterial } from "@/domains/assessmentMaterials/types";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
@@ -13,6 +8,9 @@ import UnansweredItemsWarningDialog from "./UnansweredItemsWarningDialog";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { useNavigate } from "@tanstack/react-router";
 import ConfirmationDialog from "@/components/shared/globals/ConfirmationDialog";
+import { buildSubmitAttemptPayload } from "../sharedFunctions";
+import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
+import type { Answer, UnansweredItem } from "../types";
 
 type Props = {
   attemptId: string;
@@ -42,24 +40,6 @@ export default function SubmitButton({
     isPending: submitAttemptStatus === "pending",
     pendingLabel: "Submitting Attempt",
   });
-
-  function buildSubmitAttemptPayload(attemptId: string, answers: Answer[]) {
-    const formData = new FormData();
-
-    formData.append("attempt_id", attemptId);
-
-    answers.forEach((answer, i) => {
-      formData.append(
-        `answers[${i}][asmt_material_id]`,
-        answer.assessmentMaterialId,
-      );
-      formData.append(`answers[${i}][material_type]`, answer.materialType);
-      if (getHtmlStringText(answer.content?.trim())) {
-        formData.append(`answers[${i}][content]`, answer.content!.trim());
-      }
-    });
-    return formData;
-  }
 
   function showAttemptSubmittedDialog() {
     setTimeout(() => {

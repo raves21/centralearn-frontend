@@ -5,7 +5,6 @@ import type {
   AttemptAvailability,
   StudentAssessmentAttemptInfoWithAssessment,
 } from "../types";
-import { neverRefetchSettings } from "@/utils/queryClient";
 
 export function useAttemptAvailability({
   studentId,
@@ -81,6 +80,8 @@ export function useAttemptRemainingTime(attemptId: string) {
 
       return data as number | null;
     },
-    ...neverRefetchSettings,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false
   });
 }
