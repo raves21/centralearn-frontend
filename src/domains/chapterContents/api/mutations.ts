@@ -50,7 +50,7 @@ export function useEditLecture() {
       id: string;
       formData: FormData;
     }) => {
-      await api.put(`/contents/${id}`, formData);
+      await api.post(`/contents/${id}`, formData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["chapters"] });

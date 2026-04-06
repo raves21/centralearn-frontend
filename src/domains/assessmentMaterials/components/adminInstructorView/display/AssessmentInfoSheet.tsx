@@ -13,12 +13,6 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
-import { useMemo } from "react";
-import {
-  formatDateStringToDateObj,
-  formatToLocal,
-} from "@/utils/sharedFunctions";
-import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
@@ -40,19 +34,7 @@ export default function AssessmentInfoSheet({
 }: Props) {
   const navigate = useNavigate();
   const { classId } = useParams({ from: "/_protected/lms/classes/$classId/" });
-  const isAssessmentOpen = useMemo(() => {
-    const opensAt = chapterContent.opensAt;
-
-    if (!opensAt) return false;
-
-    const opensAtLocalTime = formatToLocal(formatDateStringToDateObj(opensAt));
-
-    const isNowOrBefore =
-      dayjs(opensAtLocalTime).isSame(dayjs()) ||
-      dayjs(opensAtLocalTime).isBefore(dayjs());
-
-    return isNowOrBefore;
-  }, [chapterContent]);
+  const isAssessmentOpen = chapterContent.isAccessible;
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -119,8 +101,8 @@ export default function AssessmentInfoSheet({
                     <p className="font-medium">Time Limit</p>
                   </div>
                   <p className="font-semibold text-gray-800">
-                    {chapterContent.content.timeLimit
-                      ? `${chapterContent.content.timeLimit} minutes`
+                    {chapterContent.content.submissionSettings?.time_limit_seconds
+                      ? `${chapterContent.content.submissionSettings.time_limit_seconds / 60} minutes`
                       : "No time limit"}
                   </p>
                 </div>

@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,7 +21,12 @@ import { toast } from "sonner";
 import { api } from "@/utils/axiosBackend";
 import DateTimePicker from "@/components/shared/form/DateTimePicker";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import { formatToLocal, formatToUTC } from "@/utils/sharedFunctions";
+import {
+  formatToLocal,
+  formatToUTC,
+  hoursMinutesToSeconds,
+  secondsToHoursMinutes,
+} from "@/utils/sharedFunctions";
 import type {
   Assessment,
   ChapterContent,
@@ -56,17 +60,15 @@ const formSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     description: z.string().optional(),
-    is_published: z.boolean(),
-    publishes_at: z.date().optional().nullable(),
-    is_open: z.boolean(),
-    opens_at: z.date().optional().nullable(),
-    closes_at: z.date().optional().nullable(),
+    accessibility_type: z.enum(["visible", "hidden", "custom"]),
+    access_from: z.date().optional().nullable(),
+    access_until: z.date().optional().nullable(),
 
     // Assessment specific
-    time_limit: z.coerce
-      .number()
-      .int()
-      .min(1, "Time limit must be at least 1 minute"),
+    time_limit_hours: z.coerce.number().int().min(0).optional().nullable(),
+    time_limit_minutes: z.coerce.number().int().min(0).max(59).optional().nullable(),
+    due_date: z.date().optional().nullable(),
+    after_due_date_behavior: z.enum(["auto_submit", "block_new_attempts", "allow_all"]).optional().nullable(),
     is_answers_viewable_after_submit: z.boolean(),
     is_score_viewable_after_submit: z.boolean(),
     is_multi_attempts: z.boolean(),
@@ -77,22 +79,35 @@ const formSchema = z
       .nullable(),
   })
   .superRefine((data, ctx) => {
-    // closes_at must only be set if opens_at has value.
-    if (!data.opens_at && data.closes_at) {
+    if (data.accessibility_type === "custom") {
+      if (!data.access_from) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Access From is required when using Custom Access.",
+          path: ["access_from"],
+        });
+      }
+      if (data.access_from && data.access_until && data.access_until <= data.access_from) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Access Until must be after Access From.",
+          path: ["access_until"],
+        });
+      }
+    }
+
+    if (data.due_date && !data.after_due_date_behavior) {
       ctx.addIssue({
         code: "custom",
-        message: "Closes At must only be set if Opens At has value.",
-        path: ["closes_at"],
+        message: "Behavior after due date is required.",
+        path: ["after_due_date_behavior"],
       });
     }
 
-    // Validate closes_at is after opens_at
-    if (data.opens_at && data.closes_at && data.closes_at <= data.opens_at) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Closes At must be after Opens At.",
-        path: ["closes_at"],
-      });
+    if (!data.time_limit_hours && !data.time_limit_minutes) {
+      // Allow null if optional, but here we probably want at least something if it's set?
+      // Actually the previous one had .min(1, "Time limit...").
+      // If they are both 0 or null, we might want to flag it if a time limit is intended.
     }
 
     // Multi-attempts validation
@@ -138,12 +153,13 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      is_published: true,
-      publishes_at: null,
-      is_open: true,
-      opens_at: null,
-      closes_at: null,
-      time_limit: 60,
+      accessibility_type: "hidden",
+      access_from: null,
+      access_until: null,
+      time_limit_hours: 0,
+      time_limit_minutes: 0,
+      due_date: null,
+      after_due_date_behavior: null,
       is_answers_viewable_after_submit: true,
       is_score_viewable_after_submit: true,
       is_multi_attempts: false,
@@ -163,23 +179,37 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
       // Type assertion/check for assessment content
       const assessmentContent = chapterContentInfo.content as Assessment;
 
+      let type: "visible" | "hidden" | "custom" = "hidden";
+      let accessFrom = null;
+      let accessUntil = null;
+
+      if (chapterContentInfo.accessibilitySettings) {
+        const settings = chapterContentInfo.accessibilitySettings;
+        if (settings.visible === true) type = "visible";
+        else if (settings.visible === false) type = "hidden";
+        else if (settings.custom) {
+          type = "custom";
+          accessFrom = settings.custom.access_from ? new Date(formatToLocal(settings.custom.access_from)) : null;
+          accessUntil = settings.custom.access_until ? new Date(formatToLocal(settings.custom.access_until)) : null;
+        }
+      }
+
       form.reset({
         name: chapterContentInfo.name,
         description: chapterContentInfo.description ?? "",
-        publishes_at: chapterContentInfo.publishesAt
-          ? new Date(formatToLocal(chapterContentInfo.publishesAt))
-          : null,
-        is_open: chapterContentInfo.isOpen,
-        is_published: chapterContentInfo.isPublished,
-        opens_at: chapterContentInfo.opensAt
-          ? new Date(formatToLocal(chapterContentInfo.opensAt))
-          : null,
-        closes_at: chapterContentInfo.closesAt
-          ? new Date(formatToLocal(chapterContentInfo.closesAt))
-          : null,
+        accessibility_type: type,
+        access_from: accessFrom,
+        access_until: accessUntil,
 
         // Assessment specific
-        time_limit: assessmentContent.timeLimit ?? 0,
+        time_limit_hours: assessmentContent.submissionSettings?.time_limit_seconds
+          ? secondsToHoursMinutes(assessmentContent.submissionSettings.time_limit_seconds).hours
+          : 0,
+        time_limit_minutes: assessmentContent.submissionSettings?.time_limit_seconds
+          ? secondsToHoursMinutes(assessmentContent.submissionSettings.time_limit_seconds).minutes
+          : 0,
+        due_date: assessmentContent.submissionSettings?.due_date ? new Date(formatToLocal(assessmentContent.submissionSettings.due_date)) : null,
+        after_due_date_behavior: assessmentContent.submissionSettings?.after_due_date_behavior ?? null,
         is_answers_viewable_after_submit:
           assessmentContent.isAnswersViewableAfterSubmit,
         is_score_viewable_after_submit:
@@ -207,25 +237,30 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         formData.append("order", (chapterContentCount + 1).toString());
       }
 
-      if (data.is_published) {
-        formData.append("publishes_at", formatToUTC(new Date()));
-      } else if (data.publishes_at) {
-        formData.append("publishes_at", formatToUTC(data.publishes_at));
-      }
-
-      if (data.is_open) {
-        formData.append("opens_at", formatToUTC(new Date()));
-      } else if (data.opens_at) {
-        formData.append("opens_at", formatToUTC(data.opens_at));
-      }
-
-      if (data.closes_at) {
-        formData.append("closes_at", formatToUTC(data.closes_at));
+      if (data.accessibility_type === "visible") {
+        formData.append("accessibility_settings[visible]", "1");
+      } else if (data.accessibility_type === "hidden") {
+        formData.append("accessibility_settings[visible]", "0");
+      } else if (data.accessibility_type === "custom") {
+        if (data.access_from) {
+          formData.append("accessibility_settings[custom][access_from]", formatToUTC(data.access_from));
+        }
+        if (data.access_until) {
+          formData.append("accessibility_settings[custom][access_until]", formatToUTC(data.access_until));
+        }
       }
 
       // Assessment specific form data
-      // Using bracket notation for 'content' array as per PHP usually expecting this for nested creation/validation
-      formData.append("content[time_limit]", (data.time_limit * 60).toString());
+      const totalSeconds = hoursMinutesToSeconds(data.time_limit_hours ?? 0, data.time_limit_minutes ?? 0);
+      if (totalSeconds > 0) {
+        formData.append("content[submission_settings][time_limit_seconds]", totalSeconds.toString());
+      }
+      if (data.due_date) {
+        formData.append("content[submission_settings][due_date]", formatToUTC(data.due_date));
+        if (data.after_due_date_behavior) {
+          formData.append("content[submission_settings][after_due_date_behavior]", data.after_due_date_behavior);
+        }
+      }
       formData.append(
         "content[is_answers_viewable_after_submit]",
         data.is_answers_viewable_after_submit ? "1" : "0",
@@ -271,10 +306,10 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
     }
   };
 
-  const isPublished = form.watch("is_published");
-  const isOpen = form.watch("is_open");
-  const opensAt = form.watch("opens_at");
+  const accessibilityType = form.watch("accessibility_type");
+  const accessFrom = form.watch("access_from");
   const isMultiAttempts = form.watch("is_multi_attempts");
+  const dueDate = form.watch("due_date");
 
   if ([chapterContentInfoStatus].includes("error") && editProps) {
     return (
@@ -331,20 +366,74 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
             )}
           />
 
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="time_limit"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Time Limit (minutes)</FormLabel>
-                  <FormControl>
-                    <Input type="number" min={1} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+          <div className="flex flex-col gap-4 p-4 border rounded-md">
+            <h3 className="font-semibold text-sm">Submission Settings</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="time_limit_hours"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hours</FormLabel>
+                    <FormControl>
+                      <Input type="number" min={0} value={field.value ?? ""} onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="time_limit_minutes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Minutes</FormLabel>
+                    <FormControl>
+                      <Input type="number" min={0} max={59} value={field.value ?? ""} onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="w-full">
+                <DateTimePicker
+                  control={form.control as any}
+                  name="due_date"
+                  label="Due Date (optional)"
+                  minDateTime={new Date()}
+                />
+              </div>
+              {dueDate && (
+                <FormField
+                  control={form.control}
+                  name="after_due_date_behavior"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>After Due Date Behavior</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value ?? undefined}
+                        value={field.value ?? undefined}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select behavior" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="z-[200] font-poppins">
+                          <SelectItem value="auto_submit">Force Submit Ongoing, Block New</SelectItem>
+                          <SelectItem value="block_new_attempts">Allow Ongoing, Block New</SelectItem>
+                          <SelectItem value="allow_all">Allow All</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
-            />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2 p-4 border rounded-md">
@@ -464,100 +553,63 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
             ) : null}
           </div>
 
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-6 flex-1">
-              <FormField
-                control={form.control}
-                name="is_published"
-                render={({ field }) => (
-                  <FormItem>
-                    <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
-                      <FormControl>
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={() => {
-                            field.onChange(!field.value);
-                            form.setValue("publishes_at", null);
-                            form.clearErrors("publishes_at");
-                          }}
-                          className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="cursor-pointer">
-                          Published
-                        </FormLabel>
-                        <FormDescription>
-                          Check to make this visible to students immediately.
-                        </FormDescription>
-                      </div>
-                    </label>
-                  </FormItem>
-                )}
-              />
-              <div className="w-full">
-                {!isPublished && (
-                  <DateTimePicker
-                    control={form.control as any}
-                    name="publishes_at"
-                    label="Publishes At"
-                    minDateTime={new Date()}
-                  />
-                )}
-              </div>
-            </div>
+          <div className="flex flex-col gap-4 p-4 border rounded-md">
+            <h3 className="font-semibold text-sm mb-2">Access Settings</h3>
+            <FormField
+              control={form.control}
+              name="accessibility_type"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Visibility</FormLabel>
+                  <Select
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                      form.setValue("access_from", null);
+                      form.setValue("access_until", null);
+                      form.clearErrors("access_from");
+                      form.clearErrors("access_until");
+                    }}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full bg-white">
+                        <SelectValue placeholder="Select visibility" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="z-[200] font-poppins">
+                      <SelectItem value="visible">Always Visible</SelectItem>
+                      <SelectItem value="hidden">Hidden</SelectItem>
+                      <SelectItem value="custom">Custom Access Period</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex flex-col gap-6 flex-1">
-              <FormField
-                control={form.control}
-                name="is_open"
-                render={({ field }) => (
-                  <FormItem>
-                    <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
-                      <FormControl>
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={() => {
-                            field.onChange(!field.value);
-                            form.setValue("opens_at", null);
-                            form.setValue("closes_at", null);
-                            form.clearErrors("opens_at");
-                            form.clearErrors("closes_at");
-                          }}
-                          className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="cursor-pointer">Open</FormLabel>
-                        <FormDescription>
-                          Check to make this open to students immediately.
-                        </FormDescription>
-                      </div>
-                    </label>
-                  </FormItem>
-                )}
-              />
-              <div className="w-full flex flex-col gap-5">
-                {!isOpen && (
+            {accessibilityType === "custom" && (
+              <div className="w-full flex gap-4 mt-2">
+                <div className="flex-1">
                   <DateTimePicker
                     control={form.control as any}
-                    name="opens_at"
-                    label="Opens At"
+                    name="access_from"
+                    label="Access From"
                     minDateTime={new Date()}
                   />
-                )}
-                {(isOpen || !!opensAt) && (
-                  <DateTimePicker
-                    control={form.control as any}
-                    name="closes_at"
-                    label="Closes At"
-                    minDateTime={opensAt ?? undefined}
-                  />
-                )}
+                </div>
+                <div className="flex-1">
+                  {(accessFrom || form.getValues("access_from")) && (
+                    <DateTimePicker
+                      control={form.control as any}
+                      name="access_until"
+                      label="Access Until (optional)"
+                      minDateTime={accessFrom ?? undefined}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="flex gap-4 pt-4">
             <Button

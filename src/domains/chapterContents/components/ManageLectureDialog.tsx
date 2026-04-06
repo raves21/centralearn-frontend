@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,6 +27,13 @@ import { useEffect } from "react";
 import { useChapterContentInfo } from "../api/queries";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type EditProps = {
   type: "edit";
@@ -46,29 +52,26 @@ const formSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     description: z.string().optional(),
-    is_published: z.boolean(),
-    publishes_at: z.date().optional().nullable(),
-    is_open: z.boolean(),
-    opens_at: z.date().optional().nullable(),
-    closes_at: z.date().optional().nullable(),
+    accessibility_type: z.enum(["visible", "hidden", "custom"]),
+    access_from: z.date().optional().nullable(),
+    access_until: z.date().optional().nullable(),
   })
   .superRefine((data, ctx) => {
-    // closes_at must only be set if opens_at has value.
-    if (!data.opens_at && data.closes_at) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Closes At must only be set if Opens At has value.",
-        path: ["closes_at"],
-      });
-    }
-
-    // Validate closes_at is after opens_at
-    if (data.opens_at && data.closes_at && data.closes_at <= data.opens_at) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Closes At must be after Opens At.",
-        path: ["closes_at"],
-      });
+    if (data.accessibility_type === "custom") {
+      if (!data.access_from) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Access From is required when using Custom Access.",
+          path: ["access_from"],
+        });
+      }
+      if (data.access_from && data.access_until && data.access_until <= data.access_from) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Access Until must be after Access From.",
+          path: ["access_until"],
+        });
+      }
     }
   });
 
@@ -97,11 +100,9 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      is_published: true,
-      publishes_at: null,
-      is_open: true,
-      opens_at: null,
-      closes_at: null,
+      accessibility_type: "hidden",
+      access_from: null,
+      access_until: null,
     },
   });
 
@@ -113,20 +114,27 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
   //this only runs if user wants to edit instead of create
   useEffect(() => {
     if (chapterContentInfo) {
+      let type: "visible" | "hidden" | "custom" = "hidden";
+      let accessFrom = null;
+      let accessUntil = null;
+
+      if (chapterContentInfo.accessibilitySettings) {
+        const settings = chapterContentInfo.accessibilitySettings;
+        if (settings.visible === true) type = "visible";
+        else if (settings.visible === false) type = "hidden";
+        else if (settings.custom) {
+          type = "custom";
+          accessFrom = settings.custom.access_from ? new Date(formatToLocal(settings.custom.access_from)) : null;
+          accessUntil = settings.custom.access_until ? new Date(formatToLocal(settings.custom.access_until)) : null;
+        }
+      }
+
       form.reset({
         name: chapterContentInfo.name,
         description: chapterContentInfo.description ?? "",
-        publishes_at: chapterContentInfo.publishesAt
-          ? new Date(formatToLocal(chapterContentInfo.publishesAt))
-          : null,
-        is_open: chapterContentInfo.isOpen,
-        is_published: chapterContentInfo.isPublished,
-        opens_at: chapterContentInfo.opensAt
-          ? new Date(formatToLocal(chapterContentInfo.opensAt))
-          : null,
-        closes_at: chapterContentInfo.closesAt
-          ? new Date(formatToLocal(chapterContentInfo.closesAt))
-          : null,
+        accessibility_type: type,
+        access_from: accessFrom,
+        access_until: accessUntil,
       });
     }
   }, [chapterContentInfo]);
@@ -148,20 +156,17 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
         formData.append("order", (chapterContentCount + 1).toString());
       }
 
-      if (data.is_published) {
-        formData.append("publishes_at", formatToUTC(new Date()));
-      } else if (data.publishes_at) {
-        formData.append("publishes_at", formatToUTC(data.publishes_at));
-      }
-
-      if (data.is_open) {
-        formData.append("opens_at", formatToUTC(new Date()));
-      } else if (data.opens_at) {
-        formData.append("opens_at", formatToUTC(data.opens_at));
-      }
-
-      if (data.closes_at) {
-        formData.append("closes_at", formatToUTC(data.closes_at));
+      if (data.accessibility_type === "visible") {
+        formData.append("accessibility_settings[visible]", "1");
+      } else if (data.accessibility_type === "hidden") {
+        formData.append("accessibility_settings[visible]", "0");
+      } else if (data.accessibility_type === "custom") {
+        if (data.access_from) {
+          formData.append("accessibility_settings[custom][access_from]", formatToUTC(data.access_from));
+        }
+        if (data.access_until) {
+          formData.append("accessibility_settings[custom][access_until]", formatToUTC(data.access_until));
+        }
       }
 
       if (editProps) {
@@ -178,9 +183,8 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
     }
   };
 
-  const isPublished = form.watch("is_published");
-  const isOpen = form.watch("is_open");
-  const opensAt = form.watch("opens_at");
+  const accessibilityType = form.watch("accessibility_type");
+  const accessFrom = form.watch("access_from");
 
   if ([chapterContentInfoStatus].includes("error") && editProps) {
     return (
@@ -236,100 +240,63 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
               </FormItem>
             )}
           />
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-6">
-              <FormField
-                control={form.control}
-                name="is_published"
-                render={({ field }) => (
-                  <FormItem>
-                    <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
-                      <FormControl>
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={() => {
-                            field.onChange(!field.value);
-                            form.setValue("publishes_at", null);
-                            form.clearErrors("publishes_at");
-                          }}
-                          className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="cursor-pointer">
-                          Published
-                        </FormLabel>
-                        <FormDescription>
-                          Check to make this visible to students immediately.
-                        </FormDescription>
-                      </div>
-                    </label>
-                  </FormItem>
-                )}
-              />
-              <div className="w-full">
-                {!isPublished && (
-                  <DateTimePicker
-                    control={form.control as any}
-                    name="publishes_at"
-                    label="Publishes At"
-                    minDateTime={new Date()}
-                  />
-                )}
-              </div>
-            </div>
+          <div className="flex flex-col gap-4 p-4 border rounded-md">
+            <h3 className="font-semibold text-base mb-2">Access Settings</h3>
+            <FormField
+              control={form.control}
+              name="accessibility_type"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Visibility</FormLabel>
+                  <Select
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                      form.setValue("access_from", null);
+                      form.setValue("access_until", null);
+                      form.clearErrors("access_from");
+                      form.clearErrors("access_until");
+                    }}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full bg-white">
+                        <SelectValue placeholder="Select visibility" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="z-[200] font-poppins">
+                      <SelectItem value="visible">Always Visible</SelectItem>
+                      <SelectItem value="hidden">Hidden</SelectItem>
+                      <SelectItem value="custom">Custom Access Period</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex flex-col gap-6">
-              <FormField
-                control={form.control}
-                name="is_open"
-                render={({ field }) => (
-                  <FormItem>
-                    <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
-                      <FormControl>
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={() => {
-                            field.onChange(!field.value);
-                            form.setValue("opens_at", null);
-                            form.setValue("closes_at", null);
-                            form.clearErrors("opens_at");
-                            form.clearErrors("closes_at");
-                          }}
-                          className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="cursor-pointer">Open</FormLabel>
-                        <FormDescription>
-                          Check to make this open to students immediately.
-                        </FormDescription>
-                      </div>
-                    </label>
-                  </FormItem>
-                )}
-              />
-              <div className="w-full flex flex-col gap-5">
-                {!isOpen && (
+            {accessibilityType === "custom" && (
+              <div className="w-full flex gap-4 mt-2">
+                <div className="flex-1">
                   <DateTimePicker
                     control={form.control as any}
-                    name="opens_at"
-                    label="Opens At"
+                    name="access_from"
+                    label="Access From"
                     minDateTime={new Date()}
                   />
-                )}
-                {(isOpen || !!opensAt) && (
-                  <DateTimePicker
-                    control={form.control as any}
-                    name="closes_at"
-                    label="Closes At"
-                    minDateTime={opensAt ?? undefined}
-                  />
-                )}
+                </div>
+                <div className="flex-1">
+                  {(accessFrom || form.getValues("access_from")) && (
+                    <DateTimePicker
+                      control={form.control as any}
+                      name="access_until"
+                      label="Access Until (optional)"
+                      minDateTime={accessFrom ?? undefined}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="flex gap-4 pt-4">
             <Button

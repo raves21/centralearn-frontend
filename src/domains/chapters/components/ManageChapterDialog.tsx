@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,13 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
 import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import { getDateTimeFormat } from "@/utils/sharedFunctions";
 import { api } from "@/utils/axiosBackend";
 import { useEffect } from "react";
 import { useChapterInfo } from "../api/queries";
@@ -45,7 +42,6 @@ type Props = {
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().nullable(),
-  published_at: z.date().nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -73,7 +69,6 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      published_at: null,
     },
   });
 
@@ -88,12 +83,10 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
       const {
         description,
         name,
-        publishedAt: published_at,
       } = editProps.chapter;
       form.reset({
         name,
         description,
-        published_at: published_at ? new Date(published_at) : null,
       });
     }
   }, [chapterInfo]);
@@ -112,15 +105,6 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
         formData.append("order", editProps.chapter.order.toString());
       } else {
         formData.append("order", (courseClassChapterCount + 1).toString());
-      }
-
-      if (data.published_at) {
-        formData.append(
-          "published_at",
-          format(data.published_at, getDateTimeFormat()),
-        );
-      } else {
-        formData.append("published_at", "");
       }
 
       if (editProps) {
@@ -190,32 +174,6 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="published_at"
-            render={({ field }) => (
-              <FormItem>
-                <label className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm flex-1 cursor-pointer hover:bg-gray-50 transition-colors">
-                  <FormControl>
-                    <input
-                      type="checkbox"
-                      checked={!!field.value}
-                      onChange={(e) =>
-                        field.onChange(e.target.checked ? new Date() : null)
-                      }
-                      className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="cursor-pointer">Published</FormLabel>
-                    <FormDescription>
-                      Check to make this visible to students.
-                    </FormDescription>
-                  </div>
-                </label>
-              </FormItem>
-            )}
-          />
           <div className="flex gap-4 pt-4">
             <Button
               type="button"

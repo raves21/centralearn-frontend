@@ -9,12 +9,15 @@ export type ChapterContent = {
   id: string;
   name: string;
   description: string | null;
-  isOpen: boolean;
-  opensAt: string | null;
-  closesAt: string | null;
+  accessibilitySettings: {
+    visible: boolean | null;
+    custom: {
+      access_from: string;
+      access_until: string | null;
+    } | null;
+  } | null;
+  isAccessible: boolean;
   chapter: Chapter;
-  isPublished: boolean;
-  publishesAt: Date | null;
   order: number;
   contentId: string;
   contentType: ContentType;
@@ -23,7 +26,11 @@ export type ChapterContent = {
 
 export type Assessment = {
   id: string;
-  timeLimit: number | null;
+  submissionSettings: {
+    time_limit_seconds: number | null;
+    due_date: string | null;
+    after_due_date_behavior: "auto_submit" | "block_new_attempts" | "allow_all" | null;
+  } | null;
   maxAchievableScore: number;
   isAnswersViewableAfterSubmit: boolean;
   isScoreViewableAfterSubmit: boolean;

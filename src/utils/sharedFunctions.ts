@@ -68,3 +68,15 @@ export function formatSecondsToTimer(seconds: number) {
     secs.toString().padStart(2, "0"),
   ].join(":");
 }
+
+export function secondsToHoursMinutes(seconds: number) {
+  const totalSeconds = Math.floor(seconds);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  return { hours, minutes };
+}
+
+export function hoursMinutesToSeconds(hours: number, minutes: number) {
+  return hours * 3600 + minutes * 60;
+}

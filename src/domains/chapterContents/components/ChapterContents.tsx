@@ -252,7 +252,7 @@ export default function ChapterContents({ chapterContents, chapterId }: Props) {
             className="flex justify-center items-center gap-4 bg-gray-200 border-2 hover:bg-gray-300 transition-colors rounded-md border-dashed border-gray-700/50 w-full py-4"
           >
             <Plus className="size-8 stroke-gray-500" />
-            <p className="font-medium text-gray-500">Add Content</p>
+            <p className="font-medium text-sm text-gray-500">Add Content</p>
           </button>
         }
       />
