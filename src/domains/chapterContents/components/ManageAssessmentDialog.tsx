@@ -66,9 +66,18 @@ const formSchema = z
 
     // Assessment specific
     time_limit_hours: z.coerce.number().int().min(0).optional().nullable(),
-    time_limit_minutes: z.coerce.number().int().min(0).max(59).optional().nullable(),
+    time_limit_minutes: z.coerce
+      .number()
+      .int()
+      .min(0)
+      .max(59)
+      .optional()
+      .nullable(),
     due_date: z.date().optional().nullable(),
-    after_due_date_behavior: z.enum(["auto_submit", "block_new_attempts", "allow_all"]).optional().nullable(),
+    after_due_date_behavior: z
+      .enum(["auto_submit", "block_new_attempts", "allow_all"])
+      .optional()
+      .nullable(),
     is_answers_viewable_after_submit: z.boolean(),
     is_score_viewable_after_submit: z.boolean(),
     is_multi_attempts: z.boolean(),
@@ -77,6 +86,7 @@ const formSchema = z
       .enum(["avg_score", "highest_score"])
       .optional()
       .nullable(),
+    has_time_limit: z.boolean(),
   })
   .superRefine((data, ctx) => {
     if (data.accessibility_type === "custom") {
@@ -87,7 +97,11 @@ const formSchema = z
           path: ["access_from"],
         });
       }
-      if (data.access_from && data.access_until && data.access_until <= data.access_from) {
+      if (
+        data.access_from &&
+        data.access_until &&
+        data.access_until <= data.access_from
+      ) {
         ctx.addIssue({
           code: "custom",
           message: "Access Until must be after Access From.",
@@ -165,6 +179,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
       is_multi_attempts: false,
       max_attempts: 2,
       multi_attempt_grading_type: "highest_score",
+      has_time_limit: false,
     },
   });
 
@@ -189,8 +204,12 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         else if (settings.visible === false) type = "hidden";
         else if (settings.custom) {
           type = "custom";
-          accessFrom = settings.custom.access_from ? new Date(formatToLocal(settings.custom.access_from)) : null;
-          accessUntil = settings.custom.access_until ? new Date(formatToLocal(settings.custom.access_until)) : null;
+          accessFrom = settings.custom.access_from
+            ? new Date(formatToLocal(settings.custom.access_from))
+            : null;
+          accessUntil = settings.custom.access_until
+            ? new Date(formatToLocal(settings.custom.access_until))
+            : null;
         }
       }
 
@@ -202,20 +221,33 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         access_until: accessUntil,
 
         // Assessment specific
-        time_limit_hours: assessmentContent.submissionSettings?.time_limit_seconds
-          ? secondsToHoursMinutes(assessmentContent.submissionSettings.time_limit_seconds).hours
+        time_limit_hours: assessmentContent.submissionSettings
+          ?.time_limit_seconds
+          ? secondsToHoursMinutes(
+              assessmentContent.submissionSettings.time_limit_seconds,
+            ).hours
           : 0,
-        time_limit_minutes: assessmentContent.submissionSettings?.time_limit_seconds
-          ? secondsToHoursMinutes(assessmentContent.submissionSettings.time_limit_seconds).minutes
+        time_limit_minutes: assessmentContent.submissionSettings
+          ?.time_limit_seconds
+          ? secondsToHoursMinutes(
+              assessmentContent.submissionSettings.time_limit_seconds,
+            ).minutes
           : 0,
-        due_date: assessmentContent.submissionSettings?.due_date ? new Date(formatToLocal(assessmentContent.submissionSettings.due_date)) : null,
-        after_due_date_behavior: assessmentContent.submissionSettings?.after_due_date_behavior ?? null,
+        due_date: assessmentContent.submissionSettings?.due_date
+          ? new Date(
+              formatToLocal(assessmentContent.submissionSettings.due_date),
+            )
+          : null,
+        after_due_date_behavior:
+          assessmentContent.submissionSettings?.after_due_date_behavior ?? null,
         is_answers_viewable_after_submit:
           assessmentContent.isAnswersViewableAfterSubmit,
         is_score_viewable_after_submit:
           assessmentContent.isScoreViewableAfterSubmit,
         max_attempts: assessmentContent.maxAttempts,
         multi_attempt_grading_type: assessmentContent.multiAttemptGradingType,
+        has_time_limit:
+          !!assessmentContent.submissionSettings?.time_limit_seconds,
       });
     }
   }, [chapterContentInfo]);
@@ -243,22 +275,40 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         formData.append("accessibility_settings[visible]", "0");
       } else if (data.accessibility_type === "custom") {
         if (data.access_from) {
-          formData.append("accessibility_settings[custom][access_from]", formatToUTC(data.access_from));
+          formData.append(
+            "accessibility_settings[custom][access_from]",
+            formatToUTC(data.access_from),
+          );
         }
         if (data.access_until) {
-          formData.append("accessibility_settings[custom][access_until]", formatToUTC(data.access_until));
+          formData.append(
+            "accessibility_settings[custom][access_until]",
+            formatToUTC(data.access_until),
+          );
         }
       }
 
       // Assessment specific form data
-      const totalSeconds = hoursMinutesToSeconds(data.time_limit_hours ?? 0, data.time_limit_minutes ?? 0);
-      if (totalSeconds > 0) {
-        formData.append("content[submission_settings][time_limit_seconds]", totalSeconds.toString());
-      }
+      const totalSeconds = data.has_time_limit
+        ? hoursMinutesToSeconds(
+            data.time_limit_hours ?? 0,
+            data.time_limit_minutes ?? 0,
+          )
+        : 0;
+      formData.append(
+        "content[submission_settings][time_limit_seconds]",
+        totalSeconds.toString(),
+      );
       if (data.due_date) {
-        formData.append("content[submission_settings][due_date]", formatToUTC(data.due_date));
+        formData.append(
+          "content[submission_settings][due_date]",
+          formatToUTC(data.due_date),
+        );
         if (data.after_due_date_behavior) {
-          formData.append("content[submission_settings][after_due_date_behavior]", data.after_due_date_behavior);
+          formData.append(
+            "content[submission_settings][after_due_date_behavior]",
+            data.after_due_date_behavior,
+          );
         }
       }
       formData.append(
@@ -310,6 +360,13 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
   const accessFrom = form.watch("access_from");
   const isMultiAttempts = form.watch("is_multi_attempts");
   const dueDate = form.watch("due_date");
+  const hasTimeLimit = form.watch("has_time_limit");
+
+  useEffect(() => {
+    if (!dueDate) {
+      form.setValue("after_due_date_behavior", null);
+    }
+  }, [dueDate, form]);
 
   if ([chapterContentInfoStatus].includes("error") && editProps) {
     return (
@@ -328,7 +385,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
   }
 
   return (
-    <div className="w-[600px] bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto">
+    <div className="w-[700px] bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto">
       <h2 className="text-xl font-bold mb-4">
         {editProps ? "Update Assessment" : "Create new Assessment"}
       </h2>
@@ -368,35 +425,76 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
 
           <div className="flex flex-col gap-4 p-4 border rounded-md">
             <h3 className="font-semibold text-sm">Submission Settings</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="mb-5 mt-2 flex flex-col gap-6">
               <FormField
                 control={form.control}
-                name="time_limit_hours"
+                name="has_time_limit"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hours</FormLabel>
+                  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                     <FormControl>
-                      <Input type="number" min={0} value={field.value ?? ""} onChange={field.onChange} />
+                      <input
+                        type="checkbox"
+                        checked={field.value}
+                        onChange={(e) => {
+                          field.onChange(e.target.checked);
+                          if (!e.target.checked) {
+                            form.setValue("time_limit_hours", 0);
+                            form.setValue("time_limit_minutes", 0);
+                          }
+                        }}
+                        className="h-4 w-4 cursor-pointer accent-mainaccent"
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Add time limit</FormLabel>
+                    </div>
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="time_limit_minutes"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Minutes</FormLabel>
-                    <FormControl>
-                      <Input type="number" min={0} max={59} value={field.value ?? ""} onChange={field.onChange} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              {hasTimeLimit && (
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="time_limit_hours"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hours</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={0}
+                            value={field.value ?? ""}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="time_limit_minutes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Minutes</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={0}
+                            max={59}
+                            value={field.value ?? ""}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-6">
               <div className="w-full">
                 <DateTimePicker
                   control={form.control as any}
@@ -410,24 +508,57 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
                   control={form.control}
                   name="after_due_date_behavior"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="space-y-3">
                       <FormLabel>After Due Date Behavior</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value ?? undefined}
-                        value={field.value ?? undefined}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select behavior" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="z-[200] font-poppins">
-                          <SelectItem value="auto_submit">Force Submit Ongoing, Block New</SelectItem>
-                          <SelectItem value="block_new_attempts">Allow Ongoing, Block New</SelectItem>
-                          <SelectItem value="allow_all">Allow All</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <div className="flex flex-col gap-3">
+                          {[
+                            {
+                              value: "auto_submit",
+                              label: "Force Submit Ongoing, Block New",
+                              description:
+                                "Ongoing Attempts: Force-submitted at due date. New Attempts: Blocked.",
+                            },
+                            {
+                              value: "block_new_attempts",
+                              label: "Allow Ongoing, Block New",
+                              description:
+                                "Ongoing Attempts: May be completed past due date. New Attempts: Blocked.",
+                            },
+                            {
+                              value: "allow_all",
+                              label: "Allow All",
+                              description:
+                                "Ongoing Attempts: May be completed past due date. New Attempts: Allowed.",
+                            },
+                          ].map((item) => (
+                            <div
+                              key={item.value}
+                              className={`flex items-start space-x-3 space-y-0 p-3 border rounded-md cursor-pointer transition-colors ${
+                                field.value === item.value
+                                  ? "border-mainaccent bg-mainaccent/5"
+                                  : "hover:bg-gray-50"
+                              }`}
+                              onClick={() => field.onChange(item.value)}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={field.value === item.value}
+                                onChange={() => field.onChange(item.value)}
+                                className="h-4 w-4 mt-1 cursor-pointer accent-mainaccent"
+                              />
+                              <div className="flex flex-col gap-1 cursor-pointer">
+                                <span className="font-medium text-sm">
+                                  {item.label}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {item.description}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -580,7 +711,9 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
                     <SelectContent className="z-[200] font-poppins">
                       <SelectItem value="visible">Always Visible</SelectItem>
                       <SelectItem value="hidden">Hidden</SelectItem>
-                      <SelectItem value="custom">Custom Access Period</SelectItem>
+                      <SelectItem value="custom">
+                        Custom Access Period
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
