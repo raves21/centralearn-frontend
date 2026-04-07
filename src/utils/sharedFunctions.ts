@@ -13,7 +13,8 @@ export function getDateTimeFormat() {
 
 export function formatDateStringToDateObj(dateString: string) {
   dayjs.extend(customParseFormat);
-  const dateObj = dayjs(dateString, "YYYY-MM-DD HH:mm:ss").toDate();
+  // Append "Z" so the string is parsed as UTC, not local time
+  const dateObj = dayjs(dateString + "Z", "YYYY-MM-DD HH:mm:ssZ").toDate();
   return dateObj;
 }
 
@@ -22,6 +23,7 @@ export function getDateTimeFormatWithoutSeconds() {
 }
 
 export function formatToUTC(date: Date | string) {
+  console.log(date);
   if (typeof date === "string") {
     return formatInTimeZone(
       formatDateStringToDateObj(date),
@@ -33,12 +35,15 @@ export function formatToUTC(date: Date | string) {
 }
 
 export function formatToLocal(date: Date | string) {
+  console.log("formatToLocal utc", date);
   if (typeof date === "string") {
-    return formatInTimeZone(
+    const a = formatInTimeZone(
       formatDateStringToDateObj(date),
       Intl.DateTimeFormat().resolvedOptions().timeZone,
       getDateTimeFormat(),
     );
+    console.log("formatToLocal local", a);
+    return a;
   }
   return formatInTimeZone(
     date,

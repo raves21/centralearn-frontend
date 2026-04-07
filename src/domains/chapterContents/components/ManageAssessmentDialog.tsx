@@ -224,19 +224,19 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         time_limit_hours: assessmentContent.submissionSettings
           ?.time_limit_seconds
           ? secondsToHoursMinutes(
-            assessmentContent.submissionSettings.time_limit_seconds,
-          ).hours
+              assessmentContent.submissionSettings.time_limit_seconds,
+            ).hours
           : 0,
         time_limit_minutes: assessmentContent.submissionSettings
           ?.time_limit_seconds
           ? secondsToHoursMinutes(
-            assessmentContent.submissionSettings.time_limit_seconds,
-          ).minutes
+              assessmentContent.submissionSettings.time_limit_seconds,
+            ).minutes
           : 0,
         due_date: assessmentContent.submissionSettings?.due_date
           ? new Date(
-            formatToLocal(assessmentContent.submissionSettings.due_date),
-          )
+              formatToLocal(assessmentContent.submissionSettings.due_date),
+            )
           : null,
         after_due_date_behavior:
           assessmentContent.submissionSettings?.after_due_date_behavior ?? null,
@@ -245,6 +245,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         is_score_viewable_after_submit:
           assessmentContent.isScoreViewableAfterSubmit,
         max_attempts: assessmentContent.maxAttempts,
+        is_multi_attempts: assessmentContent.maxAttempts > 1,
         multi_attempt_grading_type: assessmentContent.multiAttemptGradingType,
         has_time_limit:
           !!assessmentContent.submissionSettings?.time_limit_seconds,
@@ -291,15 +292,16 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
       // Assessment specific form data
       const totalSeconds = data.has_time_limit
         ? hoursMinutesToSeconds(
-          data.time_limit_hours ?? 0,
-          data.time_limit_minutes ?? 0,
-        )
+            data.time_limit_hours ?? 0,
+            data.time_limit_minutes ?? 0,
+          )
         : 0;
       formData.append(
         "content[submission_settings][time_limit_seconds]",
         totalSeconds.toString(),
       );
       if (data.due_date) {
+        console.log(data.due_date);
         formData.append(
           "content[submission_settings][due_date]",
           formatToUTC(data.due_date),
@@ -534,10 +536,11 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
                           ].map((item) => (
                             <div
                               key={item.value}
-                              className={`flex items-start space-x-3 space-y-0 p-3 border rounded-md cursor-pointer transition-colors ${field.value === item.value
-                                ? "border-mainaccent bg-mainaccent/5"
-                                : "hover:bg-gray-50"
-                                }`}
+                              className={`flex items-start space-x-3 space-y-0 p-3 border rounded-md cursor-pointer transition-colors ${
+                                field.value === item.value
+                                  ? "border-mainaccent bg-mainaccent/5"
+                                  : "hover:bg-gray-50"
+                              }`}
                               onClick={() => field.onChange(item.value)}
                             >
                               <input

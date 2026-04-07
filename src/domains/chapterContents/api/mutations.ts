@@ -33,7 +33,7 @@ export function useEditAssessment() {
       id: string;
       formData: FormData;
     }) => {
-      await api.put(`/contents/${id}`, formData);
+      await api.post(`/contents/${id}`, formData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["chapters"] });
@@ -75,7 +75,7 @@ export function useReorderChapterContentBulk() {
       contents: {
         id: string;
         new_order: number;
-      }[]
+      }[],
     ) => {
       await api.post("/contents/reorder-bulk", { contents });
     },

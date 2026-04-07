@@ -211,19 +211,17 @@ function RouteComponent() {
                   </div>
                 </div>
                 <AccordionContent className="flex flex-col gap-2 w-full relative pl-16 pb-0">
-                  {chapter.contents.length > 0 ? (
-                    <>
-                      <div className="h-full absolute w-[6px] bg-mainaccent top-0 left-2 rounded-full" />
-                      <ChapterContents
-                        chapterContents={chapter.contents}
-                        chapterId={chapter.id}
-                      />
-                    </>
-                  ) : (
+                  {chapter.contents.length === 0 && (
                     <p className="mt-8 text-base font-medium text-center">
                       No contents added yet
                     </p>
                   )}
+
+                  <div className="h-full absolute w-[6px] bg-mainaccent top-0 left-2 rounded-full" />
+                  <ChapterContents
+                    chapterContents={chapter.contents}
+                    chapterId={chapter.id}
+                  />
                 </AccordionContent>
               </AccordionItem>
             ))}

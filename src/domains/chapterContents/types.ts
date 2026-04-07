@@ -29,12 +29,16 @@ export type Assessment = {
   submissionSettings: {
     time_limit_seconds: number | null;
     due_date: string | null;
-    after_due_date_behavior: "auto_submit" | "block_new_attempts" | "allow_all" | null;
+    after_due_date_behavior:
+      | "auto_submit"
+      | "block_new_attempts"
+      | "allow_all"
+      | null;
   } | null;
   maxAchievableScore: number;
   isAnswersViewableAfterSubmit: boolean;
   isScoreViewableAfterSubmit: boolean;
-  maxAttempts: number | null;
+  maxAttempts: number;
   multiAttemptGradingType: "avg_score" | "highest_score" | null;
   createdAt: Date;
   updatedAt: Date;

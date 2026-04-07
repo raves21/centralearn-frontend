@@ -45,7 +45,7 @@ export default function DateTimePicker({
                   variant={"outline"}
                   className={cn(
                     "w-full pl-3 text-left font-normal",
-                    !field.value && "text-muted-foreground"
+                    !field.value && "text-muted-foreground",
                   )}
                 >
                   {field.value ? (
@@ -61,7 +61,7 @@ export default function DateTimePicker({
               <div className="p-2 border-b">
                 <Input
                   type="time"
-                  className="cursor-pointer [&::-webkit-calendar-picker-indicator]:ml-auto"
+                  className="cursor-pointer [&::-webkit-calendar-picker-indicator]:ml-auto font-poppins"
                   min={
                     minDateTime &&
                     field.value &&
