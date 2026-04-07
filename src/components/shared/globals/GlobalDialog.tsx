@@ -17,10 +17,10 @@ export default function GlobalDialog() {
       onClose={toggleOpenDialog}
       className="relative z-[200]"
     >
-      <div className="fixed font-poppins inset-0 grid place-items-center w-dvw overflow-x-hidden hide-scrollbar overflow-y-auto bg-black/85 backdrop-blur-[1px]">
+      <div className="fixed font-poppins inset-0 grid place-items-center bg-black/85 backdrop-blur-[1px]">
         <DialogPanel
           transition
-          className="duration-150 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 overflow-y-auto"
+          className="duration-150 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
         >
           {dialogContent}
         </DialogPanel>

@@ -118,8 +118,8 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
       let accessFrom = null;
       let accessUntil = null;
 
-      if (chapterContentInfo.accessibilitySettings) {
-        const settings = chapterContentInfo.accessibilitySettings;
+      const settings = chapterContentInfo.accessibilitySettings;
+      if (settings) {
         if (settings.visible === true) type = "visible";
         else if (settings.visible === false) type = "hidden";
         else if (settings.custom) {
@@ -240,8 +240,8 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-4 p-4 border rounded-md">
-            <h3 className="font-semibold text-base mb-2">Access Settings</h3>
+          <div className="flex flex-col text-sm gap-4 p-4 border rounded-md">
+            <h3 className="font-semibold mb-2">Access Settings</h3>
             <FormField
               control={form.control}
               name="accessibility_type"
@@ -249,6 +249,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
                 <FormItem className="w-full">
                   <FormLabel>Visibility</FormLabel>
                   <Select
+                    key={field.value}
                     onValueChange={(val) => {
                       field.onChange(val);
                       form.setValue("access_from", null);
