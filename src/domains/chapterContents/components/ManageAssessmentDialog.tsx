@@ -221,25 +221,24 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         access_until: accessUntil,
 
         // Assessment specific
-        time_limit_hours: assessmentContent.submissionSettings
-          ?.time_limit_seconds
+        time_limit_hours: assessmentContent.submissionSettings?.timeLimitSeconds
           ? secondsToHoursMinutes(
-              assessmentContent.submissionSettings.time_limit_seconds,
+              assessmentContent.submissionSettings.timeLimitSeconds,
             ).hours
           : 0,
         time_limit_minutes: assessmentContent.submissionSettings
-          ?.time_limit_seconds
+          ?.timeLimitSeconds
           ? secondsToHoursMinutes(
-              assessmentContent.submissionSettings.time_limit_seconds,
+              assessmentContent.submissionSettings.timeLimitSeconds,
             ).minutes
           : 0,
-        due_date: assessmentContent.submissionSettings?.due_date
+        due_date: assessmentContent.submissionSettings?.dueDate
           ? new Date(
-              formatToLocal(assessmentContent.submissionSettings.due_date),
+              formatToLocal(assessmentContent.submissionSettings.dueDate),
             )
           : null,
         after_due_date_behavior:
-          assessmentContent.submissionSettings?.after_due_date_behavior ?? null,
+          assessmentContent.submissionSettings?.afterDueDateBehavior ?? null,
         is_answers_viewable_after_submit:
           assessmentContent.isAnswersViewableAfterSubmit,
         is_score_viewable_after_submit:
@@ -248,12 +247,12 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
         is_multi_attempts: assessmentContent.maxAttempts > 1,
         multi_attempt_grading_type: assessmentContent.multiAttemptGradingType,
         has_time_limit:
-          !!assessmentContent.submissionSettings?.time_limit_seconds,
+          !!assessmentContent.submissionSettings?.timeLimitSeconds,
       });
     }
   }, [chapterContentInfo]);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       const formData = new FormData();
       formData.append("chapter_id", chapterId);
@@ -338,9 +337,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
             data.multi_attempt_grading_type,
           );
       } else {
-        // Technically nullable if not multi-attempts, but let's ensure they are null or not sent?
-        // Validation rules say "required_if:content.is_multi_attempts,true", implying optional otherwise.
-        // We can skip appending them if they are not relevant.
+        formData.append("content[max_attempts]", "1");
       }
 
       if (editProps) {
@@ -356,7 +353,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
       //   console.error(error);
       toast.error("An error occured.");
     }
-  };
+  }
 
   const accessibilityType = form.watch("accessibility_type");
   const accessFrom = form.watch("access_from");

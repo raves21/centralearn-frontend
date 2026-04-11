@@ -101,8 +101,8 @@ export default function AssessmentInfoSheet({
                     <p className="font-medium">Time Limit</p>
                   </div>
                   <p className="font-semibold text-gray-800">
-                    {chapterContent.content.submissionSettings?.time_limit_seconds
-                      ? `${chapterContent.content.submissionSettings.time_limit_seconds / 60} minutes`
+                    {chapterContent.content.submissionSettings?.timeLimitSeconds
+                      ? `${chapterContent.content.submissionSettings.timeLimitSeconds / 60} minutes`
                       : "No time limit"}
                   </p>
                 </div>

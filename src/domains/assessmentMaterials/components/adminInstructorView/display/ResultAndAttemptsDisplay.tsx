@@ -63,7 +63,7 @@ export default function ResultAndAttemptsDisplay({
                     </p>
                   </div>
                 </div>
-                {asmtResult.finalScore ? (
+                {asmtResult.finalScore !== null ? (
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{asmtResult.finalScore}</p>
                     <p className="font-medium">
@@ -116,7 +116,7 @@ export default function ResultAndAttemptsDisplay({
                         </p>
                       )}
                     </div>
-                    {attempt.totalScore ? (
+                    {attempt.totalScore !== null ? (
                       <div className="flex gap-2 items-center pr-1">
                         <p className="font-medium">{attempt.totalScore}</p>
                         <p className="font-medium">

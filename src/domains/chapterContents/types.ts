@@ -27,9 +27,9 @@ export type ChapterContent = {
 export type Assessment = {
   id: string;
   submissionSettings: {
-    time_limit_seconds: number | null;
-    due_date: string | null;
-    after_due_date_behavior:
+    timeLimitSeconds: number | null;
+    dueDate: string | null;
+    afterDueDateBehavior:
       | "auto_submit"
       | "block_new_attempts"
       | "allow_all"

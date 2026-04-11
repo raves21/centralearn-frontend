@@ -78,10 +78,13 @@ export function useAttemptRemainingTime(attemptId: string) {
         `/student-assessment-attempts/${attemptId}/remaining-time`,
       );
 
-      return data as number | null;
+      return data as {
+        hasDeadline: boolean;
+        remainingTimeSeconds: number | null;
+      };
     },
     staleTime: Infinity,
     gcTime: Infinity,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 }

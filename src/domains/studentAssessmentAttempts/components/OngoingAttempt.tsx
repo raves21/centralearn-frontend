@@ -7,9 +7,7 @@ import type {
 import OptionBasedItemBlock from "./OptionBasedItemBlock";
 import EssayItemBlock from "./EssayItemBlock";
 import IdentificationItemBlock from "./IdentificationItemBlock";
-import {
-  useAttemptAnswersStore,
-} from "../stores/useAttemptAnswersStore";
+import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
 import { useEffect } from "react";
 import SubmitButton from "./SubmitButton";
 import { useShallow } from "zustand/react/shallow";
@@ -19,7 +17,10 @@ import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
 import OngoingAttemptHeader from "./OngoingAttemptHeader";
-import type { Answer, StudentAssessmentAttemptInfoWithAssessment } from "../types";
+import type {
+  Answer,
+  StudentAssessmentAttemptInfoWithAssessment,
+} from "../types";
 
 type Props = {
   questionnaireSnapshot: AssessmentMaterial[] | null;
@@ -66,7 +67,12 @@ export default function OngoingAttempt({
     useAttemptRemainingTime(attemptId);
 
   useEffect(() => {
-    if (attemptRemainingTime && attemptRemainingTime < 0) {
+    if (
+      attemptRemainingTime &&
+      attemptRemainingTime.hasDeadline &&
+      attemptRemainingTime.remainingTimeSeconds &&
+      attemptRemainingTime.remainingTimeSeconds < 0
+    ) {
       navigate({ to: "/lms/classes/$classId", params: { classId } });
       toggleOpenDialog(
         <div className="p-8 flex flex-col justify-center items-center gap-12 bg-white rounded-lg">
@@ -96,7 +102,7 @@ export default function OngoingAttempt({
         <div className="flex flex-col gap-12 w-full">
           <OngoingAttemptHeader
             attemptId={attemptId}
-            initialTimeRemaining={attemptRemainingTime}
+            initialTimeRemaining={attemptRemainingTime.remainingTimeSeconds}
             classId={classId}
             studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
           />
