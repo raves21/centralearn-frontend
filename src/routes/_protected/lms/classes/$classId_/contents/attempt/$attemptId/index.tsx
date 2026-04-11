@@ -3,7 +3,7 @@ import LoadingComponent from "@/components/shared/LoadingComponent";
 import { useAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
 import OngoingAttempt from "@/domains/studentAssessmentAttempts/components/OngoingAttempt";
 import SubmittedAttempt from "@/domains/studentAssessmentAttempts/components/SubmittedAttempt";
-import type { Answer } from "@/domains/studentAssessmentAttempts/stores/useAttemptAnswersStore";
+import type { Answer } from "@/domains/studentAssessmentAttempts/types";
 import { useRouteRoleGuard } from "@/utils/hooks/useRouteRoleGuard";
 import { Role } from "@/utils/sharedTypes";
 import { createFileRoute } from "@tanstack/react-router";
