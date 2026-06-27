@@ -1,5 +1,5 @@
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
-import type { UnansweredItem } from "../stores/useAttemptAnswersStore";
+import type { UnansweredItem } from "../types";
 
 type Props = {
   unansweredItems: UnansweredItem[];

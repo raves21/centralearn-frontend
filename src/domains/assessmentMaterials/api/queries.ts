@@ -6,7 +6,7 @@ import { neverRefetchSettings } from "@/utils/queryClient";
 export function useAllAssessmentMaterials({
   assessmentId,
 }: {
-  assessmentId: string;
+  assessmentId?: string;
 }) {
   return useQuery({
     queryKey: ["assessmentMaterials", assessmentId],
@@ -16,6 +16,7 @@ export function useAllAssessmentMaterials({
       });
       return data.data as AssessmentMaterial[];
     },
-    ...neverRefetchSettings
+    enabled: !!assessmentId,
+    ...neverRefetchSettings,
   });
 }

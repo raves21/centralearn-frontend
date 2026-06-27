@@ -1,5 +1,6 @@
 import ErrorComponent from "@/components/shared/ErrorComponent";
 import LoadingComponent from "@/components/shared/LoadingComponent";
+import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -85,21 +86,42 @@ function RouteComponent() {
                 )}
             </div>
           </div>
-          <button
-            onClick={() =>
-              navigate({
-                to: "/lms/classes/$classId/contents/$chapterContentId/edit",
-                params: {
-                  chapterContentId,
-                  classId,
-                },
-              })
+          <RoleBasedComponent
+            adminComponent={
+              <button
+                onClick={() =>
+                  navigate({
+                    to: "/lms/classes/$classId/contents/$chapterContentId/edit",
+                    params: {
+                      chapterContentId,
+                      classId,
+                    },
+                  })
+                }
+                className="px-4 py-2 rounded-md bg-mainaccent text-white flex items-center gap-3"
+              >
+                <Edit className="size-4" />
+                <p>Enter edit mode</p>
+              </button>
             }
-            className="px-4 py-2 rounded-md bg-mainaccent text-white flex items-center gap-3"
-          >
-            <Edit className="size-4" />
-            <p>Enter edit mode</p>
-          </button>
+            instructorComponent={
+              <button
+                onClick={() =>
+                  navigate({
+                    to: "/lms/classes/$classId/contents/$chapterContentId/edit",
+                    params: {
+                      chapterContentId,
+                      classId,
+                    },
+                  })
+                }
+                className="px-4 py-2 rounded-md bg-mainaccent text-white flex items-center gap-3"
+              >
+                <Edit className="size-4" />
+                <p>Enter edit mode</p>
+              </button>
+            }
+          />
         </div>
         {chapterContentInfo.contentType === ContentType.Lecture && (
           <LectureMaterialsListDisplay

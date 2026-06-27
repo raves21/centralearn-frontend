@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import type {
   ResultAndAttempts,
   AttemptAvailability,
-  StudentAssessmentAttemptInfoWithAssessment,
+  StudentAssessmentAttempt,
 } from "../types";
 
 export function useAttemptAvailability({
@@ -39,10 +39,7 @@ export function useAttemptInfo(attemptId: string) {
         `/student-assessment-attempts/${attemptId}`,
       );
 
-      return {
-        data: data.data,
-        assessment: data.assessment,
-      } as StudentAssessmentAttemptInfoWithAssessment;
+      return data.data as StudentAssessmentAttempt;
     },
   });
 }

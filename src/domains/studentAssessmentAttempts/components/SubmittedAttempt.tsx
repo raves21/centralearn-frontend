@@ -7,34 +7,30 @@ import type {
 import OptionBasedItemBlock from "./OptionBasedItemBlock";
 import EssayItemBlock from "./EssayItemBlock";
 import IdentificationItemBlock from "./IdentificationItemBlock";
-import {
-  useAttemptAnswersStore,
-  type Answer,
-} from "../stores/useAttemptAnswersStore";
+import { useAttemptAnswersStore } from "../stores/useAttemptAnswersStore";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import type {
-  StudentAssessmentAttemptInfoWithAssessment,
-  SubmissionSummaryItem,
-} from "../types";
+import type { Answer, SubmissionSummaryItem } from "../types";
 import SubmittedAttemptHeader from "./SubmittedAttemptHeader";
 
 type Props = {
-  questionnaireSnapshot: AssessmentMaterial[] | null;
+  questionnaireItems: AssessmentMaterial[] | null;
   answersFromDb: Answer[];
   attemptId: string;
   submissionSummary: Record<string, SubmissionSummaryItem>;
   classId: string;
-  studentAssessmentAttemptInfo: StudentAssessmentAttemptInfoWithAssessment;
+  assessmentName: string;
+  chapterName: string;
 };
 
 export default function SubmittedAttempt({
-  questionnaireSnapshot,
+  questionnaireItems,
   attemptId,
   answersFromDb,
   submissionSummary,
   classId,
-  studentAssessmentAttemptInfo,
+  assessmentName,
+  chapterName,
 }: Props) {
   const [setAnswers, resetState] = useAttemptAnswersStore(
     useShallow((state) => [state.setAnswers, state.resetState]),
@@ -57,16 +53,17 @@ export default function SubmittedAttempt({
     };
   }, [answersFromDb]);
 
-  if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
+  if (questionnaireItems && questionnaireItems.length > 0) {
     return (
       <div className="flex flex-col gap-12 w-full">
         <SubmittedAttemptHeader
           classId={classId}
-          studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
+          assessmentName={assessmentName}
+          chapterName={chapterName}
         />
         <div className="flex flex-col gap-8 pb-24">
           <div className="flex flex-col gap-8">
-            {questionnaireSnapshot.map((questionnaireItem) => {
+            {questionnaireItems.map((questionnaireItem) => {
               switch (questionnaireItem.materialType) {
                 case "App\\Models\\OptionBasedItem":
                   return (
@@ -79,7 +76,7 @@ export default function SubmittedAttempt({
                       attemptId={attemptId}
                       questionnaireItem={
                         questionnaireItem as AssessmentMaterial & {
-                          materialable: OptionBasedItem;
+                          material: OptionBasedItem;
                         }
                       }
                     />
@@ -95,7 +92,7 @@ export default function SubmittedAttempt({
                       key={questionnaireItem.id}
                       questionnaireItem={
                         questionnaireItem as AssessmentMaterial & {
-                          materialable: EssayItem;
+                          material: EssayItem;
                         }
                       }
                     />
@@ -111,7 +108,7 @@ export default function SubmittedAttempt({
                       attemptId={attemptId}
                       questionnaireItem={
                         questionnaireItem as AssessmentMaterial & {
-                          materialable: IdentificationItem;
+                          material: IdentificationItem;
                         }
                       }
                     />

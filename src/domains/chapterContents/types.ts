@@ -26,20 +26,23 @@ export type ChapterContent = {
 
 export type Assessment = {
   id: string;
+  chapterName: string | null;
+  name: string;
+  description: string | null;
   submissionSettings: {
-    timeLimitSeconds: number | null;
+    timeLimitSeconds: number;
     dueDate: string | null;
     afterDueDateBehavior:
       | "auto_submit"
       | "block_new_attempts"
       | "allow_all"
       | null;
-  } | null;
+  };
   maxAchievableScore: number;
   isAnswersViewableAfterSubmit: boolean;
   isScoreViewableAfterSubmit: boolean;
   maxAttempts: number;
   multiAttemptGradingType: "avg_score" | "highest_score" | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };

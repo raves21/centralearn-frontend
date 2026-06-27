@@ -1,5 +1,6 @@
 import ErrorComponent from "@/components/shared/ErrorComponent";
 import LoadingComponent from "@/components/shared/LoadingComponent";
+import { useAllAssessmentMaterials } from "@/domains/assessmentMaterials/api/queries";
 import { useAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
 import OngoingAttempt from "@/domains/studentAssessmentAttempts/components/OngoingAttempt";
 import SubmittedAttempt from "@/domains/studentAssessmentAttempts/components/SubmittedAttempt";
@@ -26,53 +27,69 @@ function RouteComponent() {
     status: studentAssessmentAttemptStatus,
   } = useAttemptInfo(attemptId);
 
-  if ([studentAssessmentAttemptStatus].includes("error")) {
+  const { data: assessmentMaterials, status: assessmentMaterialsStatus } =
+    useAllAssessmentMaterials({
+      assessmentId:
+        studentAssessmentAttemptInfo?.assessmentResult.assessment.id,
+    });
+
+  if (
+    [studentAssessmentAttemptStatus, assessmentMaterialsStatus].includes(
+      "error",
+    )
+  ) {
     return <ErrorComponent />;
   }
 
-  if ([studentAssessmentAttemptStatus].includes("pending")) {
+  if (
+    [studentAssessmentAttemptStatus, assessmentMaterialsStatus].includes(
+      "pending",
+    )
+  ) {
     return <LoadingComponent />;
   }
 
-  if (studentAssessmentAttemptInfo) {
-    const answersFromDb: Answer[] =
-      studentAssessmentAttemptInfo.data.answers.map((answer) => ({
+  if (studentAssessmentAttemptInfo && assessmentMaterials) {
+    const answersFromDb: Answer[] = studentAssessmentAttemptInfo.answers.map(
+      (answer) => ({
         assessmentMaterialId: answer.asmt_material_id,
         content: answer.content,
         materialType: answer.material_type,
-      }));
+      }),
+    );
 
-    if (studentAssessmentAttemptInfo.data.status === "ongoing") {
+    if (studentAssessmentAttemptInfo.status === "ongoing") {
       return (
         <OngoingAttempt
           studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
           classId={classId}
-          items={
-            studentAssessmentAttemptInfo.data.assessmentVersion
-              .questionnaireSnapshot
-          }
+          questionnaireItems={assessmentMaterials}
           answersFromDb={answersFromDb}
-          questionnaireSnapshot={
-            studentAssessmentAttemptInfo.data.assessmentVersion
-              .questionnaireSnapshot
-          }
           attemptId={attemptId}
+          assessmentName={
+            studentAssessmentAttemptInfo.assessmentResult.assessment.name
+          }
+          chapterName={
+            studentAssessmentAttemptInfo.assessmentResult.assessment
+              .chapterName!
+          }
         />
       );
     } else {
       return (
         <SubmittedAttempt
           classId={classId}
-          studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
           answersFromDb={answersFromDb}
-          questionnaireSnapshot={
-            studentAssessmentAttemptInfo.data.assessmentVersion
-              .questionnaireSnapshot
-          }
-          submissionSummary={
-            studentAssessmentAttemptInfo.data.submissionSummary!
-          }
+          questionnaireItems={assessmentMaterials}
+          submissionSummary={studentAssessmentAttemptInfo.submissionSummary!}
           attemptId={attemptId}
+          assessmentName={
+            studentAssessmentAttemptInfo.assessmentResult.assessment.name
+          }
+          chapterName={
+            studentAssessmentAttemptInfo.assessmentResult.assessment
+              .chapterName!
+          }
         />
       );
     }

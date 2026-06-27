@@ -15,7 +15,7 @@ import PointsEarned from "./PointsEarned";
 
 type Props = {
   attemptId: string;
-  questionnaireItem: AssessmentMaterial & { materialable: EssayItem };
+  questionnaireItem: AssessmentMaterial & { material: EssayItem };
   submissionSummaryItem?: SubmissionSummaryItem;
   isReadOnly: boolean;
 };
@@ -72,9 +72,9 @@ export default function EssayItemBlock({
       <div className="grid grid-cols-2 gap-6 w-fit rounded-md p-5 bg-white border border-gray-200">
         <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Minimum Words:</p>
-          {questionnaireItem.materialable.minWordCount ? (
+          {questionnaireItem.material.minWordCount ? (
             <p className="text-mainaccent">
-              {questionnaireItem.materialable.minWordCount}
+              {questionnaireItem.material.minWordCount}
             </p>
           ) : (
             <p className="text-gray-400">None</p>
@@ -82,9 +82,9 @@ export default function EssayItemBlock({
         </div>
         <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Maximum Words:</p>
-          {questionnaireItem.materialable.maxWordCount ? (
+          {questionnaireItem.material.maxWordCount ? (
             <p className="text-mainaccent">
-              {questionnaireItem.materialable.maxWordCount}
+              {questionnaireItem.material.maxWordCount}
             </p>
           ) : (
             <p className="text-gray-400">None</p>
@@ -92,9 +92,9 @@ export default function EssayItemBlock({
         </div>
         <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Minimum Characters:</p>
-          {questionnaireItem.materialable.minCharacterCount ? (
+          {questionnaireItem.material.minCharacterCount ? (
             <p className="text-mainaccent">
-              {questionnaireItem.materialable.minCharacterCount}
+              {questionnaireItem.material.minCharacterCount}
             </p>
           ) : (
             <p className="text-gray-400">None</p>
@@ -102,9 +102,9 @@ export default function EssayItemBlock({
         </div>
         <div className="flex items-center gap-4 justify-between">
           <p className="whitespace-nowrap font-medium">Maximum Characters:</p>
-          {questionnaireItem.materialable.maxCharacterCount ? (
+          {questionnaireItem.material.maxCharacterCount ? (
             <p className="text-mainaccent">
-              {questionnaireItem.materialable.maxCharacterCount}
+              {questionnaireItem.material.maxCharacterCount}
             </p>
           ) : (
             <p className="text-gray-400">None</p>

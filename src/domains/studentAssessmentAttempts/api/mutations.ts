@@ -1,7 +1,7 @@
 import { api } from "@/utils/axiosBackend";
 import { useMutation } from "@tanstack/react-query";
 import type { StudentAssessmentAttempt } from "../types";
-import type { Answer } from "../stores/useAttemptAnswersStore";
+import type { Answer } from "../types";
 import { toast } from "sonner";
 
 export function useSubmitAttempt() {

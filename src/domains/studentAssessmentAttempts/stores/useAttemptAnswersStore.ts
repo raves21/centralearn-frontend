@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { Answer, UnansweredItem } from "../types";
+import type { Answer } from "../types";
+import type { UnansweredItem } from "../types";
 
 type Values = {
   answers: Answer[];

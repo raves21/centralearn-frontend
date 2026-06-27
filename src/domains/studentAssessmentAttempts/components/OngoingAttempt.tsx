@@ -17,27 +17,26 @@ import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ErrorComponent from "@/components/shared/ErrorComponent";
 import OngoingAttemptHeader from "./OngoingAttemptHeader";
-import type {
-  Answer,
-  StudentAssessmentAttemptInfoWithAssessment,
-} from "../types";
+import type { Answer, StudentAssessmentAttempt } from "../types";
 
 type Props = {
-  questionnaireSnapshot: AssessmentMaterial[] | null;
+  questionnaireItems: AssessmentMaterial[] | null;
   answersFromDb: Answer[];
   attemptId: string;
-  items: AssessmentMaterial[] | null;
   classId: string;
-  studentAssessmentAttemptInfo: StudentAssessmentAttemptInfoWithAssessment;
+  studentAssessmentAttemptInfo: StudentAssessmentAttempt;
+  assessmentName: string;
+  chapterName: string;
 };
 
 export default function OngoingAttempt({
-  questionnaireSnapshot,
   attemptId,
   answersFromDb,
-  items,
-  studentAssessmentAttemptInfo,
+  questionnaireItems,
   classId,
+  studentAssessmentAttemptInfo,
+  assessmentName,
+  chapterName,
 }: Props) {
   const [answers, setAnswers, resetState] = useAttemptAnswersStore(
     useShallow((state) => [state.answers, state.setAnswers, state.resetState]),
@@ -97,7 +96,7 @@ export default function OngoingAttempt({
   }
 
   if (attemptRemainingTime) {
-    if (questionnaireSnapshot && questionnaireSnapshot.length > 0) {
+    if (questionnaireItems && questionnaireItems.length > 0) {
       return (
         <div className="flex flex-col gap-12 w-full">
           <OngoingAttemptHeader
@@ -105,10 +104,12 @@ export default function OngoingAttempt({
             initialTimeRemaining={attemptRemainingTime.remainingTimeSeconds}
             classId={classId}
             studentAssessmentAttemptInfo={studentAssessmentAttemptInfo}
+            assessmentName={assessmentName}
+            chapterName={chapterName}
           />
           <div className="flex flex-col gap-8 pb-24">
             <div className="flex flex-col gap-8">
-              {questionnaireSnapshot.map((questionnaireItem) => {
+              {questionnaireItems.map((questionnaireItem) => {
                 switch (questionnaireItem.materialType) {
                   case "App\\Models\\OptionBasedItem":
                     return (
@@ -118,7 +119,7 @@ export default function OngoingAttempt({
                         attemptId={attemptId}
                         questionnaireItem={
                           questionnaireItem as AssessmentMaterial & {
-                            materialable: OptionBasedItem;
+                            material: OptionBasedItem;
                           }
                         }
                       />
@@ -131,7 +132,7 @@ export default function OngoingAttempt({
                         key={questionnaireItem.id}
                         questionnaireItem={
                           questionnaireItem as AssessmentMaterial & {
-                            materialable: EssayItem;
+                            material: EssayItem;
                           }
                         }
                       />
@@ -144,7 +145,7 @@ export default function OngoingAttempt({
                         attemptId={attemptId}
                         questionnaireItem={
                           questionnaireItem as AssessmentMaterial & {
-                            materialable: IdentificationItem;
+                            material: IdentificationItem;
                           }
                         }
                       />
@@ -154,7 +155,7 @@ export default function OngoingAttempt({
             </div>
             <SubmitButton
               classId={classId}
-              items={items}
+              items={questionnaireItems}
               answers={answers}
               attemptId={attemptId}
             />

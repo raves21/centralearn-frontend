@@ -13,7 +13,7 @@ import type { SubmissionSummaryItem } from "../types";
 import PointsEarned from "./PointsEarned";
 
 type Props = {
-  questionnaireItem: AssessmentMaterial & { materialable: IdentificationItem };
+  questionnaireItem: AssessmentMaterial & { material: IdentificationItem };
   attemptId: string;
   isReadOnly: boolean;
   submissionSummaryItem?: SubmissionSummaryItem;

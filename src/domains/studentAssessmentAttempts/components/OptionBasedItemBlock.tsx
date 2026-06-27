@@ -12,7 +12,7 @@ import type { SubmissionSummaryItem } from "../types";
 import PointsEarned from "./PointsEarned";
 
 type Props = {
-  questionnaireItem: AssessmentMaterial & { materialable: OptionBasedItem };
+  questionnaireItem: AssessmentMaterial & { material: OptionBasedItem };
   submissionSummaryItem?: SubmissionSummaryItem;
   attemptId: string;
   isReadOnly: boolean;
@@ -68,7 +68,7 @@ export default function OptionBasedItemBlock({
       <div className="flex flex-col gap-6">
         <p className="text-[15px] font-medium">Options:</p>
         <div className="flex flex-col gap-4">
-          {questionnaireItem.materialable.options.map((option, index) => (
+          {questionnaireItem.material.options.map((option, index) => (
             <OptionBasedItemBlockOptions
               key={index}
               isReadOnly={isReadOnly}
@@ -77,7 +77,7 @@ export default function OptionBasedItemBlock({
               assessmentMaterialId={questionnaireItem.id}
               index={index}
               isOptionsAlphabetical={
-                questionnaireItem.materialable.isOptionsAlphabetical
+                questionnaireItem.material.isOptionsAlphabetical
               }
             />
           ))}

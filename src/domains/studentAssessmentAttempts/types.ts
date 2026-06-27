@@ -1,4 +1,5 @@
-import type { AssessmentMaterial } from "../assessmentMaterials/types";
+import type { Assessment } from "../chapterContents/types";
+import type { Student } from "../students/types";
 
 export type AttemptAvailability = {
   attemptsLeft: number;
@@ -15,43 +16,28 @@ export type SubmissionSummaryItem = {
   answer_content: string | null;
 };
 
+export type AssessmentResult = {
+  id: string;
+  assessment: Assessment;
+  finalScore: number | null;
+  attempts?: StudentAssessmentAttempt[];
+};
+
 export type StudentAssessmentAttempt = {
   id: string;
-  studentId: string;
-  maxAchievableScore: number | null;
-  assessmentVersion: {
-    id: string;
-    assessmentId: string;
-    versionNumber: string;
-    questionnaireSnapshot: AssessmentMaterial[] | null;
-  };
-  submissionSummary: Record<string, SubmissionSummaryItem> | null;
+  student: Student;
+  assessmentResult: AssessmentResult;
   attemptNumber: number;
   answers: {
     asmt_material_id: string;
     material_type: "option_based_item" | "essay_item" | "identification_item";
     content: string;
   }[];
+  submissionSummary: Record<string, SubmissionSummaryItem> | null;
   status: "ongoing" | "submitted";
   startedAt: string;
   submittedAt: string | null;
   totalScore: number | null;
-};
-
-export type StudentAssessmentAttemptInfoWithAssessment = {
-  data: StudentAssessmentAttempt;
-  assessment: {
-    id: string;
-    timeLimitSeconds: number | null;
-    chapterContent: {
-      id: string;
-      name: string;
-      chapter: {
-        id: string;
-        name: string;
-      };
-    };
-  };
 };
 
 export type ResultAndAttempts = {

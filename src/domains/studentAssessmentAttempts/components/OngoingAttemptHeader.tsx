@@ -1,6 +1,5 @@
 import { NotebookPen } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import type { StudentAssessmentAttemptInfoWithAssessment } from "../types";
 import OngoingAttemptTimer from "./OngoingAttemptTimer";
 import {
   Breadcrumb,
@@ -9,22 +8,25 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import type { StudentAssessmentAttempt } from "../types";
 
 type Props = {
-  studentAssessmentAttemptInfo: StudentAssessmentAttemptInfoWithAssessment;
+  assessmentName: string;
+  chapterName: string;
+  studentAssessmentAttemptInfo: StudentAssessmentAttempt;
   classId: string;
   initialTimeRemaining: number | null;
   attemptId: string;
 };
 
 export default function OngoingAttemptHeader({
+  assessmentName,
   studentAssessmentAttemptInfo,
+  chapterName,
   classId,
   initialTimeRemaining,
   attemptId,
 }: Props) {
-  const chapterContent = studentAssessmentAttemptInfo.assessment.chapterContent;
-
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex flex-col gap-8 w-full">
@@ -38,12 +40,12 @@ export default function OngoingAttemptHeader({
                     classId,
                   }}
                 >
-                  {chapterContent.chapter.name}
+                  {chapterName}
                 </Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{chapterContent.name}</BreadcrumbPage>
+                <BreadcrumbPage>{assessmentName}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -51,31 +53,38 @@ export default function OngoingAttemptHeader({
         <div className="flex items-center justify-between p-6 rounded-md bg-white w-full">
           <div className="flex items-center gap-4 w-full">
             <NotebookPen className="size-8" />
-            {studentAssessmentAttemptInfo.data.status === "ongoing" ? (
-              <p className="text-2xl font-bold">{chapterContent.name}</p>
+            {studentAssessmentAttemptInfo.status === "ongoing" ? (
+              <p className="text-2xl font-bold">{assessmentName}</p>
             ) : (
               <div className="flex items-center gap-5">
-                <p className="text-2xl font-bold">{chapterContent.name}</p>
+                <p className="text-2xl font-bold">{assessmentName}</p>
                 <p className="py-1 px-2 rounded-md bg-orange-200 text-orange-800 border border-orange-800">
                   Read-Only
                 </p>
               </div>
             )}
-            {studentAssessmentAttemptInfo.data.maxAchievableScore && (
+            {studentAssessmentAttemptInfo.assessmentResult.assessment
+              .maxAchievableScore && (
               <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">
-                {studentAssessmentAttemptInfo.data.maxAchievableScore}{" "}
-                {studentAssessmentAttemptInfo.data.maxAchievableScore === 1
+                {
+                  studentAssessmentAttemptInfo.assessmentResult.assessment
+                    .maxAchievableScore
+                }{" "}
+                {studentAssessmentAttemptInfo.assessmentResult.assessment
+                  .maxAchievableScore === 1
                   ? "point"
                   : "points"}
               </div>
             )}
           </div>
-          {studentAssessmentAttemptInfo.assessment.timeLimitSeconds &&
+          {studentAssessmentAttemptInfo.assessmentResult.assessment
+            .submissionSettings.timeLimitSeconds &&
             initialTimeRemaining && (
               <OngoingAttemptTimer
                 attemptId={attemptId}
                 totalDurationSeconds={
-                  studentAssessmentAttemptInfo.assessment.timeLimitSeconds
+                  studentAssessmentAttemptInfo.assessmentResult.assessment
+                    .submissionSettings.timeLimitSeconds
                 }
                 remainingTimeSeconds={initialTimeRemaining}
                 classId={classId}
