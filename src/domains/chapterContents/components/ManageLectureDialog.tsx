@@ -241,7 +241,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
             )}
           />
           <div className="flex flex-col text-sm gap-4 p-4 border rounded-md">
-            <h3 className="font-semibold mb-2">Access Settings</h3>
+            <h3 className="font-semibold mb-2">Accessibility Settings</h3>
             <FormField
               control={form.control}
               name="accessibility_type"
@@ -279,20 +279,34 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
             {accessibilityType === "custom" && (
               <div className="w-full flex gap-4 mt-2">
                 <div className="flex-1">
-                  <DateTimePicker
-                    control={form.control as any}
+                  <FormField
+                    control={form.control}
                     name="access_from"
-                    label="Access From"
-                    minDateTime={new Date()}
+                    render={({ field }) => (
+                      <DateTimePicker
+                        value={field.value}
+                        onSelect={field.onChange}
+                        onClear={() => field.onChange(null)}
+                        label="Access From"
+                        minDateTime={new Date()}
+                      />
+                    )}
                   />
                 </div>
                 <div className="flex-1">
                   {(accessFrom || form.getValues("access_from")) && (
-                    <DateTimePicker
-                      control={form.control as any}
+                    <FormField
+                      control={form.control}
                       name="access_until"
-                      label="Access Until (optional)"
-                      minDateTime={accessFrom ?? undefined}
+                      render={({ field }) => (
+                        <DateTimePicker
+                          value={field.value}
+                          onSelect={field.onChange}
+                          onClear={() => field.onChange(null)}
+                          label="Access Until (optional)"
+                          minDateTime={accessFrom ?? undefined}
+                        />
+                      )}
                     />
                   )}
                 </div>

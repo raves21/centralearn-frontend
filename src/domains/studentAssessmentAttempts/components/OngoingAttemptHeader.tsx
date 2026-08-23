@@ -53,16 +53,7 @@ export default function OngoingAttemptHeader({
         <div className="flex items-center justify-between p-6 rounded-md bg-white w-full">
           <div className="flex items-center gap-4 w-full">
             <NotebookPen className="size-8" />
-            {studentAssessmentAttemptInfo.status === "ongoing" ? (
-              <p className="text-2xl font-bold">{assessmentName}</p>
-            ) : (
-              <div className="flex items-center gap-5">
-                <p className="text-2xl font-bold">{assessmentName}</p>
-                <p className="py-1 px-2 rounded-md bg-orange-200 text-orange-800 border border-orange-800">
-                  Read-Only
-                </p>
-              </div>
-            )}
+            <p className="text-2xl font-bold">{assessmentName}</p>
             {studentAssessmentAttemptInfo.assessmentResult.assessment
               .maxAchievableScore && (
               <div className="px-3 py-2 ml-3 rounded-md border border-mainaccent text-mainaccent font-semibold text-lg">

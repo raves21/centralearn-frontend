@@ -62,5 +62,11 @@ Domain logic, types, and API calls should stay within their own domain folder ra
 - Rich text editing: Tiptap (`@tiptap/react`, `starter-kit`, `extension-placeholder`, `extension-text-style`), with a shared `TiptapSelector` type (`src/utils/sharedTypes.ts`) enumerating supported toolbar actions.
 - File/media attachments follow the `FileAttachment`/`TextAttachment` shapes in `src/utils/sharedTypes.ts`.
 
+### Assessment accessibility & submission settings
+Two independent, backend-driven access-control concerns apply to assessment content (`chapterContents`/`assessmentMaterials` domains) — don't conflate them in UI logic:
+- **Accessibility** (`ChapterContent.accessibility_settings`, JSON, required field — never `null`): whether a student can see/open the content at all. Either `{ visible: true|false, custom: null }`, or `{ visible: null, custom: { access_from, access_until } }` (`visible`/`custom` mutually exclusive; `access_until: null` means open-ended from `access_from`).
+- **Submission settings** (`AssessmentSubmissionSettings`, one per `Assessment`): `time_limit_seconds` (per-attempt cap) plus `due_date` + `after_due_date_behavior` (`auto_submit` | `block_new_attempts` | `allow_all`), coupled — both set or both `null`. Governs what happens to attempts once a student is already inside (force-submit at due date, block only new attempts, or allow all past due).
+- A student can be able to *open* an assessment past its submission `due_date` (accessibility window can outlast it) — build the "can view" check and the "can start/continue attempt" check as separate UI states rather than one combined gate. Full rules: `.mds/assessment_accessibility_and_submission_settings_doc.md` in the backend repo.
+
 ### Pagination
 List endpoints follow a Laravel-style pagination envelope (`PaginationProps` = `links` + `meta`, with `PaginatedQueryParams` for `page`/`searchQuery`/`filters` on the request side) — reuse these shared types rather than redefining pagination shapes per domain.

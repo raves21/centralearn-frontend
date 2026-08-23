@@ -42,6 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import NumberStepper from "@/components/shared/form/NumberStepper";
 
 type EditProps = {
   type: "edit";
@@ -65,7 +66,13 @@ const formSchema = z
     access_until: z.date().optional().nullable(),
 
     // Assessment specific
-    time_limit_hours: z.coerce.number().int().min(0).optional().nullable(),
+    time_limit_hours: z.coerce
+      .number()
+      .int()
+      .min(0)
+      .max(5)
+      .optional()
+      .nullable(),
     time_limit_minutes: z.coerce
       .number()
       .int()
@@ -131,6 +138,13 @@ const formSchema = z
           code: "custom",
           message:
             "Max attempts must be at least 2 when multi-attempts is enabled.",
+          path: ["max_attempts"],
+        });
+      }
+      if (data.max_attempts && data.max_attempts > 5) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Max attempts cannot exceed 5.",
           path: ["max_attempts"],
         });
       }
@@ -456,50 +470,66 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
                   <FormField
                     control={form.control}
                     name="time_limit_hours"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Hours</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={0}
-                            value={field.value ?? ""}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    render={({ field }) => {
+                      const value = field.value ?? 0;
+                      return (
+                        <FormItem>
+                          <FormLabel>Hours</FormLabel>
+                          <FormControl>
+                            <NumberStepper
+                              value={value}
+                              min={0}
+                              max={5}
+                              onIncrease={() => field.onChange(value + 1)}
+                              onDecrease={() => field.onChange(value - 1)}
+                              onInput={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
                   />
                   <FormField
                     control={form.control}
                     name="time_limit_minutes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Minutes</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={0}
-                            max={59}
-                            value={field.value ?? ""}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    render={({ field }) => {
+                      const value = field.value ?? 0;
+                      return (
+                        <FormItem>
+                          <FormLabel>Minutes</FormLabel>
+                          <FormControl>
+                            <NumberStepper
+                              value={value}
+                              min={0}
+                              max={59}
+                              onIncrease={() => field.onChange(value + 1)}
+                              onDecrease={() => field.onChange(value - 1)}
+                              onInput={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
                   />
                 </div>
               )}
             </div>
             <div className="flex flex-col gap-6">
               <div className="w-full">
-                <DateTimePicker
-                  control={form.control as any}
+                <FormField
+                  control={form.control}
                   name="due_date"
-                  label="Due Date (optional)"
-                  minDateTime={new Date()}
+                  render={({ field }) => (
+                    <DateTimePicker
+                      value={field.value}
+                      onSelect={field.onChange}
+                      onClear={() => field.onChange(null)}
+                      label="Due Date (optional)"
+                      minDateTime={new Date()}
+                    />
+                  )}
                 />
               </div>
               {dueDate && (
@@ -635,20 +665,25 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
                 <FormField
                   control={form.control}
                   name="max_attempts"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Max Attempts</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={2}
-                          value={field.value ?? ""}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const value = field.value ?? 2;
+                    return (
+                      <FormItem>
+                        <FormLabel>Max Attempts</FormLabel>
+                        <FormControl>
+                          <NumberStepper
+                            value={value}
+                            min={2}
+                            max={5}
+                            onIncrease={() => field.onChange(value + 1)}
+                            onDecrease={() => field.onChange(value - 1)}
+                            onInput={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
@@ -684,7 +719,9 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
           </div>
 
           <div className="flex flex-col gap-4 p-4 border rounded-md">
-            <h3 className="font-semibold text-sm mb-2">Access Settings</h3>
+            <h3 className="font-semibold text-sm mb-2">
+              Accessibility Settings
+            </h3>
             <FormField
               control={form.control}
               name="accessibility_type"
@@ -724,20 +761,34 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
             {accessibilityType === "custom" && (
               <div className="w-full flex gap-4 mt-2">
                 <div className="flex-1">
-                  <DateTimePicker
-                    control={form.control as any}
+                  <FormField
+                    control={form.control}
                     name="access_from"
-                    label="Access From"
-                    minDateTime={new Date()}
+                    render={({ field }) => (
+                      <DateTimePicker
+                        value={field.value}
+                        onSelect={field.onChange}
+                        onClear={() => field.onChange(null)}
+                        label="Access From"
+                        minDateTime={new Date()}
+                      />
+                    )}
                   />
                 </div>
                 <div className="flex-1">
                   {(accessFrom || form.getValues("access_from")) && (
-                    <DateTimePicker
-                      control={form.control as any}
+                    <FormField
+                      control={form.control}
                       name="access_until"
-                      label="Access Until (optional)"
-                      minDateTime={accessFrom ?? undefined}
+                      render={({ field }) => (
+                        <DateTimePicker
+                          value={field.value}
+                          onSelect={field.onChange}
+                          onClear={() => field.onChange(null)}
+                          label="Access Until (optional)"
+                          minDateTime={accessFrom ?? undefined}
+                        />
+                      )}
                     />
                   )}
                 </div>
