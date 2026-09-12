@@ -20,11 +20,11 @@ import AssignToDepartmentForm from "@/domains/programs/components/createEditProg
 import InstructorInfoForm from "@/domains/instructors/components/createEditInstructorFormSteps/InstructorInfoForm";
 import { useInstructorInfo } from "@/domains/instructors/api/queries";
 import { useEffect } from "react";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/instructors/$instructorId_/edit/"
+  "/_protected/admin-panel/instructors/$instructorId_/edit/",
 )({
   component: RouteComponent,
 });
@@ -152,11 +152,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if ([getAllDepartmentsStatus, instructorInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([getAllDepartmentsStatus, instructorInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departments && instructorInfo) {

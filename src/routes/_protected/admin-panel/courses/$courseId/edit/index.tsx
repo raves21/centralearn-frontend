@@ -22,11 +22,11 @@ import AssignToDepartmentsForm from "@/domains/courses/components/createEditCour
 import { useCourseInfo } from "@/domains/courses/api/queries";
 import { useEffect } from "react";
 import { isArrayEqualRegardlessOfOrder } from "@/utils/sharedFunctions";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/courses/$courseId/edit/"
+  "/_protected/admin-panel/courses/$courseId/edit/",
 )({
   component: RouteComponent,
 });
@@ -141,7 +141,7 @@ function RouteComponent() {
     if (
       !isArrayEqualRegardlessOfOrder(
         departments,
-        courseInfo.departments.map((dept) => dept.id)
+        courseInfo.departments.map((dept) => dept.id),
       )
     ) {
       departments!.forEach((deptId) => {
@@ -161,11 +161,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if ([getAllDepartmentsStatus, courseInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([getAllDepartmentsStatus, courseInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departments && courseInfoStatus) {

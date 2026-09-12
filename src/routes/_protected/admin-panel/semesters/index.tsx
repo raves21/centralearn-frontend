@@ -8,8 +8,8 @@ import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreate
 import { useSemesters } from "@/domains/semesters/api/queries";
 import type { Semester } from "@/domains/semesters/types";
 import dayjs from "dayjs";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -60,11 +60,11 @@ function RouteComponent() {
   ];
 
   if (status === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (status === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (data) {

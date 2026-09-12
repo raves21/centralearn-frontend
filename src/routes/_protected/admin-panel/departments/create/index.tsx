@@ -25,10 +25,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateDepartment } from "@/domains/departments/api/mutations";
 import { toast } from "sonner";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/departments/create/"
+  "/_protected/admin-panel/departments/create/",
 )({
   component: RouteComponent,
 });
@@ -80,7 +80,7 @@ function RouteComponent() {
   }
 
   if (createDepartmentStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   return (

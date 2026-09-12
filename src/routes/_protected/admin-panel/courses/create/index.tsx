@@ -19,13 +19,13 @@ import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
 import { useCreateCourse } from "@/domains/courses/api/mutations";
 import CourseInfoForm from "@/domains/courses/components/createEditCourseFormSteps/CourseInfoForm";
 import AssignToDepartmentsForm from "@/domains/courses/components/createEditCourseFormSteps/AssignToDepartmentsForm";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute("/_protected/admin-panel/courses/create/")(
   {
     component: RouteComponent,
-  }
+  },
 );
 
 const step1Schema = z.object({
@@ -125,11 +125,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if (getAllDepartmentsStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (getAllDepartmentsStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departments) {

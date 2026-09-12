@@ -21,8 +21,8 @@ import { cn } from "@/lib/utils";
 import { useLmsClassesPageState } from "@/utils/hooks/useLmsClassesPageState";
 import { useNavigate } from "@tanstack/react-router";
 import { Check, ChevronsUpDown } from "lucide-react";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export default function AdminLmsClasses() {
   const {
@@ -51,19 +51,19 @@ export default function AdminLmsClasses() {
         semester_id: semesterFilter,
         status: statusFilter ?? undefined,
       },
-    }
+    },
   );
 
   const { data: allSemesters, status: allSemestersStatus } = useAllSemesters(
-    {}
+    {},
   );
 
   if ([allSemestersStatus, courseClassesStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([allSemestersStatus, courseClassesStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (courseClasses && allSemesters) {
@@ -88,13 +88,13 @@ export default function AdminLmsClasses() {
                 role="combobox"
                 className={cn(
                   "flex-1 justify-between font-normal",
-                  !semesterFilter && "text-muted-foreground"
+                  !semesterFilter && "text-muted-foreground",
                 )}
               >
                 {semesterFilter
                   ? `${
                       allSemesters.find(
-                        (semester) => semester.id === semesterFilter
+                        (semester) => semester.id === semesterFilter,
                       )?.name
                     }`
                   : "Filter by Semester"}
@@ -118,7 +118,7 @@ export default function AdminLmsClasses() {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          !semesterFilter ? "opacity-100" : "opacity-0"
+                          !semesterFilter ? "opacity-100" : "opacity-0",
                         )}
                       />
                       Any
@@ -137,7 +137,7 @@ export default function AdminLmsClasses() {
                             "mr-2 h-4 w-4",
                             semester.id === semesterFilter
                               ? "opacity-100"
-                              : "opacity-0"
+                              : "opacity-0",
                           )}
                         />
                         {semester.name}
@@ -159,7 +159,7 @@ export default function AdminLmsClasses() {
                 role="combobox"
                 className={cn(
                   "flex-1 justify-between font-normal",
-                  !statusFilter && "text-muted-foreground"
+                  !statusFilter && "text-muted-foreground",
                 )}
               >
                 {statusFilter === null && "Filter by Status"}
@@ -184,7 +184,7 @@ export default function AdminLmsClasses() {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          statusFilter === null ? "opacity-100" : "opacity-0"
+                          statusFilter === null ? "opacity-100" : "opacity-0",
                         )}
                       />
                       Any
@@ -208,7 +208,7 @@ export default function AdminLmsClasses() {
                               "mr-2 h-4 w-4",
                               statusFilter === value
                                 ? "opacity-100"
-                                : "opacity-0"
+                                : "opacity-0",
                             )}
                           />
                           {status}

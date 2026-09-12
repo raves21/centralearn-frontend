@@ -1,5 +1,5 @@
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -52,11 +52,11 @@ function RouteComponent() {
     useStudentInfo(studentId);
 
   if ([studentInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([studentInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (studentInfo) {

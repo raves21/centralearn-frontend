@@ -1,11 +1,11 @@
 import InfoSection from "@/components/shared/infoPage/InfoSection";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import { useStudentInfo } from "@/domains/students/api/queries";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/students/$studentId/"
+  "/_protected/admin-panel/students/$studentId/",
 )({
   component: RouteComponent,
 });
@@ -17,11 +17,11 @@ function RouteComponent() {
     useStudentInfo(studentId);
 
   if ([studentInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([studentInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (studentInfo) {

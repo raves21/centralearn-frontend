@@ -14,8 +14,8 @@ import { useShallow } from "zustand/react/shallow";
 import { useAttemptRemainingTime } from "../api/queries";
 import { useNavigate } from "@tanstack/react-router";
 import { useGlobalStore } from "@/components/shared/globals/utils/useGlobalStore";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import OngoingAttemptHeader from "./OngoingAttemptHeader";
 import type { Answer, StudentAssessmentAttempt } from "../types";
 
@@ -88,11 +88,11 @@ export default function OngoingAttempt({
   }, [attemptRemainingTime]);
 
   if (attemptRemainingTimeStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (attemptRemainingTimeStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (attemptRemainingTime) {

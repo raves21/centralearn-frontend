@@ -33,8 +33,8 @@ import type {
 } from "@/domains/chapterContents/types";
 import { useEffect } from "react";
 import { useChapterContentInfo } from "../api/queries";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import {
   Select,
   SelectContent,
@@ -384,7 +384,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
   if ([chapterContentInfoStatus].includes("error") && editProps) {
     return (
       <div className="size-[300px]">
-        <ErrorComponent className="text-xl font-medium text-red-500" />
+        <ShowErrorComponent className="text-xl font-medium text-red-500" />
       </div>
     );
   }
@@ -392,7 +392,7 @@ export default function ManageAssessmentDialog({ chapterId, ...props }: Props) {
   if ([chapterContentInfoStatus].includes("pending") && editProps) {
     return (
       <div className="size-[300px]">
-        <LoadingComponent />
+        <ShowLoadingComponent />
       </div>
     );
   }

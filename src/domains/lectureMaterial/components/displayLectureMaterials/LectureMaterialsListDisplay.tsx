@@ -2,24 +2,24 @@ import { useAllLectureMaterials } from "../../api/queries";
 import TextLectureMaterialBlockDisplay from "./TextLectureMaterialBlockDisplay";
 import FileLectureMaterialBlockDisplay from "./FileLectureMaterialBlockDisplay";
 import type { FileAttachment, TextAttachment } from "@/utils/sharedTypes";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 
 type Props = {
   lectureId: string;
 };
 
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export default function LectureMaterialsListDisplay({ lectureId }: Props) {
   const { data: lectureMaterials, status: lectureMaterialsStatus } =
     useAllLectureMaterials({ lectureId });
 
   if ([lectureMaterialsStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([lectureMaterialsStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (lectureMaterials) {

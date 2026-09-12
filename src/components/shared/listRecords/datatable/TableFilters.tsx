@@ -49,7 +49,7 @@ export default function TableFilters({
       </button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="bg-none border-1 rounded-md min-w-[110px] px-3 gap-2 text-black py-2 hover:ring-mainaccent/50 hover:ring-[2px] transition-all flex items-center border-gray-400">
+          <button className="bg-none hidden border-1 rounded-md min-w-[110px] px-3 gap-2 text-black py-2 hover:ring-mainaccent/50 hover:ring-[2px] transition-all flex items-center border-gray-400">
             <p>Columns</p>
             <ChevronDown className="size-4" />
           </button>

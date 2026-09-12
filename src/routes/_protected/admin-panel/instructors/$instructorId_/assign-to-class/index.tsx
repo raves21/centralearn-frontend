@@ -21,7 +21,7 @@ import {
 import { useAssignInstructorToClass } from "@/domains/instructors/api/mutations";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { toast } from "sonner";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -32,7 +32,7 @@ type SearchParamsSchema = z.infer<typeof searchParamsSchema> &
   SearchSchemaValidationStatus;
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/instructors/$instructorId_/assign-to-class/"
+  "/_protected/admin-panel/instructors/$instructorId_/assign-to-class/",
 )({
   component: RouteComponent,
   validateSearch: (search): SearchParamsSchema => {
@@ -127,7 +127,7 @@ function RouteComponent() {
           <p
             className={cn(
               "rounded-md px-2 py-1 text-white w-min text-xs",
-              status === "open" ? "bg-green-500" : "bg-red-600"
+              status === "open" ? "bg-green-500" : "bg-red-600",
             )}
           >
             {status.split("")[0].toUpperCase() + status.substring(1)}
@@ -162,7 +162,7 @@ function RouteComponent() {
   }
 
   if (status === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (data) {

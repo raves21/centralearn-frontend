@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSections } from "@/domains/sections/api/queries";
 import type { Section } from "@/domains/sections/types";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -95,7 +95,7 @@ function RouteComponent() {
   }
 
   if (status === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (data) {

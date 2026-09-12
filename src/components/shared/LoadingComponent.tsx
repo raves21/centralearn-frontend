@@ -6,7 +6,7 @@ type Props = {
   loaderClassName?: string;
 };
 
-export default function LoadingComponent({
+export default function ShowLoadingComponent({
   containerClassName,
   loaderClassName,
 }: Props) {

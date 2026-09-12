@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useLmsClassesPageState } from "@/utils/hooks/useLmsClassesPageState";
 import { useNavigate } from "@tanstack/react-router";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import {
   useInstructorAssignedClasses,
   useInstructorAssignedSemesters,
@@ -64,11 +64,11 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
     useInstructorAssignedSemesters(instructorId);
 
   if ([assignedSemestersStatus, assignedClassesStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([assignedSemestersStatus, assignedClassesStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (assignedClasses && assignedSemesters) {
@@ -93,13 +93,13 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
                 role="combobox"
                 className={cn(
                   "flex-1 justify-between font-normal",
-                  !semesterFilter && "text-muted-foreground"
+                  !semesterFilter && "text-muted-foreground",
                 )}
               >
                 {semesterFilter
                   ? `${
                       assignedSemesters.find(
-                        (semester) => semester.id === semesterFilter
+                        (semester) => semester.id === semesterFilter,
                       )?.name
                     }`
                   : "Filter by Semester"}
@@ -123,7 +123,7 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          !semesterFilter ? "opacity-100" : "opacity-0"
+                          !semesterFilter ? "opacity-100" : "opacity-0",
                         )}
                       />
                       Any
@@ -142,7 +142,7 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
                             "mr-2 h-4 w-4",
                             semester.id === semesterFilter
                               ? "opacity-100"
-                              : "opacity-0"
+                              : "opacity-0",
                           )}
                         />
                         {semester.name}
@@ -164,7 +164,7 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
                 role="combobox"
                 className={cn(
                   "flex-1 justify-between font-normal",
-                  !statusFilter && "text-muted-foreground"
+                  !statusFilter && "text-muted-foreground",
                 )}
               >
                 {statusFilter === null && "Filter by Status"}
@@ -189,7 +189,7 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          statusFilter === null ? "opacity-100" : "opacity-0"
+                          statusFilter === null ? "opacity-100" : "opacity-0",
                         )}
                       />
                       Any
@@ -213,7 +213,7 @@ export default function InstructorLmsClasses({ instructorId }: Props) {
                               "mr-2 h-4 w-4",
                               statusFilter === value
                                 ? "opacity-100"
-                                : "opacity-0"
+                                : "opacity-0",
                             )}
                           />
                           {status}

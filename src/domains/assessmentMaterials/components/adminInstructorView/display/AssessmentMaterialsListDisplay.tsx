@@ -1,11 +1,11 @@
 import { useAllAssessmentMaterials } from "../../../api/queries";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 
 type Props = {
   assessmentId: string;
 };
 
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import OptionBasedBlockDisplay from "./OptionBasedItemBlockDisplay";
 import EssayBlockDisplay from "./EssayBlockDisplay";
 import IdentificationBlockDisplay from "./IdentificationBlockDisplay";
@@ -23,11 +23,11 @@ export default function AssessmentMaterialsListDisplay({
     useAllAssessmentMaterials({ assessmentId });
 
   if ([assessmentMaterialsStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([assessmentMaterialsStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (assessmentMaterials) {

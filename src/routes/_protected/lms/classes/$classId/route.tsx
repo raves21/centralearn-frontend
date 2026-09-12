@@ -7,8 +7,8 @@ import {
 } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import type { NavigationButton } from "@/utils/sharedTypes";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute("/_protected/lms/classes/$classId")({
   component: RouteComponent,
@@ -53,11 +53,11 @@ function RouteComponent() {
   ];
 
   if ([courseClassInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([courseClassInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (courseClassInfo) {

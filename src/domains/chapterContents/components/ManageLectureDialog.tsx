@@ -25,8 +25,8 @@ import { formatToLocal, formatToUTC } from "@/utils/sharedFunctions";
 import type { ChapterContent } from "@/domains/chapterContents/types";
 import { useEffect } from "react";
 import { useChapterContentInfo } from "../api/queries";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import {
   Select,
   SelectContent,
@@ -65,7 +65,11 @@ const formSchema = z
           path: ["access_from"],
         });
       }
-      if (data.access_from && data.access_until && data.access_until <= data.access_from) {
+      if (
+        data.access_from &&
+        data.access_until &&
+        data.access_until <= data.access_from
+      ) {
         ctx.addIssue({
           code: "custom",
           message: "Access Until must be after Access From.",
@@ -124,8 +128,12 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
         else if (settings.visible === false) type = "hidden";
         else if (settings.custom) {
           type = "custom";
-          accessFrom = settings.custom.access_from ? new Date(formatToLocal(settings.custom.access_from)) : null;
-          accessUntil = settings.custom.access_until ? new Date(formatToLocal(settings.custom.access_until)) : null;
+          accessFrom = settings.custom.access_from
+            ? new Date(formatToLocal(settings.custom.access_from))
+            : null;
+          accessUntil = settings.custom.access_until
+            ? new Date(formatToLocal(settings.custom.access_until))
+            : null;
         }
       }
 
@@ -151,7 +159,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
         formData.append("order", editProps.chapterContent.order.toString());
       } else {
         const { data: chapterContentCount } = await api.get(
-          `/chapters/${chapterId}/content-count`
+          `/chapters/${chapterId}/content-count`,
         );
         formData.append("order", (chapterContentCount + 1).toString());
       }
@@ -162,10 +170,16 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
         formData.append("accessibility_settings[visible]", "0");
       } else if (data.accessibility_type === "custom") {
         if (data.access_from) {
-          formData.append("accessibility_settings[custom][access_from]", formatToUTC(data.access_from));
+          formData.append(
+            "accessibility_settings[custom][access_from]",
+            formatToUTC(data.access_from),
+          );
         }
         if (data.access_until) {
-          formData.append("accessibility_settings[custom][access_until]", formatToUTC(data.access_until));
+          formData.append(
+            "accessibility_settings[custom][access_until]",
+            formatToUTC(data.access_until),
+          );
         }
       }
 
@@ -189,7 +203,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
   if ([chapterContentInfoStatus].includes("error") && editProps) {
     return (
       <div className="size-[300px]">
-        <ErrorComponent className="text-xl font-medium text-red-500" />
+        <ShowErrorComponent className="text-xl font-medium text-red-500" />
       </div>
     );
   }
@@ -197,7 +211,7 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
   if ([chapterContentInfoStatus].includes("pending") && editProps) {
     return (
       <div className="size-[300px]">
-        <LoadingComponent />
+        <ShowLoadingComponent />
       </div>
     );
   }
@@ -268,7 +282,9 @@ export default function ManageLectureDialog({ chapterId, ...props }: Props) {
                     <SelectContent className="z-[200] font-poppins">
                       <SelectItem value="visible">Always Visible</SelectItem>
                       <SelectItem value="hidden">Hidden</SelectItem>
-                      <SelectItem value="custom">Custom Access Period</SelectItem>
+                      <SelectItem value="custom">
+                        Custom Access Period
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

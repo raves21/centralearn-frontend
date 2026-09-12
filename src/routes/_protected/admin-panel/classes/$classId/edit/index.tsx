@@ -46,8 +46,8 @@ import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useCourseClassInfo } from "@/domains/classes/api/queries";
 import { useAllSections } from "@/domains/sections/api/queries";
 import { AxiosError } from "axios";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
   "/_protected/admin-panel/classes/$classId/edit/",
@@ -144,7 +144,7 @@ function RouteComponent() {
       allSectionsStatus,
     ].includes("error")
   ) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (
@@ -155,7 +155,7 @@ function RouteComponent() {
       allSectionsStatus,
     ].includes("pending")
   ) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (allCourses && allSemesters && courseClassInfoStatus && allSections) {

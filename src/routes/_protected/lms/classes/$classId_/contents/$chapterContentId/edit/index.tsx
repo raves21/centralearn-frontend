@@ -2,8 +2,8 @@ import { useChapterContentInfo } from "@/domains/chapterContents/api/queries";
 import EditLectureMaterials from "@/domains/lectureMaterial/components/editLectureMaterials/EditLectureMaterials";
 import { ContentType, type Assessment } from "@/domains/chapterContents/types";
 import { createFileRoute } from "@tanstack/react-router";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import EditAssessmentMaterials from "@/domains/assessmentMaterials/components/adminInstructorView/edit/EditAssessmentMaterials";
 
 export const Route = createFileRoute(
@@ -19,11 +19,11 @@ function RouteComponent() {
     useChapterContentInfo(chapterContentId);
 
   if ([chapterContentInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([chapterContentInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (chapterContentInfo) {

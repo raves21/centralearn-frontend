@@ -1,7 +1,7 @@
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import { DataTable } from "@/components/shared/listRecords/datatable/DataTable";
 import TitleAndCreateAction from "@/components/shared/listRecords/TitleAndCreateAction";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +30,7 @@ type SearchParamsSchema = z.infer<typeof searchParamSchema> &
   SearchSchemaValidationStatus;
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/instructors/$instructorId/assigned-classes/"
+  "/_protected/admin-panel/instructors/$instructorId/assigned-classes/",
 )({
   component: RouteComponent,
   validateSearch: (search): SearchParamsSchema => {
@@ -107,7 +107,7 @@ function RouteComponent() {
           <p
             className={cn(
               "rounded-md px-2 py-1 text-white w-min text-xs",
-              status === "open" ? "bg-green-500" : "bg-red-600"
+              status === "open" ? "bg-green-500" : "bg-red-600",
             )}
           >
             {status.split("")[0].toUpperCase() + status.substring(1)}
@@ -139,11 +139,11 @@ function RouteComponent() {
   ];
 
   if ([assignedClassesStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([assignedClassesStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (assignedClasses) {

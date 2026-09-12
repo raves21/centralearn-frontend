@@ -1,5 +1,5 @@
-import ErrorComponent from "@/components/shared/ErrorComponent";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 import { useAllAssessmentMaterials } from "@/domains/assessmentMaterials/api/queries";
 import { useAttemptInfo } from "@/domains/studentAssessmentAttempts/api/queries";
 import OngoingAttempt from "@/domains/studentAssessmentAttempts/components/OngoingAttempt";
@@ -38,7 +38,7 @@ function RouteComponent() {
       "error",
     )
   ) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (
@@ -46,7 +46,7 @@ function RouteComponent() {
       "pending",
     )
   ) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (studentAssessmentAttemptInfo && assessmentMaterials) {

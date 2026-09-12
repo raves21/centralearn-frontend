@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/axiosBackend";
 import type { CourseClass, CourseClassesPaginated } from "../types";
 import type { PaginatedQueryParams } from "@/utils/sharedTypes";
+import type { Student, StudentsPaginated } from "@/domains/students/types";
+import type { Instructor } from "@/domains/instructors/types";
 
 export function useCourseClasses({
   page = 1,
@@ -33,12 +35,30 @@ export function useAllCourseClasses() {
   });
 }
 
-export function useCourseClassInfo(courseClassId: string) {
+export function useCourseClassInfo(id: string) {
   return useQuery({
-    queryKey: ["courseClass", courseClassId],
+    queryKey: ["courseClass", id],
     queryFn: async () => {
-      const { data } = await api.get(`/course-classes/${courseClassId}`);
+      const { data } = await api.get(`/course-classes/${id}`);
       return data.data as CourseClass;
+    },
+  });
+}
+
+export function useCourseClassMembers({
+  id,
+  searchQuery = undefined,
+}: PaginatedQueryParams & { id: string }) {
+  return useQuery({
+    queryKey: ["courseClassMembers", id, searchQuery],
+    queryFn: async () => {
+      const { data } = await api.get(`/course-classes/${id}/members`, {
+        params: { query: searchQuery },
+      });
+      return data as {
+        instructors: Instructor[];
+        students: Student[];
+      };
     },
   });
 }

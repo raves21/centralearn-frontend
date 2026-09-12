@@ -34,11 +34,11 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { useCreateSemesterMinMaxTimestamps } from "@/domains/semesters/api/queries";
 import dayjs from "dayjs";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/semesters/create/"
+  "/_protected/admin-panel/semesters/create/",
 )({
   component: RouteComponent,
 });
@@ -96,11 +96,11 @@ function RouteComponent() {
   const startDate = form.watch("startDate");
 
   if (minMaxTimestampsStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (minMaxTimestampsStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (minMaxTimestamps) {
@@ -155,7 +155,7 @@ function RouteComponent() {
                               variant={"outline"}
                               className={cn(
                                 "pl-3 text-left font-normal shadow-none border-gray-400",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value ? (
@@ -178,7 +178,7 @@ function RouteComponent() {
                               if (!minMaxTimestamps.startDateMin) return false;
                               return dayjs(date).isBefore(
                                 dayjs(minMaxTimestamps.startDateMin),
-                                "day"
+                                "day",
                               );
                             }}
                             captionLayout="dropdown"
@@ -190,7 +190,7 @@ function RouteComponent() {
                         semester's end date
                         <br />
                         <span className="text-red-500">{`(${dayjs(
-                          minMaxTimestamps.startDateMin
+                          minMaxTimestamps.startDateMin,
                         ).format("MMM DD, YYYY")} onwards)`}</span>
                       </FormDescription>
                       <FormMessage />
@@ -211,7 +211,7 @@ function RouteComponent() {
                               variant={"outline"}
                               className={cn(
                                 "pl-3 text-left font-normal shadow-none border-gray-400",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value ? (

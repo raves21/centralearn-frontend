@@ -23,8 +23,8 @@ import {
   useStudentEnrolledClasses,
   useStudentEnrolledSemesters,
 } from "../../api/queries";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
@@ -37,7 +37,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
   const [isSemesterFilterPopoverOpen, setIsSemesterFilterPopoverOpen] =
     useState(false);
   const [statusFilter, setStatusFilter] = useState<"open" | "close" | null>(
-    null
+    null,
   );
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,11 +60,11 @@ export default function StudentLmsClasses({ studentId }: Props) {
     useStudentEnrolledSemesters(studentId);
 
   if ([enrolledSemestersStatus, enrolledClassesStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([enrolledSemestersStatus, enrolledClassesStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (enrolledClasses && enrolledSemesters) {
@@ -89,13 +89,13 @@ export default function StudentLmsClasses({ studentId }: Props) {
                 role="combobox"
                 className={cn(
                   "flex-1 justify-between font-normal",
-                  !semesterFilter && "text-muted-foreground"
+                  !semesterFilter && "text-muted-foreground",
                 )}
               >
                 {semesterFilter
                   ? `${
                       enrolledSemesters.find(
-                        (semester) => semester.id === semesterFilter
+                        (semester) => semester.id === semesterFilter,
                       )?.name
                     }`
                   : "Filter by Semester"}
@@ -119,7 +119,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          !semesterFilter ? "opacity-100" : "opacity-0"
+                          !semesterFilter ? "opacity-100" : "opacity-0",
                         )}
                       />
                       Any
@@ -138,7 +138,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
                             "mr-2 h-4 w-4",
                             semester.id === semesterFilter
                               ? "opacity-100"
-                              : "opacity-0"
+                              : "opacity-0",
                           )}
                         />
                         {semester.name}
@@ -160,7 +160,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
                 role="combobox"
                 className={cn(
                   "flex-1 justify-between font-normal",
-                  !statusFilter && "text-muted-foreground"
+                  !statusFilter && "text-muted-foreground",
                 )}
               >
                 {statusFilter === null && "Filter by Status"}
@@ -185,7 +185,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          statusFilter === null ? "opacity-100" : "opacity-0"
+                          statusFilter === null ? "opacity-100" : "opacity-0",
                         )}
                       />
                       Any
@@ -209,7 +209,7 @@ export default function StudentLmsClasses({ studentId }: Props) {
                               "mr-2 h-4 w-4",
                               statusFilter === value
                                 ? "opacity-100"
-                                : "opacity-0"
+                                : "opacity-0",
                             )}
                           />
                           {status}

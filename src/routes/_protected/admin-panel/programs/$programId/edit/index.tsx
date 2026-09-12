@@ -21,11 +21,11 @@ import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
 import { useEffect } from "react";
 import { useProgramInfo } from "@/domains/programs/api/queries";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/programs/$programId/edit/"
+  "/_protected/admin-panel/programs/$programId/edit/",
 )({
   component: RouteComponent,
 });
@@ -148,11 +148,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if ([getAllDepartmentsStatus, programInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([getAllDepartmentsStatus, programInfoStatus].includes("error")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departments && programInfoStatus) {

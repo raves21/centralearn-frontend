@@ -27,11 +27,11 @@ import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingO
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useDepartmentInfo } from "@/domains/departments/api/queries";
 import { useEffect } from "react";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/departments/$departmentId/edit/"
+  "/_protected/admin-panel/departments/$departmentId/edit/",
 )({
   component: RouteComponent,
 });
@@ -105,11 +105,11 @@ function RouteComponent() {
   }
 
   if (departmentInfoStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (departmentInfoStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departmentInfo) {

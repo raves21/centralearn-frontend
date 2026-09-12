@@ -1,11 +1,11 @@
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 import InfoSection from "@/components/shared/infoPage/InfoSection";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 import { useInstructorInfo } from "@/domains/instructors/api/queries";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/instructors/$instructorId/"
+  "/_protected/admin-panel/instructors/$instructorId/",
 )({
   component: RouteComponent,
 });
@@ -17,11 +17,11 @@ function RouteComponent() {
     useInstructorInfo(instructorId);
 
   if ([instructorInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([instructorInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (instructorInfo) {

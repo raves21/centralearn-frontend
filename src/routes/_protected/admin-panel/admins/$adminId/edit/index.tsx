@@ -24,11 +24,11 @@ import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingO
 import { useEditAdmin } from "@/domains/admins/api/mutations";
 import { useAdminInfo } from "@/domains/admins/api/queries";
 import { useEffect } from "react";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/admins/$adminId/edit/"
+  "/_protected/admin-panel/admins/$adminId/edit/",
 )({
   component: RouteComponent,
 });
@@ -105,11 +105,11 @@ function RouteComponent() {
   }
 
   if (adminInfoStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (adminInfoStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (adminInfo) {

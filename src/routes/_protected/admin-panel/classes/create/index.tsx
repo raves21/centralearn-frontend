@@ -44,13 +44,13 @@ import { cn } from "@/lib/utils";
 import { formatToSemesterNameAndTimestamps } from "@/domains/semesters/functions";
 import { useAllSections } from "@/domains/sections/api/queries";
 import { AxiosError } from "axios";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute("/_protected/admin-panel/classes/create/")(
   {
     component: RouteComponent,
-  }
+  },
 );
 
 const formSchema = z.object({
@@ -70,7 +70,7 @@ function RouteComponent() {
 
   const { data: allCourses, status: allCoursesStatus } = useAllCourses({});
   const { data: allSemesters, status: allSemestersStatus } = useAllSemesters(
-    {}
+    {},
   );
   const { data: allSections, status: allSectionsStatus } = useAllSections();
 
@@ -120,15 +120,15 @@ function RouteComponent() {
   if (
     [allCoursesStatus, allSemestersStatus, allSectionsStatus].includes("error")
   ) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (
     [allCoursesStatus, allSemestersStatus, allSectionsStatus].includes(
-      "pending"
+      "pending",
     )
   ) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (allCourses && allSemesters && allSections) {
@@ -175,17 +175,17 @@ function RouteComponent() {
                               role="combobox"
                               className={cn(
                                 "w-full justify-between font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? `${
                                     allCourses.find(
-                                      (course) => course.id === field.value
+                                      (course) => course.id === field.value,
                                     )?.name
                                   } (${
                                     allCourses.find(
-                                      (course) => course.id === field.value
+                                      (course) => course.id === field.value,
                                     )?.code
                                   })`
                                 : "Select Course..."}
@@ -212,7 +212,7 @@ function RouteComponent() {
                                         "mr-2 h-4 w-4",
                                         course.id === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {`${course.name} (${course.code})`}
@@ -243,14 +243,14 @@ function RouteComponent() {
                               role="combobox"
                               className={cn(
                                 "w-full justify-between font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? formatToSemesterNameAndTimestamps(
                                     allSemesters.find(
-                                      (semester) => semester.id === field.value
-                                    )!
+                                      (semester) => semester.id === field.value,
+                                    )!,
                                   )
                                 : "Select Department..."}
                               <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
@@ -267,7 +267,7 @@ function RouteComponent() {
                                   <CommandItem
                                     key={semester.id}
                                     value={formatToSemesterNameAndTimestamps(
-                                      semester
+                                      semester,
                                     )}
                                     onSelect={() => {
                                       field.onChange(semester.id);
@@ -278,11 +278,11 @@ function RouteComponent() {
                                         "mr-2 h-4 w-4",
                                         semester.id === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {formatToSemesterNameAndTimestamps(
-                                      semester
+                                      semester,
                                     )}
                                   </CommandItem>
                                 ))}
@@ -313,13 +313,13 @@ function RouteComponent() {
                               role="combobox"
                               className={cn(
                                 "w-full justify-between font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? `${
                                     allSections.find(
-                                      (section) => section.id === field.value
+                                      (section) => section.id === field.value,
                                     )?.name
                                   }`
                                 : "Select Section..."}
@@ -346,7 +346,7 @@ function RouteComponent() {
                                         "mr-2 h-4 w-4",
                                         section.id === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {section.name}
@@ -377,7 +377,7 @@ function RouteComponent() {
                               role="combobox"
                               className={cn(
                                 "w-full justify-between font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value === "open" ? "Open" : "Close"}
@@ -400,7 +400,7 @@ function RouteComponent() {
                                       "mr-2 h-4 w-4",
                                       field.value === "open"
                                         ? "opacity-100"
-                                        : "opacity-0"
+                                        : "opacity-0",
                                     )}
                                   />
                                   Open
@@ -416,7 +416,7 @@ function RouteComponent() {
                                       "mr-2 h-4 w-4",
                                       field.value === "close"
                                         ? "opacity-100"
-                                        : "opacity-0"
+                                        : "opacity-0",
                                     )}
                                   />
                                   Close

@@ -1,5 +1,5 @@
-import ErrorComponent from "@/components/shared/ErrorComponent";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,7 +20,7 @@ import {
 import { Pencil, Trash } from "lucide-react";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/instructors/$instructorId"
+  "/_protected/admin-panel/instructors/$instructorId",
 )({
   component: RouteComponent,
 });
@@ -52,11 +52,11 @@ function RouteComponent() {
     useInstructorInfo(instructorId);
 
   if ([instructorInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([instructorInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (instructorInfo) {

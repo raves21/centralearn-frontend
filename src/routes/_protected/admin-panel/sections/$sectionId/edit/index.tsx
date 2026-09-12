@@ -24,11 +24,11 @@ import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingO
 import { useEditSection } from "@/domains/sections/api/mutations";
 import { useSectionInfo } from "@/domains/sections/api/queries";
 import { useEffect } from "react";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/sections/$sectionId/edit/"
+  "/_protected/admin-panel/sections/$sectionId/edit/",
 )({
   component: RouteComponent,
 });
@@ -78,11 +78,11 @@ function RouteComponent() {
   }
 
   if (sectionInfoStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (sectionInfoStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (sectionInfoStatus) {

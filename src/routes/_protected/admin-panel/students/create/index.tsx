@@ -18,11 +18,11 @@ import { useAllPrograms } from "@/domains/programs/api/queries";
 import { useCreateStudent } from "@/domains/students/api/mutations";
 import StudentInfoForm from "@/domains/students/components/createEditStudentFormSteps/StudentInfoForm";
 import AssignToProgramForm from "@/domains/students/components/createEditStudentFormSteps/AssignToProgramForm";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/students/create/"
+  "/_protected/admin-panel/students/create/",
 )({
   component: RouteComponent,
 });
@@ -122,11 +122,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if (getAllProgramsStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (getAllProgramsStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (programs) {

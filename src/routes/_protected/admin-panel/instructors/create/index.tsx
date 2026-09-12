@@ -18,11 +18,11 @@ import { useCreateInstructor } from "@/domains/instructors/api/mutations";
 import { useAllDepartments } from "@/domains/departments/api/queries";
 import AssignToDepartmentForm from "@/domains/programs/components/createEditProgramFormSteps/AssignToDepartmentForm";
 import InstructorInfoForm from "@/domains/instructors/components/createEditInstructorFormSteps/InstructorInfoForm";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/instructors/create/"
+  "/_protected/admin-panel/instructors/create/",
 )({
   component: RouteComponent,
 });
@@ -126,11 +126,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if (getAllDepartmentsStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (getAllDepartmentsStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departments) {

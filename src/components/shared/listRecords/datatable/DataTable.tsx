@@ -22,13 +22,13 @@ import TableFilters from "./TableFilters";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  paginationProps: {
+  paginationProps?: {
     totalPages: number;
     currentPage: number;
     handlePageChange: (e: React.ChangeEvent<unknown>, page: number) => void;
   };
   onRowClick?: (row: TData) => void;
-  filterProps: {
+  filterProps?: {
     onInputSearch: (input: string) => void;
     searchInputPlaceholder: string;
     searchInputInitValue: string | undefined;
@@ -54,12 +54,14 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className={cn("rounded-xl flex flex-col gap-4 pb-6", className)}>
-      <TableFilters
-        table={table}
-        onInputSearch={filterProps.onInputSearch}
-        searchInputPlaceholder={filterProps.searchInputPlaceholder}
-        searchInputInitValue={filterProps.searchInputInitValue}
-      />
+      {filterProps && (
+        <TableFilters
+          table={table}
+          onInputSearch={filterProps.onInputSearch}
+          searchInputPlaceholder={filterProps.searchInputPlaceholder}
+          searchInputInitValue={filterProps.searchInputInitValue}
+        />
+      )}
       <Table className="bg-white rounded-lg">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -71,7 +73,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );
@@ -94,12 +96,14 @@ export function DataTable<TData, TValue>({
                       className={cn(
                         "whitespace-normal break-words line-clamp-3",
                         //empty header is the 'actions'
-                        { "w-min ml-auto": cell.column.columnDef.header === "" }
+                        {
+                          "w-min ml-auto": cell.column.columnDef.header === "",
+                        },
                       )}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </div>
                   </TableCell>
@@ -115,11 +119,13 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <Pagination
-        currentPage={paginationProps.currentPage}
-        handlePageChange={paginationProps.handlePageChange}
-        totalPages={paginationProps.totalPages}
-      />
+      {paginationProps && (
+        <Pagination
+          currentPage={paginationProps.currentPage}
+          handlePageChange={paginationProps.handlePageChange}
+          totalPages={paginationProps.totalPages}
+        />
+      )}
     </div>
   );
 }

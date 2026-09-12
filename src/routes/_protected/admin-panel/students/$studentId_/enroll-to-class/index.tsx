@@ -21,8 +21,8 @@ import {
 import { useEnrollStudentToClass } from "@/domains/students/api/mutations";
 import { usePendingOverlay } from "@/components/shared/globals/utils/usePendingOverlay";
 import { toast } from "sonner";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 const searchParamsSchema = z.object({
   searchQuery: z.string().optional(),
@@ -33,7 +33,7 @@ type SearchParamsSchema = z.infer<typeof searchParamsSchema> &
   SearchSchemaValidationStatus;
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/students/$studentId_/enroll-to-class/"
+  "/_protected/admin-panel/students/$studentId_/enroll-to-class/",
 )({
   component: RouteComponent,
   validateSearch: (search): SearchParamsSchema => {
@@ -128,7 +128,7 @@ function RouteComponent() {
           <p
             className={cn(
               "rounded-md px-2 py-1 text-white w-min text-xs",
-              status === "open" ? "bg-green-500" : "bg-red-600"
+              status === "open" ? "bg-green-500" : "bg-red-600",
             )}
           >
             {status.split("")[0].toUpperCase() + status.substring(1)}
@@ -155,11 +155,11 @@ function RouteComponent() {
   ];
 
   if (status === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (status === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (data) {

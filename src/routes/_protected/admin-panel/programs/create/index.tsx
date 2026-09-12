@@ -19,11 +19,11 @@ import { toast } from "sonner";
 import { useCreateProgram } from "@/domains/programs/api/mutations";
 import { useImageUploadState } from "@/utils/hooks/useImageUploadState";
 import { useMultiStepFormState } from "@/utils/hooks/useMultiStepFormState";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 export const Route = createFileRoute(
-  "/_protected/admin-panel/programs/create/"
+  "/_protected/admin-panel/programs/create/",
 )({
   component: RouteComponent,
 });
@@ -125,11 +125,11 @@ function RouteComponent() {
   const formStepEntries = Object.entries(formSteps);
 
   if (getAllDepartmentsStatus === "error") {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if (getAllDepartmentsStatus === "pending") {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (departments) {

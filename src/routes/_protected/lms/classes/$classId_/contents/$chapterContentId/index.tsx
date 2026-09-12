@@ -1,5 +1,5 @@
-import ErrorComponent from "@/components/shared/ErrorComponent";
-import LoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
 import RoleBasedComponent from "@/components/shared/RoleBasedComponent";
 import {
   Breadcrumb,
@@ -30,11 +30,11 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   if ([chapterContentInfoStatus].includes("error")) {
-    return <ErrorComponent />;
+    return <ShowErrorComponent />;
   }
 
   if ([chapterContentInfoStatus].includes("pending")) {
-    return <LoadingComponent />;
+    return <ShowLoadingComponent />;
   }
 
   if (chapterContentInfo) {

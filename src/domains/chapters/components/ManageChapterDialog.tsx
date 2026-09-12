@@ -23,8 +23,8 @@ import { api } from "@/utils/axiosBackend";
 import { useEffect } from "react";
 import { useChapterInfo } from "../api/queries";
 import type { Chapter } from "../types";
-import LoadingComponent from "@/components/shared/LoadingComponent";
-import ErrorComponent from "@/components/shared/ErrorComponent";
+import ShowLoadingComponent from "@/components/shared/LoadingComponent";
+import ShowErrorComponent from "@/components/shared/ErrorComponent";
 
 type EditProps = {
   type: "edit";
@@ -80,10 +80,7 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
 
   useEffect(() => {
     if (chapterInfo && editProps) {
-      const {
-        description,
-        name,
-      } = editProps.chapter;
+      const { description, name } = editProps.chapter;
       form.reset({
         name,
         description,
@@ -121,7 +118,7 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
   if (editProps && [chapterInfoStatus].includes("error")) {
     return (
       <div className="size-[300px]">
-        <ErrorComponent className="text-xl font-medium text-red-500" />
+        <ShowErrorComponent className="text-xl font-medium text-red-500" />
       </div>
     );
   }
@@ -129,7 +126,7 @@ export default function ManageChapterDialog({ classId, ...props }: Props) {
   if (editProps && [chapterInfoStatus].includes("pending")) {
     return (
       <div className="size-[300px]">
-        <LoadingComponent />
+        <ShowLoadingComponent />
       </div>
     );
   }
